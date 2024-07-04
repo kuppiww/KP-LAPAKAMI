@@ -1,0 +1,74 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  TAG_IMAGE: $CI_COMMIT_BRANCH-$CI_COMMIT_SHA
+
+build_prod:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - cp $ENV .env
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t "$CI_REGISTRY_IMAGE:latest" -t "$CI_REGISTRY_IMAGE:$TAG_IMAGE" .
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    - main
+
+deploy_prod:
+  stage: deploy
+  image: ubuntu
+  tags:
+    - develop
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE"
+    - docker container rm -f lapakami_v2:production || true
+    - docker run -d --restart unless-stopped -p 8071:8000 --name lapakami_v2:production $CI_REGISTRY_IMAGE
+    - docker image prune -f
+  only:
+    - main
+
+build_stag:
+  stage: build
+  before_script:
+    - cp $ENV_STAG .env
+  script:
+    - docker build -t lapakami_v2:staging -f Dockerfile.stag.
+  only:
+    - staging
+
+deploy_stag:
+  stage: deploy
+  script:
+    - docker container rm -f lapakami_v2:staging || true
+    - docker run -d -p 8070:8000 lapakami_v2:staging
+    - docker image prune -f
+  only:
+    - staging
+  tags:
+    - staging
+
+build_dev:
+  stage: build
+  before_script:
+    - cp $ENV_DEV .env
+  script:
+    - docker build -t lapakami_v2:develop -f Dockerfile.dev.
+  only:
+    - develop
+
+deploy_dev:
+  stage: deploy
+  script:
+    - docker container rm -f lapakami_v2:develop || true
+    - docker run -d -p 8069:8000 lapakami_v2:develop
+  only:
+    - develop
+  tags:
+    - develop
