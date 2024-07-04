@@ -1,0 +1,13 @@
+{
+    "name": "ReqBusiness",
+    "alias": "reqbusiness",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqBusiness\\Providers\\ReqBusinessServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -1,0 +1,13 @@
+{
+    "name": "ReqCrowd",
+    "alias": "reqcrowd",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqCrowd\\Providers\\ReqCrowdServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

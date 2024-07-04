@@ -1,0 +1,55 @@
+FROM php:8.1-alpine
+
+#RUN apt-get -y update && apt-get -y install zlib1g-dev libzip-dev unzip git gnupg2 libpq-dev
+#RUN apk add --no-cache apache2 apache2-utils msmtp perl wget procps shadow libzip libpng libjpeg-turbo libwebp freetype icu icu-data-full libpq-dev
+
+RUN apk add --no-cache --virtual build-essentials \
+    openrc icu-dev icu-libs zlib-dev g++ make automake autoconf libzip-dev \
+    libpng-dev libwebp-dev libjpeg-turbo-dev freetype-dev apache2 libpq-dev && \
+    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
+    docker-php-ext-install gd && \
+    docker-php-ext-install pgsql && \
+    docker-php-ext-install pdo_pgsql && \
+    #docker-php-ext-install mysqli && \
+    #docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install intl && \
+    docker-php-ext-install opcache && \
+    docker-php-ext-install exif && \
+    docker-php-ext-install zip && \
+    docker-php-ext-install sockets && \
+    apk del build-essentials && rm -rf /usr/src/php*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+#RUN a2enmod rewrite
+#RUN a2enmod headers
+
+#RUN sed -i "/^#LoadModule rewrite_module/s/^#//g" "/etc/apache2/*.conf"
+#RUN sed -i "/^#LoadModule rewrite_module/s/^#//g" "/etc/apache2/conf.d/*.conf"
+#RUN sed -i "/^#LoadModule headers_module/s/^#//g" "/etc/apache2/*.conf"
+#RUN sed -i "/^#LoadModule headers_module/s/^#//g" "/etc/apache2/conf.d/*.conf"
+
+ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
+
+WORKDIR /var/www/html
+
+COPY . .
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+#RUN rc-service apache2 start
+RUN composer install
+RUN composer update
+RUN php artisan octane:install --server=roadrunner
+RUN chmod +x ./rr
+
+RUN touch /etc/apache2/httpd.conf
+RUN sed -i 's@^#LoadModule rewrite_module modules/mod_rewrite\.so@LoadModule rewrite_module modules/mod_rewrite.so@' /etc/apache2/httpd.conf
+RUN sed -i 's@^#LoadModule headers_module modules/mod_headers\.so@LoadModule headers_module modules/mod_headers.so@' /etc/apache2/httpd.conf
+
+#RUN sed -i "/^#LoadModule rewrite_module/s/^#//g" "/etc/apache2/httpd.conf"
+#RUN sed -i "/^#LoadModule headers_module/s/^#//g" "/etc/apache2/httpd.conf"
+
+EXPOSE 8000
+
+ENTRYPOINT ["php", "artisan", "octane:start", "--host", "0.0.0.0"]

@@ -1,0 +1,13 @@
+{
+    "name": "ReqDeath",
+    "alias": "reqdeath",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqDeath\\Providers\\ReqDeathServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

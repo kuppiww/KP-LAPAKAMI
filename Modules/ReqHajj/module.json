@@ -1,0 +1,13 @@
+{
+    "name": "ReqHajj",
+    "alias": "reqhajj",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqHajj\\Providers\\ReqHajjServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

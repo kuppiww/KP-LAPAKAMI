@@ -1,0 +1,13 @@
+{
+    "name": "ReqSktm",
+    "alias": "reqsktm",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqSktm\\Providers\\ReqSktmServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

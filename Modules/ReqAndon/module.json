@@ -1,0 +1,13 @@
+{
+    "name": "ReqAndon",
+    "alias": "reqandon",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqAndon\\Providers\\ReqAndonServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

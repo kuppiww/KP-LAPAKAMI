@@ -1,0 +1,13 @@
+{
+    "name": "Request",
+    "alias": "request",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Request\\Providers\\RequestServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

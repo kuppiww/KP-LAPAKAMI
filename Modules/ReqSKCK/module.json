@@ -1,0 +1,13 @@
+{
+    "name": "ReqSKCK",
+    "alias": "reqskck",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqSKCK\\Providers\\ReqSKCKServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

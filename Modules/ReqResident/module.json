@@ -1,0 +1,13 @@
+{
+    "name": "ReqResident",
+    "alias": "reqresident",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqResident\\Providers\\ReqResidentServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

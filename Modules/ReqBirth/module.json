@@ -1,0 +1,13 @@
+{
+    "name": "ReqBirth",
+    "alias": "reqbirth",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqBirth\\Providers\\ReqBirthServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

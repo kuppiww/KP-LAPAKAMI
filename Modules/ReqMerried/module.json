@@ -1,0 +1,13 @@
+{
+    "name": "ReqMerried",
+    "alias": "reqmerried",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqMerried\\Providers\\ReqMerriedServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

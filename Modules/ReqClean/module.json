@@ -1,0 +1,13 @@
+{
+    "name": "ReqClean",
+    "alias": "reqclean",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqClean\\Providers\\ReqCleanServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

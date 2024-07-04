@@ -1,0 +1,13 @@
+{
+    "name": "ReqNotHouse",
+    "alias": "reqnothouse",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqNotHouse\\Providers\\ReqNotHouseServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

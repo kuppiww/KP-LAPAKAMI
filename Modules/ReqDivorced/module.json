@@ -1,0 +1,13 @@
+{
+    "name": "ReqDivorced",
+    "alias": "reqdivorced",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqDivorced\\Providers\\ReqDivorcedServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

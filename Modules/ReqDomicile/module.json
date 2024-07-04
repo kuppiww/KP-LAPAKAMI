@@ -1,0 +1,13 @@
+{
+    "name": "ReqDomicile",
+    "alias": "reqdomicile",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ReqDomicile\\Providers\\ReqDomicileServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
