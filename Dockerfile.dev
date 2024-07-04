@@ -1,4 +1,4 @@
-ç√FROM php:8.1-apache-buster
+FROM php:8.1-apache-buster
 
 RUN apt-get -y update && apt-get -y install zlib1g-dev libzip-dev unzip git gnupg2 libpq-dev
 RUN docker-php-ext-install pdo pgsql pdo_pgsql zip sockets
