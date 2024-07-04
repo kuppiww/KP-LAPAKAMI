@@ -29,7 +29,7 @@ deploy_prod:
   script:
     - docker pull "$CI_REGISTRY_IMAGE"
     - docker container rm -f lapakami_v2:production || true
-    - docker run -d --restart unless-stopped -p 8071:8000 --name lapakami_v2_production $CI_REGISTRY_IMAGE
+    - docker run -d --restart unless-stopped -p 8077:8000 --name lapakami_v2_production $CI_REGISTRY_IMAGE
     - docker image prune -f
   only:
     - main
@@ -47,7 +47,7 @@ deploy_stag:
   stage: deploy
   script:
     - docker container rm -f lapakami_v2:staging || true
-    - docker run -d -p 8070:8000 lapakami_v2_staging
+    - docker run -d -p 8076:8000 lapakami_v2_staging
     - docker image prune -f
   only:
     - staging
@@ -67,7 +67,7 @@ deploy_dev:
   stage: deploy
   script:
     - docker container rm -f lapakami_v2:develop || true
-    - docker run -d -p 8069:8000 lapakami_v2_develop
+    - docker run -d -p 8075:8000 lapakami_v2_develop
   only:
     - develop
   tags:
