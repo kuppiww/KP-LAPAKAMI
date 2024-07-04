@@ -28,8 +28,8 @@ deploy_prod:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker pull "$CI_REGISTRY_IMAGE"
-    - docker container rm -f lapakami_v2:production || true
-    - docker run -d --restart unless-stopped -p 8077:8000 --name lapakami_v2_production $CI_REGISTRY_IMAGE
+    - docker container rm -f lapakami_v2:prod || true
+    - docker run -d --restart unless-stopped -p 8077:8000 --name lapakami_v2_prod $CI_REGISTRY_IMAGE
     - docker image prune -f
   only:
     - main
