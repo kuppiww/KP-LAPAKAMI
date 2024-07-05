@@ -63,7 +63,7 @@ build_dev:
     - cp $ENV_DEV .env
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t lapakami_v2:develop -f Dockerfile.dev 
+    - docker build -t lapakami_v2:develop -f Dockerfile.dev .
     - docker build -t "$CI_REGISTRY_IMAGE:develop_latest" -t "$CI_REGISTRY_IMAGE:$TAG_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
   only:
