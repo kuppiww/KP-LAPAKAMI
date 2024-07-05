@@ -55,6 +55,7 @@ deploy_stag:
     - staging
 
 build_dev:
+  image: docker:latest
   stage: build
   before_script:
     - cp $ENV_DEV .env
@@ -64,6 +65,7 @@ build_dev:
     - develop
 
 deploy_dev:
+  image: ubuntu
   stage: deploy
   script:
     - docker container rm -f lapakami_v2:develop || true
