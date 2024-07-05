@@ -17,4 +17,9 @@ Route::prefix('user')->group(function() {
     Route::post('pengaturan', 'UserController@changepassword');
     Route::get('profil', 'UserController@showProfile');
     Route::post('profil', 'UserController@updateProfile');
+    Route::get('setting', 'UserController@showSetting');
+    Route::get('setting/password/{id}', 'UserController@showSettingPassword');
+    Route::get('setting/email/{id}', 'UserController@showSettingEmail');
+    Route::post('setting/changepassword', 'UserController@settingPassword');
+    Route::post('setting/changeemail', 'UserController@settingEmail');
 });

@@ -28,6 +28,8 @@ use DB;
 
 class UserController extends Controller
 {
+    protected $_userRepository;
+    protected $_logHelper;
 
     public function __construct()
     {
@@ -104,6 +106,43 @@ class UserController extends Controller
 
         return view('user::profile', compact('user', 'districts', 'sub_districts', 'religions', 'genders', 'merried_stats'));
     }
+
+    public function showSetting()
+    {
+        $user = $this->_userRepository->getAllOnlyMasyarakat();
+        return view('user::listuser', compact('user'));
+    }
+
+    public function showSettingPassword($id)
+    {
+        $param = array('user_id' => $id);
+        $user = $this->_userRepository->getByParams($param);
+        return view('user::formsettingpassword', compact('user'));
+    }
+
+    public function settingPassword(Request $request)
+    {
+        $password = Hash::make($request->user_password);
+        $this->_userRepository->update(DataHelper::_normalizeParams(['user_password' => $password], false, true), $request->user_id);
+        $this->_logHelper->store('Password User', $request->user_id, 'update');
+        return redirect('user/setting')->with('message', 'Kata sandi berhasil diubah');
+    }
+
+    public function showSettingEmail($id)
+    {
+        $param = array('user_id' => $id);
+        $user = $this->_userRepository->getByParams($param);
+        return view('user::formsettingemail', compact('user'));
+    }
+    
+    public function settingEmail(Request $request)
+    {
+        $email = $request->user_email;
+        $this->_userRepository->update(DataHelper::_normalizeParams(['user_email' => $email], false, true), $request->user_id);
+        $this->_logHelper->store('Email User', $request->user_id, 'update');
+        return redirect('user/setting')->with('message', 'Email berhasil diubah');
+    }
+
 
     /**
      * Show the form for editing the specified resource.

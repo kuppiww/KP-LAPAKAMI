@@ -3,6 +3,7 @@
 namespace Modules\User\Repositories;
 
 use App\Implementations\QueryBuilderImplementation;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository extends QueryBuilderImplementation
@@ -17,6 +18,19 @@ class UserRepository extends QueryBuilderImplementation
     {
         $this->table = 'users';
         $this->pk = 'user_id';
+    }
+
+    public function getAllOnlyMasyarakat()
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select('user_id', 'user_username', 'user_nama', 'user_email', 'user_is_active')
+                ->where('group_id', '=', null)
+                ->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     // public function getAll()
