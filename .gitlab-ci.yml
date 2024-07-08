@@ -78,7 +78,7 @@ deploy_dev:
   script:
     - docker pull "$CI_REGISTRY_IMAGE:develop"
     - docker container rm -f lapakami_v2_develop || true
-    - docker run -d --restart unless-stopped -p 8091:8000 --name lapakami_v2_develop "$CI_REGISTRY_IMAGE:develop"
+    - docker run -d --restart unless-stopped -p 8091:80 --name lapakami_v2_develop "$CI_REGISTRY_IMAGE:develop"
     - docker image prune -f
   only:
     - develop
