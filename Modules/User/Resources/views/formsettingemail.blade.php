@@ -1,6 +1,6 @@
 @extends('layouts.user')
 @section('title')
-    Pengaturan Password Pengguna
+    Pengaturan Email Pengguna
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
     @endif
     <div class="row mb-4 align-items-center">
         <div class="col-md-6">
-            <h4 class="text-dark fw-bold mb-0">Pengaturan Password Pengguna</h4>
+            <h4 class="text-dark fw-bold mb-0">Pengaturan Email Pengguna</h4>
         </div>
     </div>
 
