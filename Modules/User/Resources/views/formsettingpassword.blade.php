@@ -44,12 +44,12 @@
                             <input type="password" id="user_password" name="user_password" class="form-control" placeholder="Masukan kata sandi">
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    {{-- <div class="col-md-6 mb-3">
                         <div class="form-group">
                             <label class="form-label">Konfirmasi Kata Sandi</label>
                             <input type="password" name="repassword" class="form-control" placeholder="Masukan konfirmasi">
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="col-md-12 mt-4">
                     <button type="submit" class="btn btn-primary px-4">Ubah Password</button>
@@ -68,18 +68,18 @@
                     required: true,
                     minlength: 6
                 },
-                repassword: {
-                    equalTo: "#user_password"
-                },
+                // repassword: {
+                //     equalTo: "#user_password"
+                // },
             },
             messages: {
                 user_password: {
                     required: "Kata sandi tidak boleh kosong",
                     minlength: "Kata sandi minimal 6 karakter",
                 },
-                repassword: {
-                    equalTo: "Ulang kata sandi tidak sesuai"
-                },
+                // repassword: {
+                //     equalTo: "Ulang kata sandi tidak sesuai"
+                // },
             },
             errorElement: "em",
             errorClass: "invalid-feedback",
