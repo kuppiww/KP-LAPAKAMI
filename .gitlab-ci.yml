@@ -63,8 +63,8 @@ build_dev:
     - cp $ENV_DEV .env
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t lapakami_v2:develop -f Dockerfile.dev .
-    - docker push lapakami_v2:develop
+    - docker build -t "$CI_REGISTRY_IMAGE:develop" -f Dockerfile.dev .
+    - docker push "$CI_REGISTRY_IMAGE:develop"
   only:
     - develop
 
@@ -76,9 +76,9 @@ deploy_dev:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker pull lapakami_v2:develop
+    - docker pull "$CI_REGISTRY_IMAGE:develop"
     - docker container rm -f lapakami_v2_develop || true
-    - docker run -d --restart unless-stopped -p 8075:8000 --name lapakami_v2_develop lapakami_v2:develop
+    - docker run -d --restart unless-stopped -p 8075:8000 --name lapakami_v2_develop "$CI_REGISTRY_IMAGE:develop"
     - docker image prune -f
   only:
     - develop
