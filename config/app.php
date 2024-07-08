@@ -197,6 +197,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Yajra\DataTables\DataTablesServiceProvider::class,
+
     ],
 
     /*
@@ -214,6 +216,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'DateFormatHelper' => App\Helpers\DateFormatHelper::class,
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 
 ];

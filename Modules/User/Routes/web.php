@@ -22,4 +22,5 @@ Route::prefix('user')->group(function() {
     Route::get('setting/email/{id}', 'UserController@showSettingEmail');
     Route::post('setting/changepassword', 'UserController@settingPassword');
     Route::post('setting/changeemail', 'UserController@settingEmail');
+    Route::get('list', 'UserController@listuser')->name('user.list');
 });
