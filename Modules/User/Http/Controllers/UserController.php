@@ -25,6 +25,7 @@ use App\Mail\UserVerificationChangeMail;
 use App\Helpers\DataHelper;
 use App\Helpers\LogHelper;
 use DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -141,6 +142,47 @@ class UserController extends Controller
         $this->_userRepository->update(DataHelper::_normalizeParams(['user_email' => $email], false, true), $request->user_id);
         $this->_logHelper->store('Email User', $request->user_id, 'update');
         return redirect('user/setting')->with('message', 'Email berhasil diubah');
+    }
+
+    public function listuser(Request $request)
+    {
+        $data = $this->_userRepository->getAllOnlyMasyarakat();
+        if ($request->ajax()) {
+            $datatable = DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('user_nama', function($users){
+                $text = $users->user_username;
+                return "$text<br><small class='text-muted'>$users->user_nama</small>";
+            })
+            ->addColumn('user_email', function($users){
+                $text = $users->user_email;
+                return $text;
+            })
+            ->addColumn('user_is_active', function($users){
+                if($users->user_is_active) {
+                    return '<span class="badge bg-success">Aktif</span>';
+                } else {
+                    return '<span class="badge bg-danger">Tidak Aktif</span>';
+                }
+            });
+            $datatables = $datatable->addColumn('action', function($users){
+                $linkSettingPassword = url('user/setting/password');
+                $linkSettingEmail= url('user/setting/email');
+                $actionBtn = '
+                <a href="'.$linkSettingEmail.'/'. $users->user_id.'" class="btn btn-icon btn-light rounded-circle p-1" data-toggle="tooltip" data-placement="top" title="Ubah Email">
+                    <i class="ri-mail-line fs-6"></i>
+                </a>
+                <a href="'.$linkSettingPassword.'/'. $users->user_id.'" class="btn btn-icon btn-light rounded-circle p-1" data-toggle="tooltip" data-placement="top" title="Ubah Password">
+                    <i class="ri-lock-line fs-6"></i>
+                </a>
+                ';
+                return $actionBtn;
+            });
+
+            $datatables = $datatable->rawColumns(['action', 'user_nama', 'user_email', 'user_is_active']);
+            $datatables = $datatable->make(true);
+            return $datatables;
+        }   
     }
 
 

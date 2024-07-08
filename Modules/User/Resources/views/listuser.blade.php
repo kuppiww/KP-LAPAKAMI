@@ -24,18 +24,18 @@
     <div class="card p-2 border-0">
         <div class="card-body">
 
-            <table id="dataTable" class="table dt-responsive nowrap w-100">
+            <table id="table-data" class="table dt-responsive nowrap w-100 user-table">
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>NIK dan Nama</th>
+                        <th>NIK</th>
                         <th>Email</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($user as $item)
+                    {{-- @foreach ($user as $item)
                         <tr>
                             <td width="5%">{{ $loop->iteration }}</td>
                             <td>
@@ -57,7 +57,7 @@
                                         class="ri-mail-line fs-6"></i></a>
                             </td>
                         </tr>
-                    @endforeach
+                    @endforeach --}}
                 </tbody>
             </table>
         </div>
@@ -66,7 +66,32 @@
 
 @section('script')
     <script type="text/javascript">
-        
+        $(function() {
+            console.log("sini");
+            $('.user-table').DataTable({
+                language: {
+                    "url": "{{ url('assets/json/datatable-id.json') }}",
+                    paginate: {
+                        next: '<i class="ri-arrow-right-s-line"></i>',
+                        previous: '<i class="ri-arrow-left-s-line"></i>'
+                    }
+                },
+                processing: true,
+                serverSide: true,
+                searchable:true,
+                ajax: "{!! route('user.list') !!}",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'user_nama', name: 'user_nama'},
+                    {data: 'user_email', name: 'user_email'},
+                    {data: 'user_is_active', name: 'user_is_active'},
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ]
+            });
+        });
     </script>
 @endsection
 
