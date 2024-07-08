@@ -139,7 +139,8 @@ class UserController extends Controller
     public function settingEmail(Request $request)
     {
         $email = $request->user_email;
-        $this->_userRepository->update(DataHelper::_normalizeParams(['user_email' => $email], false, true), $request->user_id);
+        $payload = ['user_email_is_activate' => true, 'user_email' => $email, 'user_email_is_change' => false];
+        $this->_userRepository->update(DataHelper::_normalizeParams($payload, false, true), $request->user_id);
         $this->_logHelper->store('Email User', $request->user_id, 'update');
         return redirect('user/setting')->with('message', 'Email berhasil diubah');
     }
