@@ -518,7 +518,7 @@
                         filesize: 1024000
                     },
                     f_sptjm_kematian: {
-                        required: true,
+                        // required: true,
                         extension: "pdf|jpg|jpeg|png",
                         filesize: 1024000
                     }
@@ -577,7 +577,7 @@
                         filesize: "Ukuran file maksimal 1MB"
                     },
                     f_sptjm_kematian: {
-                        required: "SPTJM Kematian tidak boleh kosong",
+                        // required: "SPTJM Kematian tidak boleh kosong",
                         extension: "Hanya boleh mengunggah .pdf, .jpeg, .png",
                         filesize: "Ukuran file maksimal 1MB"
                     }
@@ -626,6 +626,12 @@
                 },
                 onFinished: function(event, currentIndex) {
                     // alert('Sumited');
+                    var labelText = $('#createForm').find('a[href="#finish"]').text();
+                    $('#createForm').find('a[href="#previous"]').remove();
+                    $('#createForm').find('a[href="#finish"]').text( labelText.replace("Kirim Permohonan", "Loading...") );
+                    $('#createForm').find('a[href="#finish"]').css("pointer-events", "none" );
+                    $('#createForm').find('a[href="#finish"]').css("background", "#e5e5e5" );
+                    $('#createForm').find('a[href="#finish"]').attr( 'href', '#' );
                     $("#createForm").submit();
                 },
                 // onInit : function (event, currentIndex) {
