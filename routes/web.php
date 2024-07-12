@@ -31,6 +31,7 @@ Route::get('/kebijakan-privasi', function () {
 });
 
 Route::get('/masuk', [\App\Http\Controllers\UserController::class, 'login'])->name('login');
+Route::get('/backend', [\App\Http\Controllers\AdminController::class, 'backend'])->name('backend');
 // Route::get('/daftar/selesai', function () { return view('auth/registersuccess'); });
 // Route::get('/reset-sandi', function () { return view('auth/resetpassword'); });
 
@@ -113,6 +114,7 @@ Route::get('/izinsso/selesai/{id}', function () {
 });
 Route::get('/kirim-ulang-email/{id}', [\App\Http\Controllers\UserController::class, 'resendEmail']);
 Route::post('/masuk', [\App\Http\Controllers\UserController::class, 'authenticate']);
+Route::post('/backend', [\App\Http\Controllers\AdminController::class, 'authenticate']);
 Route::get('/logout', [\App\Http\Controllers\UserController::class, 'logout'])->middleware('auth');
 Route::get('user/activation/{nik}/{token}', [\App\Http\Controllers\UserController::class, 'activation']);
 Route::get('/daftar', [\App\Http\Controllers\UserController::class, 'register']);

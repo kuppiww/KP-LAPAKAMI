@@ -73,6 +73,18 @@ class User extends Authenticatable
             return $e->getMessage();
         }
     } 
+
+    public function getByAdmin($nik)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->where('user_id_simkel', '=', $nik)
+                ->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
     
     public function getByEmail($email)
     {
