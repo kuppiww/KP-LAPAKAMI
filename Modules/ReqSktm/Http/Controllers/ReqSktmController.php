@@ -30,11 +30,35 @@ use Modules\ReqSktm\Repositories\SktmPengadilanRepository;
 use Modules\ReqSktm\Repositories\SktmPlnRepository;
 
 use App\Helpers\DataHelper;
+use App\Helpers\HTMLHelper;
 use App\Helpers\LogHelper;
+use App\Helpers\DateTime;
+use App\Helpers\HttpStatusHelper;
+use App\Helpers\ReportHelper;
 use DB;
+use PDF;
 
 class ReqSktmController extends Controller
 {
+    protected $_districtRepository;
+    protected $_subDistrictRepository;
+    protected $_religionRepository;
+    protected $_genderRepository;
+    protected $_merriedStatusRepository;
+    protected $_requestRepository;
+    protected $_famRelationRepository;
+    protected $_ketIncapableRepository;
+    protected $_hospitalRepository;
+    protected $_requestLogRepository;
+    protected $_sktmEducationRepository;
+    protected $_sktmHealthRepository;
+    protected $_sktmPengadilanRepository;
+    protected $_sktmPlnRepository;
+    protected $_requestAttachmentRepository;
+    protected $_serviceRepository;
+    protected $module;
+    protected $_logHelper;
+
     public function __construct()
     {
 
@@ -405,6 +429,90 @@ class ReqSktmController extends Controller
         $this->_requestRepository->delete($id);
 
         return redirect('user/layanan')->with('message', 'Permohonan berhasil dibatalkan');
+    }
+
+    public function showPermohoanan(Request $request, $id)
+    {
+        $slug = $request->segment(2);
+
+        // Validation service
+        $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+
+        // Validation request data 
+        $params = array(
+            'request_id' => $id,
+            'requests.request_id' => $id,
+            // 'requests.service_id'   => $getService->service_id
+        );
+        $request = $this->_requestRepository->getByParams($params);
+
+        if (!$request) {
+            return redirect(url('404'));
+        }
+
+        $filter['request_id'] = $id;
+
+        $logs = $this->_requestLogRepository->getAllByParams($filter);
+        $request_docs = $this->_requestAttachmentRepository->getAllByParams($filter);
+
+        if ($request->service_id == 'REQ_SKTM_EDUCATION') {
+            $request_detail = $this->_sktmEducationRepository->getByParams($filter);
+        } elseif ($request->service_id == 'REQ_SKTM_HEALTH') {
+            $request_detail = $this->_sktmHealthRepository->getByParams($filter);
+        } elseif ($request->service_id == 'REQ_SKTM_JUDICIARY') {
+            $request_detail = $this->_sktmPengadilanRepository->getByParams($filter);
+        } else {
+            $request_detail = $this->_sktmPlnRepository->getByParams($filter);
+        }
+
+        return view('reqsktm::detailPermohonan', compact('request', 'request_detail', 'logs', 'request_docs'));
+    }
+
+    public function pdf(Request $request, $id, $servicename)
+    {
+        $slug = $request->segment(3);
+        
+        $getService     = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+        
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+        
+        $title = 'SURAT KETERANGAN TIDAK MAMPU';
+
+        $params     = array(
+            'request_id'            => $id, 
+            // 'requests.created_by'   => $user->user_id, 
+            // 'requests.service_id'   => $getService->service_id
+        );
+        
+        $datarequest = $this->_sktmHealthRepository->getByParams($params); //$this->_setRepository($getService->slug);
+
+        $data = [
+            'meta' => [],//$this->meta,
+            'data' => $datarequest,
+            'pengajuan' => $this->_requestRepository->getByParams($params),
+            'service' => $getService,
+            'title' => $title,
+            'ReportHelper' => ReportHelper::class,
+            'HtmlHelper' => HTMLHelper::class,
+            'DateTime' => DateTime::class
+        ];
+
+        $pdf = PDF::loadView(
+            'report/pdf/sktm-rs', //ReportHelper::getReportTemplatePath($servicename),
+            $data,
+            [],
+            config('mpdf')
+        );
+
+        return response()->stream(function () use ($pdf) {
+            $pdf->stream('skd-pdf-' . date('YmdHis') . '.pdf');
+        }, HttpStatusHelper::OK, ['Content-Type' => 'application/pdf']);
     }
 
     private function _logRequest($req_id, $stat_id, $note_log)

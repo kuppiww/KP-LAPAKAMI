@@ -67,7 +67,6 @@
 @section('script')
     <script type="text/javascript">
         $(function() {
-            console.log("sini");
             $('.user-table').DataTable({
                 language: {
                     "url": "{{ url('assets/json/datatable-id.json') }}",
