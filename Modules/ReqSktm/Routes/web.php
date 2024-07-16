@@ -18,4 +18,9 @@ Route::prefix('user/layanan/sktm')->group(function() {
     Route::get('/ubah/{id}', 'ReqSktmController@edit');
     Route::post('/update/{id}', 'ReqSktmController@update');
     Route::get('/batal/{id}', 'ReqSktmController@destroy');
+    Route::get('/pdf/{id}/{service}', 'ReqSktmController@pdf');
+});
+
+Route::prefix('verification/sktm')->group(function() {
+    Route::get('/lihat/{id}', 'ReqSktmController@showPermohoanan');
 });

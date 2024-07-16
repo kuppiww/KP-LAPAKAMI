@@ -20,5 +20,6 @@
     "ReqDomicile": true,
     "ReqHajj": true,
     "ReqSKCK": true,
-    "ReqDomicileCompany": true
+    "ReqDomicileCompany": true,
+    "Verification": true
 }
