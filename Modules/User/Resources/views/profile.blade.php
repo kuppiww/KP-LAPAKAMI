@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label class="form-label">
                             Nomor Kartu Keluarga<span class="text-danger">*</span>
-                            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#infoModal"> 
+                            <button type="button" class="btn btn-link p-0" data-bs-toggle="modal" data-bs-target="#formModal"> 
                                 <i class="ri-information-fill text-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Klik untuk lihat penjelasan">klik ganti nomor kartu keluarga </i>
                             </button>
                         </label>
@@ -241,15 +241,51 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title text-dark">Informasi Perubahan NIK/Nomor KK</h5>
+                    <h5 class="modal-title text-dark">Informasi Perubahan NIK</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Jika terjadi kesalahan NIK atau Nomor KK pada saat pendaftaran Anda tidak dapat merubahnya secara langsung melalui profil, tetapi Anda dapat menghubungi pihak berwenang melalui email yang anda daftarkan pada saat pendaftaran akun lapakami dan dikirim ke alamat <b>lapakami@cimahikota.go.id</b> dengan melampirkan hasil scan atau foto Kartu Keluarga </p>
+                    <p>Jika terjadi kesalahan NIK pada saat pendaftaran Anda tidak dapat merubahnya secara langsung melalui profil, tetapi Anda dapat menghubungi pihak berwenang melalui email yang anda daftarkan pada saat pendaftaran akun lapakami dan dikirim ke alamat <b>lapakami@cimahikota.go.id</b> dengan melampirkan hasil scan atau foto Kartu Keluarga </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">Perubahan Nomor KK</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url('ubah-kk/simpan') }}" id="formUbahKK" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <p>Jika terjadi kesalahan Nomor KK, Anda tidak dapat merubahnya secara langsung melalui profil, tetapi Anda dapat merubah melalui form dibawah ini dengan melampirkan hasil scan atau foto Kartu Keluarga </p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">Nomor KK Baru<span class="text-danger">*</span></label>
+                                    <input type="text" name="kk_baru" id="kk_baru" class="form-control" placeholder="Masukan Nomor KK" >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">Scan atau Foto KK Baru<span class="text-danger">*</span></label>
+                                    <input type="file" name="f_change_kk" id="f_change_kk" class="form-control" >
+                                    <small class="form-note">File .jpg, .jpeg, .png, .pdf, Maksimal 1MB</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" >Ajukan Permohonan</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -320,6 +356,48 @@
                 },
                 kd_kel: "Kelurahan harus dipilih",
                 user_alamat: "Alamat tidak boleh kosong",
+
+            },
+            errorElement: "em",
+            errorClass: "invalid-feedback",
+            errorPlacement: function(error, element) {
+                // Add the `help-block` class to the error element
+                $(element).parents('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-valid").removeClass("is-invalid");
+            }
+        });
+
+        $("#formUbahKK").validate({
+            rules: {
+                kk_baru: {
+                    required: true,
+                    number : true,
+                    maxlength : 16,
+                    minlength : 16
+                },
+                f_change_kk: {
+                    required: true,
+                    extension: "pdf|jpg|jpeg|png",
+                    filesize: 1024000
+                }
+            },
+            messages: {
+                kk_baru: {
+                    required: "Nomor KK tidak boleh kosong",
+                    number : "Hanya boleh diisi angka",
+                    maxlength : "Nomor KK harus 16 angka",
+                    minlength : "Nomor KK harus 16 angka"
+                },
+                f_change_kk: {
+                    required: "KK tidak boleh kosong",
+                    extension: "Hanya boleh mengunggah .pdf, .jpeg, .png",
+                    filesize: "Ukuran file maksimal 1MB"
+                },
 
             },
             errorElement: "em",
