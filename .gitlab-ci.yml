@@ -14,7 +14,7 @@ build_prod:
     - cp $ENV .env
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t "$CI_REGISTRY_IMAGE:latest" -t "$CI_REGISTRY_IMAGE:$TAG_IMAGE" .
+    - docker build -t "$CI_REGISTRY_IMAGE:$TAG_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
   only:
     - main
@@ -27,48 +27,68 @@ deploy_prod:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker pull "$CI_REGISTRY_IMAGE"
-    - docker container rm -f lapakami_v2:prod || true
-    - docker run -d --restart unless-stopped -p 8077:8000 --name lapakami_v2_prod $CI_REGISTRY_IMAGE
+    - docker pull "$CI_REGISTRY_IMAGE:$TAG_IMAGE"
+    - docker container rm -f lapakami_v2_prod || true
+    - docker run -d --restart unless-stopped -p 8093:8000 --name lapakami_v2_prod "$CI_REGISTRY_IMAGE:$TAG_IMAGE"
     - docker image prune -f
   only:
     - main
 
 build_stag:
+  image: docker:latest
   stage: build
+  services:
+    - docker:dind
   before_script:
     - cp $ENV_STAG .env
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t lapakami_v2:staging -f Dockerfile.stag.
+    - docker build -t "$CI_REGISTRY_IMAGE:staging" -f Dockerfile.stag .
+    - docker push "$CI_REGISTRY_IMAGE:staging"
   only:
     - staging
 
 deploy_stag:
   stage: deploy
+  image: ubuntu
+  tags:
+    - staging
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker container rm -f lapakami_v2:staging || true
-    - docker run -d -p 8076:8000 lapakami_v2_staging
+    - docker pull "$CI_REGISTRY_IMAGE:stag"
+    - docker container rm -f lapakami_v2_stag || true
+    - docker run -d --restart unless-stopped -p 8092:80 --name lapakami_v2_staging "$CI_REGISTRY_IMAGE:staging"
     - docker image prune -f
   only:
     - staging
-  tags:
-    - staging
 
 build_dev:
+  image: docker:latest
   stage: build
+  services:
+    - docker:dind
   before_script:
     - cp $ENV_DEV .env
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - docker build -t lapakami_v2:develop -f Dockerfile.dev.
+    - docker build -t "$CI_REGISTRY_IMAGE:develop" -f Dockerfile.dev .
+    - docker push "$CI_REGISTRY_IMAGE:develop"
   only:
     - develop
 
 deploy_dev:
   stage: deploy
-  script:
-    - docker container rm -f lapakami_v2:develop || true
-    - docker run -d -p 8075:8000 lapakami_v2_develop
-  only:
-    - develop
+  image: ubuntu
   tags:
     - develop
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull "$CI_REGISTRY_IMAGE:develop"
+    - docker container rm -f lapakami_v2_develop || true
+    - docker run -d --restart unless-stopped -p 8091:80 --name lapakami_v2_develop "$CI_REGISTRY_IMAGE:develop"
+    - docker image prune -f
+  only:
+    - develop
+  

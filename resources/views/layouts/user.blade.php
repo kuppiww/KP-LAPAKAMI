@@ -137,6 +137,12 @@
                         <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
+                        href="{{ url('user/setting') }}">
+                        <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                    </a>
+                </li>
             </ul>
             <p class="text-dark mt-5 mb-3 ms-3 fw-semibold">Menu Lainnya</p>
             <ul class="nav flex-column">
@@ -201,6 +207,12 @@
                             <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif"
                                 href="{{ url('user/pengaturan') }}">
                                 <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
+                                href="{{ url('user/setting') }}">
+                                <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
                             </a>
                         </li>
                     </ul>
@@ -314,6 +326,23 @@
                     }
                 })
             });
+
+            // Cancel request button
+	        $('.btnDelete').click(function(){
+				Swal.fire({
+				  title: 'Hapus?',
+				  text: "Anda yakin akan menghapus nya ?",
+				  icon: 'danger',
+				  showCancelButton: true,
+				  confirmButtonColor: '#ff2323',
+				  confirmButtonText: 'Ya, hapus!',
+				  cancelButtonText: 'Tutup',
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				  	window.location = $(this).attr('data-url');
+				  }
+				})
+			});
 
         });
     </script>

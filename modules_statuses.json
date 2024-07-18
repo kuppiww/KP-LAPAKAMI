@@ -1,6 +1,12 @@
 {
-    "User": true,
+    "SysModule": true,
+    "SysTask": true,
+    "SysRole": true,
+    "SysMenu": true,
     "Dashboard": true,
+    "UserGroup": true,
+    "Users": true,
+    "User": true,
     "Request": true,
     "ReqBrith": false,
     "ReqResident": true,
