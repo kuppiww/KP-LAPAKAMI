@@ -119,7 +119,7 @@
                             </div>
                         	<div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Modul </label>
+                                    <label>Fitur </label>
                                     <select class="form-control" name="module_id" id="module_id">
                                     	<option value="">- Pilih Modul -</option>
                                     	@if(sizeof($modules) > 0) 
@@ -189,7 +189,7 @@
     </div>
 </div>
 <!-- Modal Add -->
-
+@section('script')
 <script type="text/javascript">
 	$('.btnAdd').click(function(){
         $('#menu_name').val('');
@@ -209,7 +209,7 @@
         var id  = $(this).attr('data-id');
         var url = "{{ url('sysmenu/getdata') }}";
 
-        $('.addModal form').attr('action', "{{ url('sysmenu/update') }}" +'/'+ id);
+        $('#addModal form').attr('action', "{{ url('sysmenu/update') }}" +'/'+ id);
 
         $.ajax({
             type : 'GET',
@@ -282,4 +282,5 @@
         }
     });
 </script>
+@endsection
 @endsection

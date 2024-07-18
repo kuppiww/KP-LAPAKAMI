@@ -1,29 +1,29 @@
 <?php
 
-namespace Modules\SysMenu\Http\Controllers;
+namespace Modules\SysTask\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 
-use Modules\SysMenu\Repositories\SysMenuRepository;
+use Modules\SysTask\Repositories\SysTaskRepository;
 use Modules\SysModule\Repositories\SysModuleRepository;
 use App\Helpers\DataHelper;
 use App\Helpers\LogHelper;
 use DB;
 
-class SysMenuController extends Controller
+class SysTaskController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
 
-        $this->_sysmenuRepository   = new SysMenuRepository;
+        $this->_systaskRepository   = new SysTaskRepository;
         $this->_sysmoduleRepository = new SysModuleRepository;
-        $this->module = "SysMenu";
+        $this->module               = "SysTask";
+        $this->_logHelper           = new LogHelper;
 
-        $this->_logHelper       = new LogHelper;
     }
 
     /**
@@ -37,11 +37,10 @@ class SysMenuController extends Controller
         //     return redirect('unauthorize');
         // }
 
-        $menus      = $this->_sysmenuRepository->getAll();
-        $parents    = $this->_sysmenuRepository->getAllByParams(['menu_is_sub' => false]);
+        $tasks      = $this->_systaskRepository->getAll();
         $modules    = $this->_sysmoduleRepository->getAll();
         
-        return view('sysmenu::index', compact('menus', 'modules', 'parents'));
+        return view('systask::index', compact('tasks', 'modules'));
     }
 
     /**
@@ -55,7 +54,7 @@ class SysMenuController extends Controller
         //     return redirect('unauthorize');
         // }
 
-        return view('sysmenu::create');
+        return view('systask::create');
     }
 
     /**
@@ -65,20 +64,17 @@ class SysMenuController extends Controller
      */
     public function store(Request $request)
     {
-        // // Authorize
+        // Authorize
         // if (Gate::denies(__FUNCTION__, $this->module)) {
         //     return redirect('unauthorize');
         // }
-
         DB::beginTransaction();
 
-        $this->_sysmenuRepository->insert(DataHelper::_normalizeParams($request->all(), true));
-
-        $this->_logHelper->store($this->module, $request->menu_name, 'create');
-
+        $this->_systaskRepository->insert(DataHelper::_normalizeParams($request->all(), true));
+        $this->_logHelper->store($this->module, $request->task_name, 'create');
         DB::commit();
 
-        return redirect('sysmenu')->with('message', 'Menu berhasil ditambahkan');
+        return redirect('systask')->with('message', 'Task berhasil ditambahkan');
 
     }
 
@@ -90,11 +86,11 @@ class SysMenuController extends Controller
     public function show($id)
     {
         // Authorize
-        // if (Gate::denies(__FUNCTION__, $this->module)) {
-        //     return redirect('unauthorize');
-        // }
+        if (Gate::denies(__FUNCTION__, $this->module)) {
+            return redirect('unauthorize');
+        }
 
-        return view('sysmenu::show');
+        return view('systask::show');
     }
 
     /**
@@ -105,13 +101,11 @@ class SysMenuController extends Controller
     public function edit($id)
     {
         // Authorize
-        // if (Gate::denies(__FUNCTION__, $this->module)) {
-        //     return redirect('unauthorize');
-        // }
+        if (Gate::denies(__FUNCTION__, $this->module)) {
+            return redirect('unauthorize');
+        }
 
-        // $modules    = $this->_sysmoduleRepository->getAll();
-
-        return view('sysmenu::edit');
+        return view('systask::edit');
     }
 
     /**
@@ -127,13 +121,11 @@ class SysMenuController extends Controller
         //     return redirect('unauthorize');
         // }
         DB::beginTransaction();
-
-        $this->_sysmenuRepository->update(DataHelper::_normalizeParams($request->all(), false, true), $id);
-        $this->_logHelper->store($this->module, $request->menu_name, 'update');
-
+        $this->_systaskRepository->update(DataHelper::_normalizeParams($request->all(), false, true), $id);
+        $this->_logHelper->store($this->module, $request->task_name, 'update');
         DB::commit();
 
-        return redirect('sysmenu')->with('message', 'Menu berhasil diubah');
+        return redirect('systask')->with('message', 'Task berhasil diubah');
     }
 
     /**
@@ -147,19 +139,22 @@ class SysMenuController extends Controller
         // if (Gate::denies(__FUNCTION__, $this->module)) {
         //     return redirect('unauthorize');
         // }
-         // Check detail to db
-         $detail  = $this->_sysmenuRepository->getById($id);
+        // Check detail to db
+        $detail  = $this->_systaskRepository->getById($id);
 
-         if (!$detail) {
-             return redirect('sysmenu');
-         }
+        if (!$detail) {
+            return redirect('systask');
+        }
+
         DB::beginTransaction();
-        $this->_sysmenuRepository->delete($id);
-        $this->_logHelper->store($this->module, $detail->menu_name, 'delete');
+
+        $this->_systaskRepository->delete($id);
+
+        $this->_logHelper->store($this->module, $detail->task_name, 'delete');
+
         DB::commit();
 
-
-        return redirect('sysmenu')->with('message', 'Menu berhasil dihapus');
+        return redirect('systask')->with('message', 'Task berhasil dihapus');
     }
 
     /**
@@ -170,7 +165,7 @@ class SysMenuController extends Controller
     public function getdata($id){
 
         $response   = array('status' => 0, 'result' => array()); 
-        $getDetail  = $this->_sysmenuRepository->getById($id);
+        $getDetail  = $this->_systaskRepository->getById($id);
 
         if ($getDetail) {
             $response['status'] = 1;

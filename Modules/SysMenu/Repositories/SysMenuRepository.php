@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class SysMenuRepository extends QueryBuilderImplementation
 {
 
-    public $fillable = ['module_id', 'menu_name', 'menu_url', 'menu_icon', 'menu_is_sub', 'menu_parent_id', 'menu_position', 'created_at', 'created_by', 'updated_at', 'updated_by'];
+    public $fillable = ['module_id', 'menu_name', 'menu_is_sub', 'menu_url', 'menu_icon', 'menu_parent_id', 'menu_position', 'created_at', 'created_by', 'updated_at', 'updated_by'];
 
     public function __construct()
     {

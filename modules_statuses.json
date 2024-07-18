@@ -26,5 +26,8 @@
     "ReqDomicile": true,
     "ReqHajj": true,
     "ReqSKCK": true,
-    "ReqDomicileCompany": true
+    "ReqDomicileCompany": true,
+    "Systask": true,
+    "Systasks": true,
+    "SysTasks": true
 }
