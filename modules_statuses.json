@@ -1,6 +1,12 @@
 {
-    "User": true,
+    "SysModule": true,
+    "SysTask": true,
+    "SysRole": true,
+    "SysMenu": true,
     "Dashboard": true,
+    "UserGroup": true,
+    "Users": true,
+    "User": true,
     "Request": true,
     "ReqBrith": false,
     "ReqResident": true,
@@ -21,6 +27,12 @@
     "ReqHajj": true,
     "ReqSKCK": true,
     "ReqDomicileCompany": true,
+<<<<<<< HEAD
+    "Systask": true,
+    "Systasks": true,
+    "SysTasks": true
+=======
     "Verification": true,
     "ChangeKK": true
+>>>>>>> 3927811b3aaec007a18a870499850bacc240945b
 }

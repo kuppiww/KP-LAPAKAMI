@@ -1,0 +1,11 @@
+{
+    "name": "SysModule",
+    "alias": "sysmodule",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SysModule\\Providers\\SysModuleServiceProvider"
+    ],
+    "files": []
+}
