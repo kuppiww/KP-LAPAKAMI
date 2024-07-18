@@ -7,6 +7,12 @@ use App\Models\Condition;
 class HTMLHelper
 {
 
+    public static function printBreakLine($row = 1) {
+		for ($i=1; $i <= $row; $i++) {
+			echo '<br />';
+		}
+	}
+
     public static function renderConditionBadges($condition_id, $condition_color, $condition_name)
     {
         if (!empty($condition_id)){

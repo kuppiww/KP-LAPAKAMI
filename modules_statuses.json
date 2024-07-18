@@ -27,7 +27,12 @@
     "ReqHajj": true,
     "ReqSKCK": true,
     "ReqDomicileCompany": true,
+<<<<<<< HEAD
     "Systask": true,
     "Systasks": true,
     "SysTasks": true
+=======
+    "Verification": true,
+    "ChangeKK": true
+>>>>>>> 3927811b3aaec007a18a870499850bacc240945b
 }

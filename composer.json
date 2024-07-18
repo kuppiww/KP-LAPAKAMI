@@ -7,13 +7,15 @@
     "require": {
         "php": "^8.0.2",
         "biscolab/laravel-recaptcha": "^6.0",
+        "carlos-meneses/laravel-mpdf": "^2.1",
         "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/octane": "^1.4",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "nwidart/laravel-modules": "9.*",
+        "nwidart/laravel-modules": "^10.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spiral/roadrunner": "^2.12",
         "yajra/laravel-datatables-oracle": "^10.11"
     },

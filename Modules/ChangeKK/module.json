@@ -1,0 +1,11 @@
+{
+    "name": "ChangeKK",
+    "alias": "changekk",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ChangeKK\\Providers\\ChangeKKServiceProvider"
+    ],
+    "files": []
+}

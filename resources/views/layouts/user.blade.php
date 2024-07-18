@@ -143,6 +143,18 @@
                         <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
+                        href="{{ url('verification') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                        href="{{ url('verification') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
+                    </a>
+                </li>
             </ul>
             <p class="text-dark mt-5 mb-3 ms-3 fw-semibold">Menu Lainnya</p>
             <ul class="nav flex-column">
@@ -213,6 +225,18 @@
                             <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
                                 href="{{ url('user/setting') }}">
                                 <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
+                                href="{{ url('verification') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                                href="{{ url('verification') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                             </a>
                         </li>
                     </ul>
