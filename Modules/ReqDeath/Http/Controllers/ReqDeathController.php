@@ -24,8 +24,13 @@ use Modules\Request\Repositories\ServiceRepository;
 use Modules\ReqDeath\Repositories\ReqDeathRepository;
 
 use App\Helpers\DataHelper;
+use App\Helpers\DateTime;
+use App\Helpers\HTMLHelper;
+use App\Helpers\HttpStatusHelper;
 use App\Helpers\LogHelper;
+use App\Helpers\ReportHelper;
 use DB;
+use PDF;
 
 
 class ReqDeathController extends Controller
@@ -312,6 +317,49 @@ class ReqDeathController extends Controller
         $this->_requestRepository->delete($id);
 
         return redirect('user/layanan')->with('message', 'Permohonan berhasil dibatalkan');
+    }
+
+    public function pdf(Request $request, $id, $servicename)
+    {
+        $slug = $request->segment(3);
+        
+        $getService     = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+        
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+        
+        $title = 'SURAT KETERANGAN KEMATIAN';
+
+        $params     = array(
+            'request_id'            => $id, 
+            // 'requests.created_by'   => $user->user_id, 
+            // 'requests.service_id'   => $getService->service_id
+        );
+        
+        $datarequest = $this->_reqDeathRepository->getByParams($params); //$this->_setRepository($getService->slug);
+
+        $data = [
+            'meta' => [],//$this->meta,
+            'data' => $datarequest,
+            'pengajuan' => $this->_requestRepository->getByParams($params),
+            'service' => $getService,
+            'title' => $title,  
+            'ReportHelper' => ReportHelper::class,
+            'HtmlHelper' => HTMLHelper::class,
+            'DateTime' => DateTime::class
+        ];
+
+        $pdf = PDF::loadView(
+            'report/pdf/kematian', //ReportHelper::getReportTemplatePath($servicename),
+            $data,
+            [],
+            config('mpdf')
+        );
+
+        return response()->stream(function () use ($pdf) {
+            $pdf->stream('kematian-pdf-' . date('YmdHis') . '.pdf');
+        }, HttpStatusHelper::OK, ['Content-Type' => 'application/pdf']);
     }
 
     private function _logRequest($req_id, $stat_id, $note_log)
