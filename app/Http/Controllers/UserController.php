@@ -18,6 +18,8 @@ use App\Mail\UserForgotPasswordMail;
 use App\Mail\UserVerificationMail;
 // Use App\User;
 use App\Helpers\LogHelper;
+use App\Helpers\CheckSiak;
+
 use App\Models\User;
 use App\Models\UserTemp;
 use Session;
@@ -402,6 +404,24 @@ class UserController extends Controller
         $data['created_at'] = date('Y-m-d H:i:s');
         $data['user_email_token'] = $token;
         $data['user_email_expired'] = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
+
+         //check to siak
+         if (empty($request->client_id) && empty($request->token) && empty($request->client_secret)) {
+               // mantra cek kependudukan
+                $checkRes = CheckSiak::exec($request);
+
+                dd($checkRes);
+    
+                //do scoring
+                $score = $checkRes['score'];
+    
+                if ($score < 100) {
+                    $message = 'Data yang anda masukan tidak sesuai dengan data kependudukan. Tolong cek kembali kesuaian ' . $checkRes['message_score'];
+
+                    return redirect('/masuk')->with('error', $message);
+                }
+        } 
+        
 
         $nikEnc = Crypt::encryptString($request['user_nik']);
         $data_email = [];
