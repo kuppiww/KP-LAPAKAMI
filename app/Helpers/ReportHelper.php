@@ -74,7 +74,7 @@ class ReportHelper {
 		}
 		return '<div style="position: absolute; left: 15px; bottom: 15px;">' .
 			QrCodeHelper::generate(env('APP_URL_LAPAKAMI_VERIFIKASI') . '/hasil?key=' . $serviceCode . '-' . $idSurat, 110, $status_request) . '<br />' .
-			'<span style="font-size: 15px;color:'.$color.'">' . strtoupper($serviceCode) . '-' . $idSurat . '</span>' .
+			// '<span style="font-size: 15px;color:'.$color.'">' . strtoupper($serviceCode) . '-' . $idSurat . '</span>' .
 		'</div>';
 	}
 
@@ -171,14 +171,47 @@ class ReportHelper {
 			'<table align="center" width="500px" border="0" autoresize="0">'.
 				'<tr>'.
 					'<td width="110px" align="center" style="padding-top:13px;padding-bottom:15px;">'.
-						// '<img height="42%" src="' . public_path() . '/assets/img/logo_report_color.png" />'.
-						''.self::setQrCode($id_surat, $service_code, $request_status).''.
+						'<img height="42%" src="' . public_path() . '/assets/img/logo_report_color.png" />'.
 					'</td>'.
 					'<td width="310px">'.
 						'Ditandatangani secara elektronik oleh : <br>'.
 						'<b>'.$jabatan.'</b><br><br>'.
 						'<b>'.$nama_singkat_ttd.'</b><br>'.$pangkat.'<br>'.
 						'<p>NIP. '.substr("$nip_ttd",0,8) . " " . substr("$nip_ttd",8,6) . " " . substr("$nip_ttd",14,1) . " " . substr("$nip_ttd",15,3).'</p>'.
+					'</td>'.
+				'</tr>'.
+			'</table>';
+	}
+
+	public static function tte_v2($nama_kel, $tgl_surat, $ttd_l, $ttd_f, $id_surat, $service_code, $request_status, $nama_singkat_ttd)
+	{
+		$fontsize = '25px';
+		$color = 'black';
+		$backgroundColor = '';
+		if ($ttd_f == null) {
+			$backgroundColor = 'red';
+			$color = 'white';
+		}
+		return
+			'<table width="500px" border="0" autoresize="0">'.
+				'<tr>'.
+					'<td>
+						<p style="font-family: Arial;color:'.$color.';background-color: '.$backgroundColor.';font-size: '.$fontsize.';">'.$nama_kel.', '.self::setFormatTanggal($tgl_surat).'</p>
+					</td>
+				</tr>'.
+				'<tr>'.
+					'<td >'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.' '.strtoupper(str_replace(chr(13), '<br />', $ttd_l)).'</b><br>'.
+					'</td>'.
+				'</tr>'.
+				'<tr>'.
+					'<td width="420px" align="left" style="padding-top:13px;padding-bottom:15px;">'.
+						''.self::setQrCode($id_surat, $service_code, $request_status).''.
+					'</td>'.
+				'</tr>'.
+				'<tr>'.
+					'<td >'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.strtoupper($nama_singkat_ttd).'</b><br>'.
 					'</td>'.
 				'</tr>'.
 			'</table>';

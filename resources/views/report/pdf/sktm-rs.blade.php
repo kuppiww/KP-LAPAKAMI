@@ -91,7 +91,7 @@
     @else
     @endif --}}
     <p style="margin-top: 0px;text-align:center;{{ ($pengajuan->request_status_id == 'APPROVED') ? '' : 'color:red;' }}">
-        Nomor : {{ $data->no_surat ?? '{nomor_surat}' }}
+        Nomor : {{ $data->no_surat ?? '${nomor_surat}' }}
     </p>
 
     {{-- <div class="row" style="padding-left: 223px;margin-top:0px;">
@@ -219,77 +219,47 @@
         //     $ttd_l_kec = $expkec[1];
         // }
 
-		$nama_singkat_ttd = '{nama_singkat_ttd}';//$d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd
+		$nama_singkat_ttd = '${nama_singkat_ttd}';//$d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd
 	@endphp
-	<div>
-		{{-- <table align="center" width="555px" border="0" autoresize="0">
-			<tr>
-				<td width="265px"></td>
-				<td width="22px"></td>
-				<td width="250px">
-					{{ session('nama_kelurahan') }}, {{ $DateTime::getSimpleDate($d->tgl_surat) }}
-				</td>
-			</tr>
-			<tr>
-				<td valign="top">Camat {{ session('nama_kecamatan') }},</td>
-				<td valign="top">{{ $d->f_ttd }}</td>
-				<td valign="top">{!! str_replace(chr(13), '<br />', $d->l_ttd) !!},{{ $HtmlHelper::printBreakLine(3) }}</td>
-			</tr>
-			<tr>
-				<td colspan="3">{{ $HtmlHelper::printBreakLine(4) }}</td>
-			</tr>
-			<tr>
-				<td>__________________________</td>
-				<td></td>
-				<td><u>{{ $d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd }}</u></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-				<td>NIP. {{ $d->nip_ttd }}</td>
-			</tr>
-			<tr>
-				<td align="left" colspan="3"><barcode code="{{ $d->nik }}" type="C128B" size="0.6" height="2" text="1" /></td>
-			</tr>
-		</table> --}}
-	</div>
-	<div class="row" style="margin-right: 40px;margin-left: 40px;">
+	{{-- <div class="row" style="margin-right: 40px;margin-left: 40px;">
 		@if ($service->service_is_kec)
             {!! $ReportHelper::ttehead($pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'), $data->f_ttd, $data->l_ttd ?? '{ttd_l}', true, 'l_kec_ttd', 'f_kec_ttd') !!}
         @else
             {!! $ReportHelper::ttehead($pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'), $data->f_ttd, $data->l_ttd) !!}
         @endif
-	</div>
+	</div> --}}
     <div class="row" style="margin-right: 40px;margin-left: 40px;">
 		@if ($service->service_is_kec)
 			<div class="sec1_col6">
 				{{-- {!! $ReportHelper::setQrCode('{id_surat}', $service->service_code ?: '', $pengajuan->request_status_id) !!} --}}
 			</div>
 			<div style="float: left; width: 10px; text-align: left;">&nbsp;</div>
-            <div class="sec2_col6" style="border: double;">
+            <div class="sec2_col6">
                 {{-- {!! $ReportHelper::ttecamat($ttd_l_kec, $d->nama_kec_ttd, $d->nip_kec_ttd, $d->jabatan_kec_ttd) !!} --}}
-				{!! $ReportHelper::tte(
-                    '{id_surat}', 
+				{!! $ReportHelper::tte_v2(
+                    $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
+                    $data->l_ttd,
+                    $data->f_ttd,
+                    '${id_surat}', 
                     $service->service_code ?: '', 
-                    $pengajuan->request_status_id, 
-                    $nama_singkat_ttd, 
-                    $data->jabatan_kec_ttd ?? '{jabatan}', 
-                    $data->nip_ttd ?? '{nip_ttd}', 
-                    '{pangkat}') !!}
+                    $pengajuan->request_status_id,
+                    $nama_singkat_ttd
+				) !!}
             </div>
         @else
             <div class="sec1_col6">
                 {{-- {!! $ReportHelper::setQrCode('{id_surat}', $service->service_code ?: '', $pengajuan->request_status_id) !!} --}}
             </div>
 			<div class="sec2_col6" style="border: double">
-                {!! $ReportHelper::tte(
-                    '{id_surat}', 
+                {!! $ReportHelper::tte_v2(
+                    $pengajuan->sub_district, $data->tgl_surat,
+                    $data->l_ttd,
+                    $data->f_ttd,
+                    '${id_surat}', 
                     $service->service_code ?: '', 
-                    $pengajuan->request_status_id, 
-                    $nama_singkat_ttd, 
-                    $data->jabatan ?? '{jabatan}', 
-                    $data->nip_ttd ?? '{nip_ttd}', 
-                    '{pangkat}') !!}
+                    $pengajuan->request_status_id,
+                    $nama_singkat_ttd
+				) !!}
             </div>
         @endif
     </div>
