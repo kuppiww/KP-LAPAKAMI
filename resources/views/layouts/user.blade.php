@@ -351,6 +351,23 @@
                 })
             });
 
+            // Cancel request button
+	        $('.btnDelete').click(function(){
+				Swal.fire({
+				  title: 'Hapus?',
+				  text: "Anda yakin akan menghapus nya ?",
+				  icon: 'danger',
+				  showCancelButton: true,
+				  confirmButtonColor: '#ff2323',
+				  confirmButtonText: 'Ya, hapus!',
+				  cancelButtonText: 'Tutup',
+				}).then((result) => {
+				  if (result.isConfirmed) {
+				  	window.location = $(this).attr('data-url');
+				  }
+				})
+			});
+
         });
     </script>
     <!-- Script -->
