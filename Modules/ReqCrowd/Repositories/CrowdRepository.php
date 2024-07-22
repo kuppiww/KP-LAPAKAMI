@@ -2,6 +2,7 @@
 
 namespace Modules\ReqCrowd\Repositories;
 
+use App\Helpers\DateFormatHelper;
 use App\Implementations\QueryBuilderImplementation;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,14 @@ class CrowdRepository extends QueryBuilderImplementation
         $data['requests_det']['request_id']           = $data['request_id'];
         $data['requests_det']['created_at']           = $data['created_at'];
         $data['requests_det']['created_by']           = $data['created_by'];
+        if ($data['requests_det']['tgl_kegiatan_akhir'] == $data['requests_det']['tgl_kegiatan'] ) {
+            $day = date('D', strtotime($data['requests_det']['tgl_kegiatan']));
+            $data['requests_det']['hari_kegiatan'] = DateFormatHelper::hariIndo($day);
+        } else {
+            $day_one = date('D', strtotime($data['requests_det']['tgl_kegiatan']));
+            $day_two = date('D', strtotime($data['requests_det']['tgl_kegiatan_akhir']));
+            $data['requests_det']['hari_kegiatan'] = DateFormatHelper::hariIndo($day_one). ' s.d '.DateFormatHelper::hariIndo($day_two);
+        }
 
         try {
             DB::beginTransaction();
@@ -59,6 +68,14 @@ class CrowdRepository extends QueryBuilderImplementation
         $data['requests_det']['request_id']      = $data['request_id'];
         $data['requests_det']['updated_at']      = $data['updated_at'];
         $data['requests_det']['updated_by']      = $data['updated_by'];
+        if ($data['requests_det']['tgl_kegiatan_akhir'] == $data['requests_det']['tgl_kegiatan'] ) {
+            $day = date('D', strtotime($data['requests_det']['tgl_kegiatan']));
+            $data['requests_det']['hari_kegiatan'] = DateFormatHelper::hariIndo($day);
+        } else {
+            $day_one = date('D', strtotime($data['requests_det']['tgl_kegiatan']));
+            $day_two = date('D', strtotime($data['requests_det']['tgl_kegiatan_akhir']));
+            $data['requests_det']['hari_kegiatan'] = DateFormatHelper::hariIndo($day_one). ' s.d '.DateFormatHelper::hariIndo($day_two);
+        }
 
         try {
             DB::beginTransaction();

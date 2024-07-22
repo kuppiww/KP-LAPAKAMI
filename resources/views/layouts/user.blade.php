@@ -151,7 +151,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
-                        href="{{ url('verification') }}">
+                        href="{{ url('ubah-kk') }}">
                         <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                     </a>
                 </li>
@@ -235,7 +235,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
-                                href="{{ url('verification') }}">
+                                href="{{ url('ubah-kk') }}">
                                 <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                             </a>
                         </li>
