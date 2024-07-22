@@ -187,7 +187,7 @@ return [
         /*
          * Package Service Providers...
          */
-        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+        // Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -199,6 +199,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Yajra\DataTables\DataTablesServiceProvider::class,
+
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
 
     ],
 
@@ -215,10 +217,11 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        // 'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'DateFormatHelper' => App\Helpers\DateFormatHelper::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
     ])->toArray(),
 
 ];
