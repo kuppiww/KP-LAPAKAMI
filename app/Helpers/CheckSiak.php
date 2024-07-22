@@ -46,9 +46,9 @@ class CheckSiak
             $url,
             $query,
             [
-                'Content-Type: application/x-www-form-urlencoded',
-                'User-Agent: MANTRA',
-                'AccessKey: nmjzu2a490'
+                'Content-Type:application/x-www-form-urlencoded',
+                'User-Agent:MANTRA',
+                'AccessKey:nmjzu2a490'
             ],
         );
 
