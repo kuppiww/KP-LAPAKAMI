@@ -25,6 +25,7 @@
                 <input type="text" name="client_id" value="{{ $data['client_id'] }}" hidden readonly>
                 <input type="text" name="client_secret" value="{{ $data['client_secret'] }}" hidden readonly>
                 <input type="text" name="token" value="{{ $data['token'] }}" hidden readonly>
+                <input type="hidden" id="recaptcha-token" name="recaptcha_token">
                 
                 <div class="col-md-12 mb-3">
                     <div class="form-group">
@@ -105,6 +106,12 @@
             unhighlight: function(element, errorClass, validClass) {
                 $(element).addClass("is-valid").removeClass("is-invalid");
             }
+        });
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('captcha.sitekey') }}"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute();
         });
     </script>
 @endsection

@@ -84,4 +84,10 @@
             }
         });
     </script>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config('captcha.sitekey') }}"></script>
+    <script>
+        grecaptcha.ready(function() {
+            grecaptcha.execute();
+        });
+    </script>
 @endsection
