@@ -64,6 +64,7 @@ class RequestRepository extends QueryBuilderImplementation
                 ->select('requests.*', 'services.service_name', 'request_status.request_status_name_alias as request_status_name', 'request_status.request_status_color_alias as request_status_color', )
                 ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
                 ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id')
+                ->where('requests.request_status_id', 'PROCCESS')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } catch (Exception $e) {

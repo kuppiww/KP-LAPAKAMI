@@ -623,6 +623,27 @@
         var jmlhDocs = '{{ count($request_docs) }}';
         let jmlhCeklis = 0;
         var id = '{{ $request->request_id }}';
+        var status = '{{ $request->request_status_id }}';
+
+        if (status === 'PROCCESS') {
+            jmlhCeklis = jmlhDocs;
+            setChecklist('check_file_ktp');
+            setChecklist('check_file_rt_rw');
+            setChecklist('check_file_kk');
+            setChecklist('check_file_pernyataan');
+            setChecklist('check_file_rekomendasi_sekolah');
+            setChecklist('check_file_rujukan_rs');
+            setChecklist('check_file_jamkesmas');
+            setButton();
+        }
+
+        function setChecklist(id) {
+            var element = document.getElementById(id);
+            if (element !== null) {
+                $("#".id).attr('value', 'true');
+                document.getElementById(id).checked = true;
+            }
+        }
 
         $("#check_file_ktp").on('change', function() {
             if ($(this).is(':checked')) {

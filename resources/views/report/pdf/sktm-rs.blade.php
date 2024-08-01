@@ -250,9 +250,9 @@
             <div class="sec1_col6">
                 {{-- {!! $ReportHelper::setQrCode('{id_surat}', $service->service_code ?: '', $pengajuan->request_status_id) !!} --}}
             </div>
-			<div class="sec2_col6" style="border: double">
+			<div class="sec2_col6">
                 {!! $ReportHelper::tte_v2(
-                    $pengajuan->sub_district, $data->tgl_surat,
+                    $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
                     $data->l_ttd,
                     $data->f_ttd,
                     '${id_surat}', 
