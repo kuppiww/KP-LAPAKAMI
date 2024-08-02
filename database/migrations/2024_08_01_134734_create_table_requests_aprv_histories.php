@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('service_settings', function (Blueprint $table) {
-            $table->bigIncrements('service_setting_id');
-            $table->string('service_id', 50);
-            $table->string('kd_kel', 50);
-            $table->string('kd_kec', 50);
-            $table->string('role_setting', 255);
+        Schema::create('requests_verifications', function (Blueprint $table) {
+            $table->bigIncrements('req_verification_id');
+            $table->integer('request_id');
+            $table->string('status', 15);
             $table->dateTime('created_at')->nullable();
             $table->bigInteger('created_by')->nullable();
             $table->dateTime('updated_at')->nullable();
@@ -33,6 +31,11 @@ return new class extends Migration
                 ->references('user_id')
                 ->on('sys_users')
                 ->onDelete('cascade');
+            
+            $table->foreign('request_id')
+                ->references('request_id')
+                ->on('requests')
+                ->onDelete('cascade');
 
             $table->engine = 'InnoDB';
         });
@@ -45,6 +48,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('service_settings');
+        Schema::dropIfExists('requests_verifications');
     }
 };
