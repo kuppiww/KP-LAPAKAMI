@@ -144,9 +144,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
-                        href="{{ url('verification') }}">
-                        <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                    <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                        href="{{ url('operator') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Operator
                     </a>
                 </li>
                 <li class="nav-item">
@@ -228,9 +228,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
-                                href="{{ url('verification') }}">
-                                <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                            <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                                href="{{ url('operator') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Operator
                             </a>
                         </li>
                         <li class="nav-item">

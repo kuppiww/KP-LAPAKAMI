@@ -821,7 +821,7 @@ class ReqSktmController extends Controller
 
         DB::commit();
 
-        return redirect('verification/sktm/lihat/'.$id)->with('message', 'Permohonan berhasil diperbaharui');
+        return redirect('operator/sktm/lihat/'.$id)->with('message', 'Permohonan berhasil diperbaharui');
     }
 
     private function _logRequest($req_id, $stat_id, $note_log)

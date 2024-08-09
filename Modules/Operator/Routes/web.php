@@ -11,6 +11,8 @@
 |
 */
 
-Route::prefix('verification')->group(function() {
-    Route::get('/', 'VerificationController@index');
+Route::prefix('operator')->group(function() {
+    Route::get('/', 'OperatorController@index');
+    Route::get('/list', 'OperatorController@listpermohonan')->name('permohonan.list');
+    Route::get('/detail/{id}/{service_id}', 'OperatorController@show');
 });

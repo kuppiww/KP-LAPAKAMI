@@ -24,7 +24,7 @@ Route::prefix('user/layanan/sktm')->group(function() {
     Route::post('/updatepermohonan/{id}', 'ReqSktmController@updatepermohonan');
 });
 
-Route::prefix('verification/sktm')->group(function() {
+Route::prefix('operator/sktm')->group(function() {
     Route::get('/lihat/{id}', 'ReqSktmController@showPermohoanan');
     Route::get('/sesuai/{id}', 'ReqSktmController@proses');
 });
