@@ -31,5 +31,6 @@
     "Systasks": true,
     "SysTasks": true,
     "Verification": true,
-    "ChangeKK": true
+    "ChangeKK": true,
+    "Operator": true
 }
