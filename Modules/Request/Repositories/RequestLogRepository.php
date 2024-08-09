@@ -32,4 +32,19 @@ class RequestLogRepository extends QueryBuilderImplementation
             return $e->getMessage();
         }
     }
+
+    public function getAllByParamsForAdmin(array $params)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select('request_logs.*', 'request_status.request_status_name')
+                ->leftJoin('request_status', 'request_status.request_status_id', '=', 'request_logs.request_status_id')
+                ->where($params)
+                ->orderBy('request_log_id', 'DESC')
+                ->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
