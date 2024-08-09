@@ -182,6 +182,27 @@ class DateFormatHelper{
 			case 7: 	return "Minggu"; 	break; 
 		}
 	}
+
+	public static function hariIndo ($hariInggris) {
+		switch ($hariInggris) {
+		  case 'Sun':
+			return 'Minggu';
+		  case 'Mon':
+			return 'Senin';
+		  case 'Tue':
+			return 'Selasa';
+		  case 'Wed':
+			return 'Rabu';
+		  case 'Thu':
+			return 'Kamis';
+		  case 'Fri':
+			return 'Jumat';
+		  case 'Sat':
+			return 'Sabtu';
+		  default:
+			return 'hari tidak valid';
+		}
+	}
 }
  
 

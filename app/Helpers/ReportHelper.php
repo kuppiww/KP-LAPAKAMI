@@ -69,13 +69,24 @@ class ReportHelper {
 
 	public static function setQrCode($idSurat, $serviceCode = '', $status_request) {
 		$color = 'red';
-		if ($status_request == 'APPROVED') {
+		if ($status_request == 'APPROVED' || $status_request == 'APPROVED_KEC') {
 			$color = 'black';
 		}
 		return '<div style="position: absolute; left: 15px; bottom: 15px;">' .
 			QrCodeHelper::generate(env('APP_URL_LAPAKAMI_VERIFIKASI') . '/hasil?key=' . $serviceCode . '-' . $idSurat, 110, $status_request) . '<br />' .
 			// '<span style="font-size: 15px;color:'.$color.'">' . strtoupper($serviceCode) . '-' . $idSurat . '</span>' .
 		'</div>';
+
+		// $color = 'red';
+		// if ($status_request == 'APPROVED' || $status_request == 'APPROVED_KEC') {
+		// 	$color = 'black';
+		// }
+
+		// $qrCodeContent = QrCodeHelper::generate(env('APP_URL_LAPAKAMI_VERIFIKASI') . '/hasil?key=' . $serviceCode . '-' . $idSurat, 110, $status_request);
+
+		// return '<div style="position: absolute; left: 15px; bottom: 15px;">' .
+		// 	'<img src="data:image/png;base64,' . $qrCodeContent . '" alt="QR Code with Logo"><br />' .
+		// 	'</div>';
 	}
 
 	public static function setFormatTanggal($tanggal)
@@ -183,35 +194,145 @@ class ReportHelper {
 			'</table>';
 	}
 
-	public static function tte_v2($nama_kel, $tgl_surat, $ttd_l, $ttd_f, $id_surat, $service_code, $request_status, $nama_singkat_ttd)
+	public static function tte_v2_old($nama_kel, $tgl_surat, $ttd_f, $ttd_l, $service_code, $request_status, $nama_singkat_ttd)
 	{
 		$fontsize = '25px';
 		$color = 'black';
 		$backgroundColor = '';
+		$align = 'left';
 		if ($ttd_f == null) {
+			$align = 'left';
 			$backgroundColor = 'red';
 			$color = 'white';
 		}
+		$tablewidth = '500px';
+		$tdwidthone = '512px';
+		$tdwidthan  = '48px';
+		$tdwidthtwo = '510px';
 		return
-			'<table width="500px" border="0" autoresize="0">'.
+			// '<table align="'.$align.'" width="'.$tablewidth.'" border="1" autoresize="0">'.
+			// 	'<tr>'.
+			// 		'<td width="'.$tdwidthone.'" style="text-align:'.$align.';">
+			// 			<b style="font-family: Arial;font-size: '.$fontsize.';"></b>
+			// 		</td>'.
+			// 		'<td width="'.$tdwidthan.'" style="text-align:justify;vertical-align: top;">
+			// 			<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b>
+			// 		</td>'.
+			// 		'<td width="'.$tdwidthtwo.'" style="text-align:'.$align.';">
+			// 			<b style="font-family: Arial;font-size: '.$fontsize.';">'.str_replace(chr(13), '<br />', $ttd_l). ',</b>
+			// 		</td>'.
+			// 	'</tr>'.
+			// '</table>
+			'<table width="500px" border="1" autoresize="0">'.
 				'<tr>'.
+					'<td>'.
+						'<b style="font-family: Arial;color:white;font-size: '.$fontsize.';">a.n.</b><br>'.
+					'</td>'.
 					'<td>
 						<p style="font-family: Arial;color:'.$color.';background-color: '.$backgroundColor.';font-size: '.$fontsize.';">'.$nama_kel.', '.self::setFormatTanggal($tgl_surat).'</p>
-					</td>
-				</tr>'.
+					</td>'.
+				'</tr>'.
+			'</table>'.
+			'<table width="500px" border="1" autoresize="0">'.
 				'<tr>'.
-					'<td >'.
-						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.' '.strtoupper(str_replace(chr(13), '<br />', $ttd_l)).'</b><br>'.
+					'<td>'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b><br>'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b><br>'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b><br>'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b><br>'.
+						// '<b style="font-family: Arial;font-size: '.$fontsize.';">'.$ttd_f.'</b><br>'.
+					'</td>'.
+					'<td>'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.strtoupper(str_replace(chr(13), '<br />', $ttd_l)).'</b></br>'.
 					'</td>'.
 				'</tr>'.
 				'<tr>'.
+					'<td >'.
+						
+					'</td>'.
 					'<td width="420px" align="left" style="padding-top:13px;padding-bottom:15px;">'.
-						''.self::setQrCode($id_surat, $service_code, $request_status).''.
+						''.self::setQrCode('id_surat', $service_code, $request_status).'</br>'.
 					'</td>'.
 				'</tr>'.
+					'<tr>'.
+						'<td >'.
+						
+						'</td>'.
+						'<td width="420px" align="left" style="padding-top:13px;padding-bottom:15px;">'.
+							'<b style="font-family: Arial;color:'.$color.';font-size: '.$fontsize.';background-color: '.$backgroundColor.';">'.strtoupper($nama_singkat_ttd).'</b><br>'.
+						'</td>'.
+				'</tr>'.
+			'</table>';
+	}
+
+	public static function tte_v2($nama_kel, $tgl_surat, $ttd_f, $ttd_l, $service_code, $request_status, $nama_singkat_ttd)
+	{
+		$tablewidth = '800px';
+		$fontsize = '25px';
+		$tdwidthone = '512px';
+		$tdwidthan  = '48px';
+		$tdwidthtwo = '510px';
+		$backgroundColor = '';
+		$color = 'black';
+		$align = 'left';
+		$tglSurat = self::setFormatTanggal($tgl_surat);
+
+		if ($request_status != 'APPROVED' || $request_status != 'APPROVED_KEC') {
+			$align = 'left';
+			$backgroundColor = 'red';
+			$color = 'white';
+		}
+
+		$tglsurat = '<table align="'.$align.'" width="'.$tablewidth.'" border="0" autoresize="0">'.
+						'<tr>'.
+							'<td width="'.$tdwidthone.'" style="text-align:'.$align.';">
+								<b style="font-family: Arial;font-size: '.$fontsize.';"></b>
+							</td>'.
+							'<td width="'.$tdwidthan.'" style="text-align:justify;vertical-align: top;">
+								<b style="font-family: Arial;font-size: '.$fontsize.';"></b>
+							</td>'.
+							'<td width="'.$tdwidthtwo.'" style="text-align:left;">
+								<p style="font-family: Arial;color:'.$color.';background-color: '.$backgroundColor.';font-size: '.$fontsize.';">'.$nama_kel.', '.$tglSurat.'</p>
+							</td>
+						</tr>
+					</table><table><tr><td></td><td></td><td></td></tr></table>';
+
+			return $tglsurat.'<table align="'.$align.'" width="'.$tablewidth.'" border="0" autoresize="0">'.
 				'<tr>'.
-					'<td >'.
-						'<b style="font-family: Arial;font-size: '.$fontsize.';">'.strtoupper($nama_singkat_ttd).'</b><br>'.
+					'<td width="'.$tdwidthone.'" style="text-align:'.$align.';">
+						<b style="font-family: Arial;font-size: '.$fontsize.';"></b>
+					</td>'.
+					'<td width="'.$tdwidthan.'" style="text-align:justify;vertical-align: top;">
+						<b style="font-family: Arial;color:'.$color.';background-color: '.$backgroundColor.';font-size: '.$fontsize.';">'.$ttd_f.'</b>
+					</td>'.
+					'<td width="'.$tdwidthtwo.'" style="text-align:'.$align.';">
+						<b style="font-family: Arial;color:'.$color.';background-color: '.$backgroundColor.';font-size: '.$fontsize.';">'.str_replace(chr(13), '<br />', $ttd_l). ',</b><br>'.
+					'</td>'.
+				'</tr>'.
+			'</table>'.
+			'<table align="'.$align.'" width="'.$tablewidth.'" border="0" autoresize="0">'.
+				'<tr>'.
+					'<td width="'.$tdwidthone.'" style="text-align:'.$align.';">
+					
+					</td>'.
+					'<td width="'.$tdwidthan.'" style="text-align:justify;vertical-align: top;">
+						<b style="font-family: Arial;color:white;font-size: '.$fontsize.';">a.n.</b>
+					</td>'.
+					'<td width="'.$tdwidthtwo.'" style="text-align:'.$align.';">'.
+						''.self::setQrCode('id_surat', $service_code, $request_status).'</br>'.
+					'</td>'.
+				'</tr>'.
+			'</table>'.
+			'<table align="'.$align.'" width="'.$tablewidth.'" border="0" autoresize="0">'.
+				'<tr>'.
+					'<td width="'.$tdwidthone.'" style="text-align:'.$align.';">
+					
+					</td>'.
+					'<td width="'.$tdwidthan.'" style="text-align:justify;vertical-align: top;">
+						<b style="font-family: Arial;color:white;font-size: '.$fontsize.';">a.n.</b>
+					</td>'.
+					'<td width="'.$tdwidthtwo.'" style="text-align:'.$align.';">'.
+						'<b style="font-family: Arial;font-size: '.$fontsize.';color:'.$color.';background-color: '.$backgroundColor.';">'.$nama_singkat_ttd.'</b>'.
 					'</td>'.
 				'</tr>'.
 			'</table>';

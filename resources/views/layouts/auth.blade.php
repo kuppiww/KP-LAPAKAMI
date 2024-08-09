@@ -100,7 +100,7 @@
 	<!-- /Jquery Validation / -->
 
 	<!-- Google reCaptcha -->
-	{!! ReCaptcha::htmlScriptTagJsApi() !!}
+	{!! NoCaptcha::renderJs() !!}
 
 	<!-- Script -->
 	@yield('script')

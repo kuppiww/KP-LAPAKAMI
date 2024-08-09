@@ -34,7 +34,12 @@ use App\Helpers\HTMLHelper;
 use App\Helpers\LogHelper;
 use App\Helpers\DateTime;
 use App\Helpers\HttpStatusHelper;
+use App\Helpers\NotificationHelper;
 use App\Helpers\ReportHelper;
+use App\Helpers\Surat;
+use App\Helpers\TtdHelper;
+use App\Mail\RequestNotifikasiMail;
+use App\Mail\RequestRejectedFinalMail;
 use DB;
 use PDF;
 
@@ -58,6 +63,7 @@ class ReqSktmController extends Controller
     protected $_serviceRepository;
     protected $module;
     protected $_logHelper;
+    protected $breadcrumbs;
 
     public function __construct()
     {
@@ -81,6 +87,7 @@ class ReqSktmController extends Controller
         $this->_sktmPlnRepository = new SktmPlnRepository;
         $this->_requestAttachmentRepository = new RequestAttachmentRepository;
         $this->_serviceRepository = new ServiceRepository;
+        $this->breadcrumbs = ['Ekonomi, Pemberdayaan Masyarakat dan Kesejahteraan Sosial', 'Tidak Mampu', 'Sekolah'];
 
         $this->module = "ReqBirth";
         $this->_logHelper = new LogHelper;
@@ -431,7 +438,7 @@ class ReqSktmController extends Controller
         return redirect('user/layanan')->with('message', 'Permohonan berhasil dibatalkan');
     }
 
-    public function showPermohoanan(Request $request, $id)
+    public function proses(Request $request, $id)
     {
         $slug = $request->segment(2);
 
@@ -446,12 +453,163 @@ class ReqSktmController extends Controller
         $params = array(
             'request_id' => $id,
             'requests.request_id' => $id,
-            // 'requests.service_id'   => $getService->service_id
         );
         $request = $this->_requestRepository->getByParams($params);
 
         if (!$request) {
             return redirect(url('404'));
+        }
+
+        if ($request->request_status_id == 'VERIFIED') {
+            $status['request_status_id'] = 'PROCCESS';
+            DB::beginTransaction();
+            $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+            $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+            DB::commit();
+
+            if ($request->service_is_kec) {
+                $status['request_status_id'] = 'SUBMITED_KEC';
+                DB::beginTransaction();
+                $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+                $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+                DB::commit();
+            } else {
+                // set nomor surat
+                $no_surat = Surat::getNoSurat($this->_sktmHealthRepository, date('Y'), $request->kd_kel, $this->breadcrumbs);
+                $data['no_surat'] = $no_surat;
+                $data['tgl_surat'] = date('Y-m-d');
+                $data['masa_berlaku'] = date('Y-m-d',strtotime('+1 month',strtotime($data['tgl_surat'])));
+                DB::beginTransaction();
+                $this->_sktmHealthRepository->updateNoSurat(DataHelper::_normalizeParams($data, false, true), $request->request_id);
+                DB::commit();
+
+                // send notif
+                if ($id != null) {
+                    $text = NotificationHelper::redaksi($status['request_status_id'], null);
+                    $data_email = array(
+                        'name' => $request->nama_warga,
+                        'email' => $request->user_email,
+                        'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                        'service_name' => 'Surat Keterangan Tidak Mampu',
+                        'time' => date('Y-m-d H:i:s'),
+                        'status'        => $text['statusname'],
+                        'redaksi'       => $text['redaksi'],
+                        'catatan'       => $text['catatan']
+                    );
+        
+                    Mail::to($request->user_email)->send(new RequestNotifikasiMail($data_email));
+                }
+            }
+        }
+
+        if ($request->request_status_id == 'VERIFIED_KEC') {
+            $status['request_status_id'] = 'PROCCESS_KEC';
+            DB::beginTransaction();
+            $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+            $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+            DB::commit();
+
+            if ($id != null) {
+                $text = NotificationHelper::redaksi($status['request_status_id'], null);
+                $data_email = array(
+                    'name' => $request->nama_warga,
+                    'email' => $request->user_email,
+                    'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                    'service_name' => 'Surat Keterangan Tidak Mampu',
+                    'time' => date('Y-m-d H:i:s'),
+                    'status'        => $text['statusname'],
+                    'redaksi'       => $text['redaksi'],
+                    'catatan'       => $text['catatan']
+                );
+    
+                Mail::to($request->user_email)->send(new RequestNotifikasiMail($data_email));
+            }
+
+            // set nomor surat
+            $no_surat = Surat::getNoSurat($this->_sktmHealthRepository, date('Y'), $request->kd_kel, $this->breadcrumbs);
+            $data['no_surat'] = $no_surat;
+            $data['tgl_surat'] = date('Y-m-d');
+            $data['masa_berlaku'] = date('Y-m-d',strtotime('+1 month',strtotime($data['tgl_surat'])));
+            DB::beginTransaction();
+            $this->_sktmHealthRepository->updateNoSurat(DataHelper::_normalizeParams($data, false, true), $request->request_id);
+            DB::commit();
+        }
+
+        // return view('reqsktm::detailPermohonan', compact('request', 'request_detail', 'logs', 'request_docs'));
+        return redirect('/verification');
+    }
+
+    public function showPermohoanan(Request $request, $id)
+    {
+        $slug = $request->segment(2);
+        $user = Auth::user();
+
+
+        // Validation service
+        $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+
+        // Validation request data 
+        $params = array(
+            'request_id' => $id,
+            'requests.request_id' => $id,
+            // 'requests_ttes.request_id'   => $id
+        );
+        $request = $this->_requestRepository->getByParams($params);
+
+        if (!$request) {
+            return redirect(url('404'));
+        }
+
+        if ($request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED') {
+            $status['request_status_id'] = 'VERIFIED';
+            DB::beginTransaction();
+            $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+            $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+            DB::commit();
+
+            if ($id != null) {
+                $text = NotificationHelper::redaksi($status['request_status_id'], null);
+                $data_email = array(
+                    'name' => $request->nama_warga,
+                    'email' => $request->user_email,
+                    'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                    'service_name' => 'Surat Keterangan Tidak Mampu',
+                    'time' => date('Y-m-d H:i:s'),
+                    'status'        => $text['statusname'],
+                    'redaksi'       => $text['redaksi'],
+                    'catatan'       => $text['catatan']
+                );
+    
+                Mail::to($user->user_email)->send(new RequestNotifikasiMail($data_email));
+            }
+        }
+
+        if ($request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'SUBMITED_KEC') {
+            $status['request_status_id'] = 'VERIFIED_KEC';
+            DB::beginTransaction();
+            $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+            $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+            DB::commit();
+
+            if ($id != null) {
+                $text = NotificationHelper::redaksi($status['request_status_id'], null);
+                $data_email = array(
+                    'name' => $request->nama_warga,
+                    'email' => $request->user_email,
+                    'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                    'service_name' => 'Surat Keterangan Tidak Mampu',
+                    'time' => date('Y-m-d H:i:s'),
+                    'status'        => $text['statusname'],
+                    'redaksi'       => $text['redaksi'],
+                    'catatan'       => $text['catatan']
+                );
+    
+                Mail::to($request->user_email)->send(new RequestNotifikasiMail($data_email));
+            }
         }
 
         $filter['request_id'] = $id;
@@ -468,8 +626,13 @@ class ReqSktmController extends Controller
         } else {
             $request_detail = $this->_sktmPlnRepository->getByParams($filter);
         }
+        
+        $listJK = $this->_genderRepository->getAll();
+        $listReligion = $this->_religionRepository->getAll();
+        $listHospitals = $this->_hospitalRepository->getAll();
+        $listHubKel = $this->_famRelationRepository->getAll();
 
-        return view('reqsktm::detailPermohonan', compact('request', 'request_detail', 'logs', 'request_docs'));
+        return view('reqsktm::detailPermohonan', compact('request', 'listHubKel', 'listHospitals', 'request_detail', 'logs', 'request_docs', 'listJK', 'listReligion'));
     }
 
     public function pdf(Request $request, $id, $servicename)
@@ -491,13 +654,19 @@ class ReqSktmController extends Controller
         );
         
         $datarequest = $this->_sktmHealthRepository->getByParams($params); //$this->_setRepository($getService->slug);
+        $ttd = $this->_requestRepository->getTTD($id);
+        $f_ttd = TtdHelper::getFttd($this->_sktmHealthRepository, $ttd->ttd_nip);
+        $l_ttd = TtdHelper::getLttd($this->_sktmHealthRepository, $ttd->ttd_nip);
 
         $data = [
             'meta' => [],//$this->meta,
             'data' => $datarequest,
             'pengajuan' => $this->_requestRepository->getByParams($params),
             'service' => $getService,
+            'f_ttd' => $f_ttd,
+            'l_ttd' => $l_ttd,
             'title' => $title,
+            'ttdRequest' => $ttd,
             'ReportHelper' => ReportHelper::class,
             'HtmlHelper' => HTMLHelper::class,
             'DateTime' => DateTime::class
@@ -515,12 +684,156 @@ class ReqSktmController extends Controller
         }, HttpStatusHelper::OK, ['Content-Type' => 'application/pdf']);
     }
 
+    public function tangguhkan(Request $request, $id)
+    {
+        $slug = $request->segment(3);
+        $user = Auth::user();
+
+        // Validation service
+        $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+
+        // validate request
+        $params = array(
+            'request_id' => $id,
+            'requests.request_id' => $id
+        );
+        $requestService = $this->_requestRepository->getByParams($params);
+
+        if (!$requestService) {
+            return redirect(url('404'));
+        }
+
+        // update status
+        $status['request_status_id'] = 'REJECTED';
+        DB::beginTransaction();
+        $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $id);
+        $this->_logRequest($id, $status['request_status_id'], 'Ditolak oleh ');
+        DB::commit();
+
+        if ($id != null) {
+            $data_email = array(
+                'name' => $requestService->user_nama,
+                'email' => $requestService->user_email,
+                'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                'service_name' => 'Surat Keterangan Tidak Mampu',
+                'redaksi' => $request->keterangan,
+                'time' => date('Y-m-d H:i:s'),
+            );
+
+            Mail::to($user->user_email)->send(new RequestRejectedFinalMail($data_email));
+        }
+
+        return redirect('/verification');
+    }
+
+    public function tolak(Request $request, $id)
+    {
+        $slug = $request->segment(3);
+        $user = Auth::user();
+
+        // Validation service
+        $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+
+        // validate request
+        $params = array(
+            'request_id' => $id,
+            'requests.request_id' => $id
+        );
+        $requestService = $this->_requestRepository->getByParams($params);
+
+        if (!$requestService) {
+            return redirect(url('404'));
+        }
+
+        // update status
+        $status['request_status_id'] = 'REJECTED_FINAL';
+        DB::beginTransaction();
+        $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $id);
+        $this->_logRequest($id, $status['request_status_id'], $request->keterangan);
+
+        if ($id != null) {
+            $data_email = array(
+                'name' => $requestService->user_nama,
+                'email' => $requestService->user_email,
+                'url' => env('APP_URL') . '/user/layanan/sktm/lihat/' . $id,
+                'service_name' => 'Surat Keterangan Tidak Mampu',
+                'redaksi' => $request->keterangan,
+                'time' => date('Y-m-d H:i:s'),
+            );
+
+            Mail::to($user->user_email)->send(new RequestRejectedFinalMail($data_email));
+        }
+
+        DB::commit();
+
+
+        return redirect('/verification');
+    }
+
+    public function updatepermohonan(Request $request, $id)
+    {
+        $slug = $request->segment(3);
+
+        // Validation service
+        $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
+
+        if (!$getService) {
+            return redirect(url('404'));
+        }
+
+        $filter['request_id'] = $id;
+        $req = $this->_requestRepository->getByParams($filter);
+
+        if (!$req) {
+            return redirect(url('404'));
+        }
+
+        $datarequest['_token'] = $request->_token;
+        $datarequest['id_jenkel'] = $request->gender;
+        $datarequest['tmp_lahir'] = $request->tmp_lahir;
+        $datarequest['id_agama'] = $request->religion;
+        $datarequest['pekerjaan'] = $request->pekerjaan;
+        $datarequest['rt'] = $request->rt;
+        $datarequest['rw'] = $request->rw;
+
+        //convertion date pengantar
+        $tgl_surat_pengantar = str_replace('/', '-', $request->tgl_surat_pengantar);
+        $datarequest['tgl_surat_pengantar'] = date("Y-m-d", strtotime($tgl_surat_pengantar));
+        $datarequest['no_surat_pengantar'] = $request->no_surat_pengantar;
+        $datarequest['_token'] = $request->_token;
+
+        //convertion date birth
+        $tgl_lahir = str_replace('/', '-', $request->tgl_lahir);
+        $datarequest['tgl_lahir'] = date("Y-m-d", strtotime($tgl_lahir));
+
+        DB::beginTransaction();
+
+        $this->_requestRepository->updatePermohonan(DataHelper::_normalizeParams($datarequest, false, true), $id);
+        $this->_logHelper->store($this->module, $request->service_id, 'update');
+
+        DB::commit();
+
+        return redirect('verification/sktm/lihat/'.$id)->with('message', 'Permohonan berhasil diperbaharui');
+    }
+
     private function _logRequest($req_id, $stat_id, $note_log)
     {
         $user_name = Auth::user()->user_id;
         $request['request_id'] = $req_id;
         $request['request_status_id'] = $stat_id;
-        $request['request_log_note'] = $note_log . $user_name;
+        if ($stat_id == 'REJECTED_FINAL' || $stat_id == 'REJECTED') {
+            $request['request_log_note'] = $note_log;
+        } else {
+            $request['request_log_note'] = $note_log . $user_name;
+        }
 
         $this->_requestLogRepository->insert(DataHelper::_normalizeParams($request, true));
     }

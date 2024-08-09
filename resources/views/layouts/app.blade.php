@@ -213,7 +213,7 @@
 
     @yield('script')
 
-    {!! ReCaptcha::htmlScriptTagJsApi() !!}
+    {!! NoCaptcha::renderJs() !!}
 	<!-- End  Javascript -->
 </body>
 </html>

@@ -52,6 +52,42 @@ class NotificationHelper{
 
 	}
 
+	public static function redaksi($status, $request_note)
+	{
+		$dalamproses = 'Selamat permohonan layanan yang anda ajukan melalui aplikasi Lapakami dalam proses';
+        $prosespermohonan = 'proses permohonan dapat anda lihat melalui Lapakami menggunakan akun anda dengan detail permohonan sebagai berikut.';
+        $catatan = null;
+        if ($status == 'APPROVED') {
+            $redaksi = 'Selamat permohonan layanan yang anda ajukan melalui aplikasi Lapakami telah selesai, dokumen hasil permohonan dapat anda unduh melalui Lapakami menggunakan akun anda dengan detail permohonan sebagai berikut.';
+            $statusname = 'Selesai';
+        } else if ($status == 'VERIFIED') {
+            $redaksi = $dalamproses.' verfikasi, '. $prosespermohonan;
+            $statusname = 'Proses Verifikasi';
+        } else if ($status == 'REJECTED') {
+            $redaksi = 'Mohon maaf permohonan layanan yang anda ajukan melalui aplikasi Lapakami tidak dapat kami lanjutkan ke tahapan berikutnya, silahkan lengkapi atau perbaiki persyaratan dengan detail sebagai berikut.';
+            $statusname = 'Permohonan Ditolak';
+            $catatan = $request_note;
+        } else if ($status == 'PROCCESS') {
+            $redaksi = $dalamproses.' pembuatan dokumen, '. $prosespermohonan;
+            $statusname = 'Proses Pembuatan Dokumen';
+        } else if ($status == 'PROCCESS_KEC') {
+            $redaksi = $dalamproses.' pembuatan, '. $prosespermohonan;
+            $statusname = 'Proses Pembuatan Dokumen di Kecamatan';
+        } else if ($status = 'VERIFIED_KEC') {
+            $redaksi = $dalamproses.' verfikasi di Kecamatan, '. $prosespermohonan;
+            $statusname = 'Proses Verifikasi di Kecamatan';
+        } else {
+            $redaksi = '-';
+            $statusname = '-';
+        }
+
+		$data['redaksi'] = $redaksi;
+		$data['statusname'] = $statusname;
+		$data['catatan'] = $catatan;
+
+		return $data;
+	}
+
 	public static function render(){
 
 		$userid 	= Auth::user()->user_id;
