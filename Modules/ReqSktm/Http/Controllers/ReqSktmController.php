@@ -461,12 +461,6 @@ class ReqSktmController extends Controller
         }
 
         if ($request->request_status_id == 'VERIFIED') {
-            $status['request_status_id'] = 'PROCCESS';
-            DB::beginTransaction();
-            $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
-            $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
-            DB::commit();
-
             if ($request->service_is_kec) {
                 $status['request_status_id'] = 'SUBMITED_KEC';
                 DB::beginTransaction();
@@ -474,6 +468,12 @@ class ReqSktmController extends Controller
                 $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
                 DB::commit();
             } else {
+                $status['request_status_id'] = 'PROCCESS';
+                DB::beginTransaction();
+                $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $request->request_id);
+                $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+                DB::commit();
+
                 // set nomor surat
                 $no_surat = Surat::getNoSurat($this->_sktmHealthRepository, date('Y'), $request->kd_kel, $this->breadcrumbs);
                 $data['no_surat'] = $no_surat;
@@ -614,7 +614,7 @@ class ReqSktmController extends Controller
 
         $filter['request_id'] = $id;
 
-        $logs = $this->_requestLogRepository->getAllByParams($filter);
+        $logs = $this->_requestLogRepository->getAllByParamsForAdmin($filter);
         $request_docs = $this->_requestAttachmentRepository->getAllByParams($filter);
 
         if ($request->service_id == 'REQ_SKTM_EDUCATION') {
