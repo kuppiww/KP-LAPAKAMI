@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('requests_verifications', function (Blueprint $table) {
-            $table->integer('user_id_kec')->nullable();
+        Schema::table('requests_ttes', function (Blueprint $table) {
+            $table->integer('user_id')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('requests_verifications', function (Blueprint $table) {
-            $table->dropColumn('user_id_kec')->nullable();
+        Schema::table('requests_ttes', function (Blueprint $table) {
+            $table->dropColumn('user_id')->nullable();
         });
     }
 };

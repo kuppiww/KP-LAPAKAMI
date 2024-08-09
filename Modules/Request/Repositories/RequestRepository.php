@@ -64,7 +64,7 @@ class RequestRepository extends QueryBuilderImplementation
                 ->select('requests.*', 'services.service_name', 'request_status.request_status_name_alias as request_status_name', 'request_status.request_status_color_alias as request_status_color', )
                 ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
                 ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id')
-                ->where('requests.request_status_id', 'PROCCESS')
+                // ->where('requests.request_status_id', 'PROCCESS')
                 ->orderBy('created_at', 'desc')
                 ->get();
         } catch (Exception $e) {
@@ -97,7 +97,7 @@ class RequestRepository extends QueryBuilderImplementation
         try {
             return DB::connection($this->db)
                 ->table($this->table)
-                ->select('requests.*', 'services.service_name', 'request_status_color', 'request_status.request_status_name as request_status_name', 'm_gender.gender', 'm_religion.religion', 'm_sub_districts.sub_district', 'm_districts.district', 'm_districts.kd_district', 'users.user_alamat', 'services.slug', 'services.service_is_kec', 'services.slug_simkel')
+                ->select('requests.*', 'services.service_name', 'request_status_color', 'request_status.request_status_name as request_status_name', 'm_gender.gender', 'm_religion.religion', 'm_sub_districts.sub_district', 'm_districts.district', 'm_districts.kd_district', 'users.user_alamat', 'users.user_email', 'services.slug', 'services.service_is_kec', 'services.slug_simkel')
                 ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
                 ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id')
                 ->leftJoin('m_gender', 'm_gender.id_gender', '=', 'requests.id_jenkel')
@@ -110,6 +110,17 @@ class RequestRepository extends QueryBuilderImplementation
         } catch (Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function getTTD($id)
+    {
+        return DB::connection($this->db)
+        ->table('requests_ttes')
+        ->select('pegawai.nama as ttd_name', 'pegawai.nip as ttd_nip')
+        ->leftJoin('sys_users', 'sys_users.user_id', '=', 'requests_ttes.user_id')
+        ->leftJoin('pegawai', 'pegawai.nip', '=', 'sys_users.user_nip')
+        ->where('requests_ttes.request_id', $id)
+        ->first();
     }
 
     // public function getByKeyParams(array $params)
@@ -176,6 +187,46 @@ class RequestRepository extends QueryBuilderImplementation
             DB::commit();
             return $requestId;
         } catch (Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    public function updateStatus(array $data, $id)
+    {
+        $data['requests']['request_status_id'] = $data['request_status_id'];
+        $data['requests']['updated_at'] = $data['updated_at'];
+        $data['requests']['updated_by'] = $data['updated_by'];
+
+        try {
+            DB::beginTransaction();
+            DB::table($this->table)->where('request_id', '=', $id)->update($data['requests']);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    public function updatePermohonan(array $data, $id)
+    {
+        $data['requests']['id_jenkel'] = isset($data['id_jenkel']) ? $data['id_jenkel'] : null;
+        $data['requests']['tmp_lahir'] = isset($data['tmp_lahir']) ? $data['tmp_lahir'] : null;
+        $data['requests']['tgl_lahir'] = isset($data['tgl_lahir']) ? $data['tgl_lahir'] : null;
+        $data['requests']['id_agama'] = isset($data['id_agama']) ? $data['id_agama'] : null;
+        $data['requests']['pekerjaan'] = isset($data['pekerjaan']) ? $data['pekerjaan'] : null;
+        $data['requests']['no_surat_pengantar'] = isset($data['no_surat_pengantar']) ? $data['no_surat_pengantar'] : null;
+        $data['requests']['tgl_surat_pengantar'] = isset($data['tgl_surat_pengantar']) ? $data['tgl_surat_pengantar'] : null;
+        $data['requests']['rt'] = $data['rt'];
+        $data['requests']['rw'] = $data['rw'];
+        $data['requests']['updated_at'] = $data['updated_at'];
+        $data['requests']['updated_by'] = $data['updated_by'];
+
+        try {
+            DB::beginTransaction();
+            DB::table($this->table)->where('request_id', '=', $id)->update($data['requests']);
+            DB::commit();
+        } catch (\Throwable $e) {
             DB::rollback();
             return $e->getMessage();
         }

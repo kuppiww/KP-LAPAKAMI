@@ -24,6 +24,22 @@ class QrCodeHelper
         }
 
         return substr((string) $qrcode, 38);
+
+        // if ($status_request == 'APPROVED') {
+        //     $qrcode = \QrCode::format('png')
+        //                     ->size($size)
+        //                     ->generate($content);
+        // } else {
+        //     $logoPath = public_path('assets/img/logo-color-baru.jpg');
+        //     $qrcode = \QrCode::format('png')
+        //                     ->size($size)
+        //                     ->color(255, 0, 0)
+        //                     ->merge($logoPath, .1, true)
+        //                     ->errorCorrection('M')
+        //                     ->generate($content);
+        // }
+    
+        // return base64_encode($qrcode);
     }
 
 }

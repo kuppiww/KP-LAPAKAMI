@@ -2,7 +2,7 @@
 @section('title')
     Detail Permohonan Layanan
 @endsection
-<?php use App\Helpers\DateFormatHelper; ?>
+<?php use App\Helpers\DateFormatHelper; use App\Helpers\Masking; ?>
 
 
 @section('content')
@@ -69,13 +69,13 @@
                                 <div class="col-md-6">
                                     <p>
                                         <label class="form-label">Nomor Induk Kependudukan</label><br>
-                                        {{ $request->nik }}
+                                        {{ Masking::number($request->nik, 4) }}
                                     </p>
                                 </div>
                                 <div class="col-md-6">
                                     <p>
                                         <label class="form-label">Nomor Kartu Keluarga</label><br>
-                                        {{ $request->no_kk }}
+                                        {{ Masking::number($request->no_kk, 4) }}
                                     </p>
                                 </div>
                                 <div class="col-md-6">

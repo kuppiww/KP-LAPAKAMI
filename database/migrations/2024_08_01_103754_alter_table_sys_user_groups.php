@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('sys_user_groups', function (Blueprint $table) {
-            $table->integer('group_value');
+            $table->integer('group_value')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('sys_user_groups', function (Blueprint $table) {
-            $table->dropColumn('group_value');
+            $table->dropColumn('group_value')->nullable();
         });
     }
 };

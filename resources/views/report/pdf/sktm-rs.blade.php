@@ -153,7 +153,7 @@
     </div>
 
 	<div class="paragraph">
-		Berdasarkan Surat Keterangan dari Ketua RT.{{ substr('00' . $pengajuan->rt, -2) }} RW.{{ substr('00' . $pengajuan->rw, -2) }} Nomor : {{ $pengajuan->no_surat_pengantar }} tanggal {{ $DateTime::getSimpleDate($pengajuan->tgl_surat_pengantar) }} keadaan ekonominya termasuk masyarakat tidak mampu  
+		Berdasarkan Surat Keterangan dari Ketua RT.{{ substr('00' . $pengajuan->rt, -2) }} RW.{{ substr('00' . $pengajuan->rw, -2) }} Nomor : {{ $pengajuan->no_surat_pengantar }} tanggal {{ $DateTime::getSimpleDate($pengajuan->tgl_surat_pengantar) }} keadaan ekonominya termasuk masyarakat tidak mampu.
 		
 
 		@if (trim($data->no_jamkesmas) != '' && ! is_null($data->no_jamkesmas) && $data->no_jamkesmas != 0)
@@ -162,13 +162,13 @@
 	</div>
 
 	<div class="paragraph">
-		Surat keterangan ini berlaku sampai dengan tanggal {{ $DateTime::getSimpleDate($data->masa_berlaku) }} dan diberikan untuk pengajuan mendapatkan keringanan biaya pelayanan kesehatan
+		Surat keterangan ini berlaku sampai dengan tanggal {{ ($data->masa_berlaku == null) ? '${masa_berlaku}' : $DateTime::getSimpleDate($data->masa_berlaku) }} dan diberikan untuk pengajuan mendapatkan keringanan biaya pelayanan kesehatan
 
 		@if ($data->id_rumkit != 12)
-			@if ($data->peruntukan == 'sendiri')
-				ke {{ 'nama_rumkit' }}.
+			@if ($data->id_hub_kel == null)
+				ke {{ $data->name }}.
 			@else
-				ke {{ 'nama_rumkit' }}, atas nama :
+				ke {{ $data->name }}, atas nama :
 				{{-- <div style="padding-left: 40px;border:1;"> --}}
 					
 				{{-- </div> --}}
@@ -176,7 +176,7 @@
 		@endif
 	</div>
 	@if ($data->id_rumkit != 12)
-		@if ($data->peruntukan != 'sendiri')
+		@if ($data->id_hub_kel != null)
 			<div class="row">
 				<div class="sec1_col1">Nama Pasien</div>
 				<div class="sec1_col2">:</div>
@@ -219,7 +219,15 @@
         //     $ttd_l_kec = $expkec[1];
         // }
 
-		$nama_singkat_ttd = '${nama_singkat_ttd}';//$d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd
+        $ttd = str_replace(chr(13), ',', $l_ttd);
+		$exp = explode(",", $ttd);
+		if (count($exp) <= 1) {
+			$ttd_l = $exp[0];
+		} else {
+			$ttd_l = $exp[1];
+		}
+		// $nama_singkat_ttd = $d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd
+		$nama_singkat_ttd = $ttdRequest->ttd_name ?? 'null';//$d->nama_singkat_ttd === null ? $d->nama_ttd : $d->nama_singkat_ttd
 	@endphp
 	{{-- <div class="row" style="margin-right: 40px;margin-left: 40px;">
 		@if ($service->service_is_kec)
@@ -230,37 +238,23 @@
 	</div> --}}
     <div class="row" style="margin-right: 40px;margin-left: 40px;">
 		@if ($service->service_is_kec)
-			<div class="sec1_col6">
-				{{-- {!! $ReportHelper::setQrCode('{id_surat}', $service->service_code ?: '', $pengajuan->request_status_id) !!} --}}
-			</div>
-			<div style="float: left; width: 10px; text-align: left;">&nbsp;</div>
-            <div class="sec2_col6">
-                {{-- {!! $ReportHelper::ttecamat($ttd_l_kec, $d->nama_kec_ttd, $d->nip_kec_ttd, $d->jabatan_kec_ttd) !!} --}}
-				{!! $ReportHelper::tte_v2(
-                    $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
-                    $data->l_ttd,
-                    $data->f_ttd,
-                    '${id_surat}', 
-                    $service->service_code ?: '', 
-                    $pengajuan->request_status_id,
-                    $nama_singkat_ttd
-				) !!}
-            </div>
+            {!! $ReportHelper::tte_v2(
+                $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
+                $f_ttd,
+                $l_ttd,
+                $service->service_code ?: '', 
+                $pengajuan->request_status_id,
+                $nama_singkat_ttd
+            ) !!}
         @else
-            <div class="sec1_col6">
-                {{-- {!! $ReportHelper::setQrCode('{id_surat}', $service->service_code ?: '', $pengajuan->request_status_id) !!} --}}
-            </div>
-			<div class="sec2_col6">
-                {!! $ReportHelper::tte_v2(
-                    $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
-                    $data->l_ttd,
-                    $data->f_ttd,
-                    '${id_surat}', 
-                    $service->service_code ?: '', 
-                    $pengajuan->request_status_id,
-                    $nama_singkat_ttd
-				) !!}
-            </div>
+            {!! $ReportHelper::tte_v2(
+                $pengajuan->sub_district, $data->tgl_surat ?? date('Y-m-d'),
+                $f_ttd,
+                $l_ttd,
+                $service->service_code ?: '', 
+                $pengajuan->request_status_id,
+                $nama_singkat_ttd
+            ) !!}
         @endif
     </div>
 

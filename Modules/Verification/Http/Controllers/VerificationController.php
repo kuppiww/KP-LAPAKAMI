@@ -139,10 +139,16 @@ class VerificationController extends Controller
             });
             $datatables = $datatable->addColumn('action', function($permohonan){
                 $linkDetail= url('verification/detail');
-                $detailBtn = '
-                <a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-icon btn-light rounded-circle p-1" data-toggle="tooltip" data-placement="top" title="Detail">
-                    <i class="ri-arrow-right-line fs-6"></i>
-                </a>';
+                if ($permohonan->request_status_id == 'SUBMITED' || $permohonan->request_status_id == 'EDITED') {
+                    $detailBtn = '<a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-info btn-light" data-toggle="tooltip" data-placement="top" title="Verifikasi">
+                        Verifkasi
+                    </a>';
+                } else {
+                    $detailBtn = '
+                    <a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-icon btn-light rounded-circle p-1" data-toggle="tooltip" data-placement="top" title="Detail">
+                        <i class="ri-arrow-right-line fs-6"></i>
+                    </a>';
+                }
                 return $detailBtn;
             });
     

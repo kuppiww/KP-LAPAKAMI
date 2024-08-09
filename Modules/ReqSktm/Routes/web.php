@@ -19,8 +19,12 @@ Route::prefix('user/layanan/sktm')->group(function() {
     Route::post('/update/{id}', 'ReqSktmController@update');
     Route::get('/batal/{id}', 'ReqSktmController@destroy');
     Route::get('/pdf/{id}/{service}', 'ReqSktmController@pdf');
+    Route::post('/tangguhkan/{id}', 'ReqSktmController@tangguhkan');
+    Route::post('/tolak/{id}', 'ReqSktmController@tolak');
+    Route::post('/updatepermohonan/{id}', 'ReqSktmController@updatepermohonan');
 });
 
 Route::prefix('verification/sktm')->group(function() {
     Route::get('/lihat/{id}', 'ReqSktmController@showPermohoanan');
+    Route::get('/sesuai/{id}', 'ReqSktmController@proses');
 });
