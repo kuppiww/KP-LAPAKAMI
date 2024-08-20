@@ -158,7 +158,7 @@ class UserController extends Controller
             return redirect('/masuk'.$param)->with('error', 'Pengguna belum melakukan aktivasi melalui email yang sudah di daftarkan ');
         }
 
-        if (Auth::attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'user_is_active' => 1])) {
+        if (Auth::guard('web')->attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'user_is_active' => 1])) {
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL,config("auth.sso_api_host"). "/"."service"."/create");

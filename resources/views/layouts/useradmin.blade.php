@@ -69,7 +69,7 @@
                             aria-expanded="false">
                             <div class="btn btn-icon bg-light rounded-circle me-3 text-primary"><i
                                     class="ri-user-line fs-5"></i></div><span
-                                class="me-1">{{ Auth::user()->user_nama }}</span>
+                                class="me-1">{{ Auth::guard('admin')->user()->user_name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
                             <li>
@@ -77,11 +77,11 @@
                                     <i class="ri-user-line me-2 fs-6 text-primary"></i> Profil
                                 </a>
                             </li>
-                            <li>
+                            {{-- <li>
                                 <a class="dropdown-item" href="{{ url('user/pengaturan') }}">
                                     <i class="ri-settings-5-line me-2 fs-6 text-primary"></i> Pengaturan
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a class="dropdown-item btnLogout" href="javascript:void(0)">
                                     <i class="ri-logout-box-r-line me-2 fs-6 text-primary"></i> Keluar
@@ -108,33 +108,33 @@
             <p class="text-dark mb-3 ms-3 fw-semibold">Menu Utama</p>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'beranda') active @endif"
-                        href="{{ url('user/beranda') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'admin') active @endif"
+                        href="{{ url('user/admin') }}">
                         <i class="ri-home-3-line me-2 fs-5"></i> Beranda
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'layanan') active @endif"
-                        href="{{ url('user/layanan') }}">
-                        <i class="ri-stack-line me-2 fs-5"></i> Layanan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'pemberitahuan') active @endif"
-                        href="{{ url('user/pemberitahuan') }}">
-                        <i class="ri-notification-2-line me-2 fs-5"></i> Pemberitahuan
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'bantuan') active @endif"
-                        href="{{ url('user/bantuan') }}">
-                        <i class="ri-question-line me-2 fs-5"></i> Bantuan
-                    </a>
-                </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif"
                         href="{{ url('user/pengaturan') }}">
                         <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
+                    </a>
+                </li> --}}
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
+                        href="{{ url('user/setting') }}">
+                        <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                        href="{{ url('operator') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Operator
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                        href="{{ url('ubah-kk') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                     </a>
                 </li>
             </ul>
@@ -165,42 +165,33 @@
                     <p class="text-dark mb-3 ms-3 fw-semibold">Menu Utama</p>
                     <ul class="nav flex-column nav-user">
                         <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(2) == 'beranda') active @endif"
-                                href="{{ url('user/beranda') }}">
+                            <a class="nav-link @if (Request::segment(2) == 'admin') active @endif"
+                                href="{{ url('user/admin') }}">
                                 <i class="ri-home-3-line me-2 fs-5"></i> Beranda
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(2) == 'layanan') active @endif"
-                                href="{{ url('user/layanan') }}">
-                                <i class="ri-stack-line me-2 fs-5"></i> Layanan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(2) == 'pemberitahuan') active @endif"
-                                href="{{ url('user/pemberitahuan') }}">
-                                <i class="ri-notification-2-line me-2 fs-5 position-relative">
-                                    @if ($notif_unread)
-                                        <span
-                                            class="position-absolute top-0 start-50 p-1 bg-danger border border-light rounded-circle">
-                                            <span class="visually-hidden">New notif</span>
-                                        </span>
-                                    @endif
-
-                                </i>
-                                Pemberitahuan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(2) == 'bantuan') active @endif"
-                                href="{{ url('user/bantuan') }}">
-                                <i class="ri-question-line me-2 fs-5"></i> Bantuan
-                            </a>
-                        </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif"
                                 href="{{ url('user/pengaturan') }}">
                                 <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
+                            </a>
+                        </li> --}}
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
+                                href="{{ url('user/setting') }}">
+                                <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                                href="{{ url('operator') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Operator
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                                href="{{ url('ubah-kk') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                             </a>
                         </li>
                     </ul>

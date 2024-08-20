@@ -14,3 +14,7 @@
 Route::prefix('user/beranda')->group(function() {
     Route::get('/', 'DashboardController@index');
 });
+
+Route::prefix('user/admin')->group(function() {
+    Route::get('/', 'DashboardAdminController@admin');
+});

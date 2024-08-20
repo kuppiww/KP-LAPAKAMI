@@ -27,7 +27,7 @@ class OperatorController extends Controller
     public function __construct(){
 
         // Require Login
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
 
         $this->_requestRepository               = new RequestRepository;
         $this->_requestLogRepository            = new RequestLogRepository;
@@ -46,7 +46,7 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         $filter['requests.created_by'] = $user->user_id;
         $services= $this->_serviceRepository->getAllByParams(['is_select' => true]);
         // $requests  = $this->_requestRepository->getAll();

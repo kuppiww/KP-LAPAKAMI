@@ -26,12 +26,18 @@ use AuthenticatesUsers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Modules\Users\Repositories\SysUsersRepository;
 use Modules\Users\Repositories\UsersRepository;
 
 class AdminController extends Controller
 {
     protected $_SSOController;
     protected $_userRepository;
+    protected $_userTemp;
+    protected $_forgotRepository;
+    protected $_logHelper;
+    protected $_fcmHelper;
+    protected $_sysUsersRepository;
 
     public function __construct()
     {
@@ -42,6 +48,7 @@ class AdminController extends Controller
         $this->_logHelper           = new LogHelper;
         $this->_fcmHelper           = new FCMHelper;
         $this->_SSOController = new SSOController;
+        $this->_sysUsersRepository = new SysUsersRepository;
     }
 
     public function backend(Request $request)
@@ -76,19 +83,15 @@ class AdminController extends Controller
             return redirect('/backend')->with('error', 'username dan kata sandi tidak boleh kosong');
         }
 
-        $getUser = $this->_userRepository->getByAdmin($request->user_username);
+        $getUser = $this->_sysUsersRepository->getByNIP($request->user_username);
 
         // User Validation
         if (!$getUser) {
             return redirect('/backend')->with('error', 'Pengguna tidak terdaftar');
         }
 
-        // if (!$getUser->user_is_active) {
-        //     return redirect('/masuk'.$param)->with('error', 'Pengguna belum melakukan aktivasi melalui email yang sudah di daftarkan ');
-        // }
-
-        if (Auth::attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'user_is_active' => 1])) {
-            return redirect()->intended('user/beranda');
+        if (Auth::guard('admin')->attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'is_active' => 1])) {
+            return redirect()->intended('user/admin');
         } else {
             return redirect('/backend')->with('error', 'username atau kata sandi salah');
         }

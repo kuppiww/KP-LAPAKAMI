@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.useradmin')
 @section('title')
     Pengaturan Email Pengguna
 @endsection
