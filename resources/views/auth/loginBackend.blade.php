@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h4 class="text-dark fw-bold mb-1">Masuk Akun</h4>
-            <p class="mb-1">Untuk mengakses layanan yang tersedia pada aplikasi anda diwajibkan memiliki akun.</p>
+            <p class="mb-1">Untuk mengakses layanan silahkan masuk menggunakan akun Anda.</p>
 
             @if (session('error'))
                 <div class="alert bg-danger mt-3">
@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <div class="modal fade show" id="perhatianModal" tabindex="-1" aria-labelledby="perhatianModalLabel" aria-hidden="true" style="display: block;">
+    {{-- <div class="modal fade show" id="perhatianModal" tabindex="-1" aria-labelledby="perhatianModalLabel" aria-hidden="true" style="display: block;">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-body">
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('script')

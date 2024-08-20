@@ -3,6 +3,7 @@
 namespace Modules\Users\Repositories;
 
 use App\Implementations\QueryBuilderImplementation;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class SysUsersRepository extends QueryBuilderImplementation
@@ -40,5 +41,18 @@ class SysUsersRepository extends QueryBuilderImplementation
             return $e->getMessage();
         }
     }
+
+    public function getByNIP($nip)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->join('sys_user_groups', 'sys_user_groups.group_id', '=', 'sys_users.group_id')
+                ->where('user_username', '=', $nip)
+                ->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    } 
 
 }

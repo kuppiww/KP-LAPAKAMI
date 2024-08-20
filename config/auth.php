@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'sys_users',
+        ],
     ],
 
     /*
@@ -70,6 +75,12 @@ return [
             'table' => 'users',
         ],
 
+        'sys_users' => [
+            'driver' => 'CustomUserProvider',
+            'model' => App\Models\SysUsers::class,
+            'table' => 'sys_users',
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -94,6 +105,13 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'sys_users' => [
+            'provider' => 'sys_users',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

@@ -17,10 +17,13 @@ Route::prefix('user')->group(function() {
     Route::post('pengaturan', 'UserController@changepassword');
     Route::get('profil', 'UserController@showProfile');
     Route::post('profil', 'UserController@updateProfile');
-    Route::get('setting', 'UserController@showSetting');
-    Route::get('setting/password/{id}', 'UserController@showSettingPassword');
-    Route::get('setting/email/{id}', 'UserController@showSettingEmail');
-    Route::post('setting/changepassword', 'UserController@settingPassword');
-    Route::post('setting/changeemail', 'UserController@settingEmail');
-    Route::get('list', 'UserController@listuser')->name('user.list');
+});
+
+Route::prefix('user')->group(function() {
+    Route::get('setting', 'UserAdminController@showSetting');
+    Route::get('setting/password/{id}', 'UserAdminController@showSettingPassword');
+    Route::get('setting/email/{id}', 'UserAdminController@showSettingEmail');
+    Route::post('setting/changepassword', 'UserAdminController@settingPassword');
+    Route::post('setting/changeemail', 'UserAdminController@settingEmail');
+    Route::get('list', 'UserAdminController@listuser')->name('user.list');
 });

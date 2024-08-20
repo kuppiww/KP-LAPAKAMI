@@ -29,7 +29,7 @@ class ChangeKKController extends Controller
     public function __construct(){
 
         // Require Login
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
 
         $this->_requestLogRepository            = new RequestLogRepository;
         $this->_changeKKRepository               = new RequestKKRepository;
