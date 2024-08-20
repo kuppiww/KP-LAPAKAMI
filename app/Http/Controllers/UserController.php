@@ -688,6 +688,30 @@ class UserController extends Controller
         return ResponseHelper::setResponse(200, 'Sukses', $result);
     }
 
+    public function showForm()
+    {
+
+        // dd('here');
+        return view('users.services.form-detail');
+    }
+    public function submitForm(Request $request)
+    {
+        // Validasi dan simpan data
+        $validatedData = $request->validate([
+            'nama_layanan' => 'required|string|max:255',
+            'nama_kelurahan' => 'required|string|max:255',
+            'nama_kecamatan' => 'required|string|max:255',
+            'paraf_kelurahan' => 'required|string',
+            'tanda_tangan_kelurahan' => 'required|string',
+            'paraf_kecamatan' => 'required|string',
+            'tanda_tangan_kecamatan' => 'required|string',
+        ]);
+
+        // Simpan data ke database atau proses lainnya
+
+        return redirect()->back()->with('success', 'Data berhasil disimpan!');
+    }
+
     public function showVerification()
     {
         $data = [

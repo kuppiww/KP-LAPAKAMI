@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
         @if (View::hasSection('title'))
-            @yield('title') -
+        @yield('title') -
         @endif
 
         Lapakami Pemerintah Daerah Kota Cimahi
@@ -82,11 +82,6 @@
                                     <i class="ri-settings-5-line me-2 fs-6 text-primary"></i> Pengaturan
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item btnLogout" href="javascript:void(0)">
-                                    <i class="ri-logout-box-r-line me-2 fs-6 text-primary"></i> Keluar
-                                </a>
-                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -108,42 +103,77 @@
             <p class="text-dark mb-3 ms-3 fw-semibold">Menu Utama</p>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'beranda') active @endif"
-                        href="{{ url('user/beranda') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'beranda') active @endif" href="{{ url('user/beranda') }}">
                         <i class="ri-home-3-line me-2 fs-5"></i> Beranda
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'layanan') active @endif"
-                        href="{{ url('user/layanan') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'layanan') active @endif" href="{{ url('user/layanan') }}">
                         <i class="ri-stack-line me-2 fs-5"></i> Layanan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'pemberitahuan') active @endif"
-                        href="{{ url('user/pemberitahuan') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'pemberitahuan') active @endif" href="{{ url('user/pemberitahuan') }}">
                         <i class="ri-notification-2-line me-2 fs-5"></i> Pemberitahuan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'bantuan') active @endif"
-                        href="{{ url('user/bantuan') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'bantuan') active @endif" href="{{ url('user/bantuan') }}">
                         <i class="ri-question-line me-2 fs-5"></i> Bantuan
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif"
-                        href="{{ url('user/pengaturan') }}">
+                    <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif" data-bs-toggle="collapse" href="#pengaturanCollapse" role="button" aria-expanded="false" aria-controls="pengaturanCollapse">
                         <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
+                        <i class="ri-arrow-down-s-line ms-auto"></i>
+                    </a>
+                    <div class="collapse" id="pengaturanCollapse">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link @if (Request::segment(2) == 'pengaturan1') active @endif" data-bs-toggle="collapse" href="#pengaturan1Collapse" role="button" aria-expanded="false" aria-controls="pengaturan1Collapse">
+                                    Pengaturan 1
+                                    <i class="ri-arrow-down-s-line ms-auto"></i>
+                                </a>
+                                <div class="collapse" id="pengaturan1Collapse">
+                                    <ul class="nav flex-column ms-3">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url('user/form-detail') }}">Sub Menu 1</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{ url('user/verification-permohonan') }}">Sub Menu 2</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @if (Request::segment(2) == 'pengaturan2') active @endif" href="{{ url('user/pengaturan2') }}">Pengaturan 2</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(2) == 'setting') active @endif" href="{{ url('user/setting') }}">
+                        <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
+                        href="{{ url('verification') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                        href="{{ url('verification') }}">
+                        <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                     </a>
                 </li>
             </ul>
             <p class="text-dark mt-5 mb-3 ms-3 fw-semibold">Menu Lainnya</p>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(2) == 'profil') active @endif"
-                        href="{{ url('user/profil') }}">
-                        <i class="ri-user-line  me-2 fs-5"></i> Profil
+                    <a class="nav-link @if (Request::segment(2) == 'profil') active @endif" href="{{ url('user/profil') }}">
+                        <i class="ri-user-line me-2 fs-5"></i> Profil
                     </a>
                 </li>
                 <li class="nav-item">
@@ -154,6 +184,7 @@
             </ul>
         </div>
     </div>
+
     <!-- Off Canvas Nav -->
 
     <!-- Main -->
@@ -181,12 +212,10 @@
                                 href="{{ url('user/pemberitahuan') }}">
                                 <i class="ri-notification-2-line me-2 fs-5 position-relative">
                                     @if ($notif_unread)
-                                        <span
-                                            class="position-absolute top-0 start-50 p-1 bg-danger border border-light rounded-circle">
-                                            <span class="visually-hidden">New notif</span>
-                                        </span>
+                                    <span class="position-absolute top-0 start-50 p-1 bg-danger border border-light rounded-circle">
+                                        <span class="visually-hidden">New notif</span>
+                                    </span>
                                     @endif
-
                                 </i>
                                 Pemberitahuan
                             </a>
@@ -198,9 +227,51 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif"
-                                href="{{ url('user/pengaturan') }}">
+                            <a class="nav-link @if (Request::segment(2) == 'pengaturan') active @endif" data-bs-toggle="collapse" href="#pengaturanCollapse" role="button" aria-expanded="false" aria-controls="pengaturanCollapse">
                                 <i class="ri-settings-5-line me-2 fs-5"></i> Pengaturan
+                                <i class="ri-arrow-down-s-line ms-auto"></i>
+                            </a>
+                            <div class="collapse" id="pengaturanCollapse">
+                                <ul class="nav flex-column ms-3">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link @if (Request::segment(2) == 'pengaturan1') active @endif" data-bs-toggle="collapse" href="#pengaturan1Collapse" role="button" aria-expanded="false" aria-controls="pengaturan1Collapse">
+                                            Pengaturan 1
+                                            <i class="ri-arrow-down-s-line ms-auto"></i>
+                                        </a>
+                                        <div class="collapse" id="pengaturan1Collapse">
+                                            <ul class="nav flex-column ms-3">
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="{{ url('user/form-detail') }}">Sub Menu 1</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="{{ url('user/verification-permohonan') }}">Sub Menu 2</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link @if (Request::segment(2) == 'pengaturan2') active @endif" href="{{ url('user/pengaturan2') }}">Pengaturan 2</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(2) == 'setting') active @endif"
+                                href="{{ url('user/setting') }}">
+                                <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
+                                href="{{ url('verification') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
+                                href="{{ url('verification') }}">
+                                <i class="ri-file-line me-2 fs-5"></i> Ubah Nomor KK
                             </a>
                         </li>
                     </ul>
@@ -316,21 +387,21 @@
             });
 
             // Cancel request button
-	        $('.btnDelete').click(function(){
-				Swal.fire({
-				  title: 'Hapus?',
-				  text: "Anda yakin akan menghapus nya ?",
-				  icon: 'danger',
-				  showCancelButton: true,
-				  confirmButtonColor: '#ff2323',
-				  confirmButtonText: 'Ya, hapus!',
-				  cancelButtonText: 'Tutup',
-				}).then((result) => {
-				  if (result.isConfirmed) {
-				  	window.location = $(this).attr('data-url');
-				  }
-				})
-			});
+            $('.btnDelete').click(function() {
+                Swal.fire({
+                    title: 'Hapus?',
+                    text: "Anda yakin akan menghapus nya ?",
+                    icon: 'danger',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff2323',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Tutup',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location = $(this).attr('data-url');
+                    }
+                })
+            });
 
         });
     </script>
