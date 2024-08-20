@@ -40,9 +40,11 @@
                                 @foreach ($requests as $request)
                                     <tr>
                                         <td>
-                                            <a href="/user/layanan/detail/{{$request->request_id}}/{{ $request->service_id }}" class="text-dark">{{ $request->service_name }} </a><br>
+                                            {{-- <a href="/user/layanan/detail/{{$request->request_id}}/{{ $request->service_id }}" class="text-dark">{{ $request->service_name }} </a> --}}
+                                            <p class="text-dark">{{ $request->service_name }}
+                                            <br>
                                             <small
-                                                class="text-muted">{{ DateFormatHelper::dateInFull($request->created_at) }}</small>
+                                                class="text-muted">{{ DateFormatHelper::dateInFull($request->created_at) }}</small></p>
                                         </td>
 
                                         <td valign="middle">
