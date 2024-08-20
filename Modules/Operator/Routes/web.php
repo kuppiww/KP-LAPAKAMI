@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::prefix('operator')->group(function() {
     Route::get('/', 'OperatorController@index');
     Route::get('/list', 'OperatorController@listpermohonan')->name('permohonan.list');

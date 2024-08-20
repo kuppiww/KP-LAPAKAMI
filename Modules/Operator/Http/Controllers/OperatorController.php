@@ -46,8 +46,8 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        $user = Auth::guard('admin')->user();
-        $filter['requests.created_by'] = $user->user_id;
+        // $user = Auth::guard('admin')->user();
+        // $filter['requests.kd_kel'] = $user->kd_kel;
         $services= $this->_serviceRepository->getAllByParams(['is_select' => true]);
         // $requests  = $this->_requestRepository->getAll();
         return view('operator::index', compact('services'));
@@ -117,7 +117,9 @@ class OperatorController extends Controller
 
     public function listpermohonan(Request $request)
     {
-        $data = $this->_requestRepository->getAll();
+        $user = Auth::guard('admin')->user();
+        $filter['requests.kd_kel'] = $user->kd_kel;
+        $data = $this->_requestRepository->getAllByParams($filter);
         if ($request->ajax()) {
             $datatable = DataTables::of($data)
             ->addIndexColumn()
