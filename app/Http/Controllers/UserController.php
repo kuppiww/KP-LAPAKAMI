@@ -65,7 +65,6 @@ class UserController extends Controller
             }
             return view('auth.login', compact('data'));
         }
-
     }
 
     public function register(Request $request)
@@ -88,7 +87,6 @@ class UserController extends Controller
             }
             return view('auth.register', compact('data'));
         }
-
     }
 
     public function username()
@@ -136,13 +134,13 @@ class UserController extends Controller
         $credentials = $request->only('user_username', 'user_password');
         $param = '';
         if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
-            $param = "?client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$credentials['user_username']."&id=".env('APPLICATION_ID');   
+            $param = "?client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $credentials['user_username'] . "&id=" . env('APPLICATION_ID');
         }
 
         $validator = Validator::make($request->all(), $this->_rules(''));
 
         if ($validator->fails()) {
-            return redirect('/masuk'.$param)->with('error', 'NIK dan kata sandi tidak boleh kosong');
+            return redirect('/masuk' . $param)->with('error', 'NIK dan kata sandi tidak boleh kosong');
         }
 
         $getUser = $this->_userRepository->getByNIK($request->user_username);
@@ -151,42 +149,40 @@ class UserController extends Controller
 
         // User Validation
         if (!$getUser) {
-            return redirect('/masuk'.$param)->with('error', 'Pengguna tidak terdaftar');
+            return redirect('/masuk' . $param)->with('error', 'Pengguna tidak terdaftar');
         }
 
         if (!$getUser->user_is_active) {
-            return redirect('/masuk'.$param)->with('error', 'Pengguna belum melakukan aktivasi melalui email yang sudah di daftarkan ');
+            return redirect('/masuk' . $param)->with('error', 'Pengguna belum melakukan aktivasi melalui email yang sudah di daftarkan ');
         }
 
         if (Auth::guard('web')->attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'user_is_active' => 1])) {
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL,config("auth.sso_api_host"). "/"."service"."/create");
+                curl_setopt($ch, CURLOPT_URL, config("auth.sso_api_host") . "/" . "service" . "/create");
                 curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$credentials['user_username']."&id=".env('APPLICATION_ID'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $credentials['user_username'] . "&id=" . env('APPLICATION_ID'));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec ($ch);
-                curl_close ($ch);
+                $result = curl_exec($ch);
+                curl_close($ch);
                 return redirect()->intended('user/beranda');
             } else {
                 return redirect()->intended('user/beranda');
             }
         } else {
-            if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) { 
-                return redirect('/masuk'.$param)->with('error', 'NIK atau kata sandi salah');
+            if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
+                return redirect('/masuk' . $param)->with('error', 'NIK atau kata sandi salah');
             } else {
                 return redirect('/masuk')->with('error', 'NIK atau kata sandi salah');
             }
         }
-
     }
 
     public function setting()
     {
 
         return view('user.setting');
-
     }
 
     public function changepassword(Request $request)
@@ -202,7 +198,6 @@ class UserController extends Controller
         $this->_userRepository->update(DataHelper::_normalizeParams(['user_password' => $password], false, true), Auth::user()->user_id);
 
         return redirect('setting')->with('message', 'Kata sandi berhasil diubah');
-
     }
 
     public function sendforgot(Request $request)
@@ -242,11 +237,9 @@ class UserController extends Controller
             $this->_forgotRepository->insert(DataHelper::_normalizeParams($value, false));
 
             return redirect('/lupa-sandi')->with('message', 'Lupa kata sandi berhasil dikirim melalui email!');
-
         } catch (Exception $e) {
             return redirect('/lupa-sandi')->with('error', 'Terjadi kesalahan!');
         }
-
     }
 
     public function reset($id, $token)
@@ -299,12 +292,10 @@ class UserController extends Controller
 
         if (!$getToken) {
             return redirect('/reset-sandi' . '/' . $request->input('id') . '/' . $token)->with('error', 'Token tidak valid');
-
         }
 
         if ($getToken->forgot_expired < date('Y-m-d H:i:s')) {
             return redirect('/reset-sandi' . '/' . $request->input('id') . '/' . $token)->with('error', 'Token sudah kadaluarsa');
-
         }
 
         DB::beginTransaction();
@@ -330,7 +321,6 @@ class UserController extends Controller
         $this->_fcmHelper->saveToken($request->input('token'), Auth::user()->user_id, $request->header('User-Agent'));
 
         return true;
-
     }
 
     public function logout(Request $request)
@@ -357,7 +347,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), $this->_registerRules()['rules'], $this->_registerRules()['messages']);
         $token = md5(sha1($request->user_nik . time() . uniqid()));
-        $param = "?client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$request['user_nik']."&id=".env('APPLICATION_ID');
+        $param = "?client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $request['user_nik'] . "&id=" . env('APPLICATION_ID');
         // dd($validator->messages());
         unset($request['repassword']);
         $password = Hash::make($request['user_password']);
@@ -372,7 +362,7 @@ class UserController extends Controller
             $email = $request['user_email'];
             $nama = $request['user_nama'];
 
-            
+
             //email yan dimasukan sebelum nya salah tp belum aktif
             // if (!$getUser->user_is_active) {
             //     $this->_userRepository->updateData(DataHelper::_normalizeParams(['user_password' => $password], false, false), $getUser->user_id);
@@ -381,7 +371,7 @@ class UserController extends Controller
             // }
 
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
-                return redirect('/daftar'.$param)->withErrors($validator)->withInput();
+                return redirect('/daftar' . $param)->withErrors($validator)->withInput();
             } else {
                 return redirect('/daftar')->withErrors($validator)->withInput();
             }
@@ -405,33 +395,33 @@ class UserController extends Controller
         $data['user_email_token'] = $token;
         $data['user_email_expired'] = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
 
-         //check to siak
-         if (empty($request->client_id) && empty($request->token) && empty($request->client_secret)) {
-               // mantra cek kependudukan
-                $checkRes = CheckSiak::exec($request);
+        //check to siak
+        if (empty($request->client_id) && empty($request->token) && empty($request->client_secret)) {
+            // mantra cek kependudukan
+            $checkRes = CheckSiak::exec($request);
 
-                dd($checkRes);
-    
-                //do scoring
-                $score = $checkRes['score'];
-    
-                if ($score < 100) {
-                    $message = 'Data yang anda masukan tidak sesuai dengan data kependudukan. Tolong cek kembali kesuaian ' . $checkRes['message_score'];
+            dd($checkRes);
 
-                    return redirect('/masuk')->with('error', $message);
-                }
-        } 
-        
+            //do scoring
+            $score = $checkRes['score'];
+
+            if ($score < 100) {
+                $message = 'Data yang anda masukan tidak sesuai dengan data kependudukan. Tolong cek kembali kesuaian ' . $checkRes['message_score'];
+
+                return redirect('/masuk')->with('error', $message);
+            }
+        }
+
 
         $nikEnc = Crypt::encryptString($request['user_nik']);
         $data_email = [];
-        $param = "?client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$data['user_username']."&id=".env('APPLICATION_ID');
+        $param = "?client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $data['user_username'] . "&id=" . env('APPLICATION_ID');
 
         DB::beginTransaction();
         // dd($data, $request->all());
 
         // $store = $this->_userRepository->insertGetId(DataHelper::_normalizeParams($request->all()), 'user_id');
-        
+
         $store = $this->_userTemp->insertGetId(DataHelper::_normalizeParams($data), 'user_id');
 
         $id_enc = Crypt::encryptString($store);
@@ -441,13 +431,13 @@ class UserController extends Controller
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
                 $is_SSO = true;
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL,config("auth.sso_api_host"). "/"."service"."/create");
+                curl_setopt($ch, CURLOPT_URL, config("auth.sso_api_host") . "/" . "service" . "/create");
                 curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$request['user_nik']."&id=".env('APPLICATION_ID'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $request['user_nik'] . "&id=" . env('APPLICATION_ID'));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec ($ch);
-                curl_close ($ch);
+                $result = curl_exec($ch);
+                curl_close($ch);
             }
             $data_email = array(
                 'name' => $request['user_nama'],
@@ -496,9 +486,7 @@ class UserController extends Controller
 
         if ($is_validate) {
             $message = "Anda sudah pernah mendaftar, silahkan cek email untuk melakukan aktivasi";
-
-        }
-        ;
+        };
 
         return $this->_sendMailActivation($data_email, $message, false);
     }
@@ -511,23 +499,23 @@ class UserController extends Controller
             Mail::to($data['email'])->send(new UserVerificationMail($data));
             return redirect('/daftar/selesai/' . $data['user_id'])->with('message', $message);
         }
-
     }
 
-    public function activationSso($nik, $token, $data, $messages, $param) {
+    public function activationSso($nik, $token, $data, $messages, $param)
+    {
         $nikDec = Crypt::decryptString($nik);
         $getUserByToken = $this->_userTemp->getByParams(['user_email_token' => $token, 'user_nik' => $nikDec]);
         $getUser = $this->_userRepository->getByNIK($nikDec);
 
         if ($getUser) {
             $message = "Akun sudah pernah berhasil diaktifasi";
-            return redirect('/masuk'.$param)->with('error', $message);
+            return redirect('/masuk' . $param)->with('error', $message);
         }
 
         // Token Validation
         if (!$getUserByToken) {
             $message = "Izin akses gagal, Token tidak valid!";
-            return redirect('/masuk'.$param)->with('error', $message);
+            return redirect('/masuk' . $param)->with('error', $message);
         }
 
         $id = $getUserByToken->user_id;
@@ -590,7 +578,6 @@ class UserController extends Controller
             $message = "Validasi Email Gagal, Token tidak valid!";
             if (!Auth::check()) {
                 return redirect('/masuk')->with('error', $message);
-
             }
             return redirect('/user/profil')->with('error', $message);
         }
@@ -640,7 +627,6 @@ class UserController extends Controller
         );
 
         return $rules;
-
     }
 
     private function _registerRules()
@@ -661,7 +647,6 @@ class UserController extends Controller
         );
 
         return array('rules' => $rules, 'messages' => $messages);
-
     }
 
     /**
@@ -701,6 +686,17 @@ class UserController extends Controller
         }
 
         return ResponseHelper::setResponse(200, 'Sukses', $result);
+    }
 
+    public function showVerification()
+    {
+        $data = [
+            'nomor_surat' => '123/ABC/2024',  // Contoh nomor surat
+            'layanan' => 'Nama Layanan',      // Contoh layanan
+            'tanggal_surat' => date('Y-m-d'), // Contoh tanggal surat
+            'pdf_filename' => 'test.pdf' // Nama file PDF
+        ];
+
+        return view('users.services.verification-permohonan', $data);
     }
 }
