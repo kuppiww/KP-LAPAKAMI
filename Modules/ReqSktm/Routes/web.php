@@ -18,13 +18,13 @@ Route::prefix('user/layanan/sktm')->group(function() {
     Route::get('/ubah/{id}', 'ReqSktmController@edit');
     Route::post('/update/{id}', 'ReqSktmController@update');
     Route::get('/batal/{id}', 'ReqSktmController@destroy');
-    Route::get('/pdf/{id}/{service}', 'ReqSktmController@pdf');
-    Route::post('/tangguhkan/{id}', 'ReqSktmController@tangguhkan');
-    Route::post('/tolak/{id}', 'ReqSktmController@tolak');
-    Route::post('/updatepermohonan/{id}', 'ReqSktmController@updatepermohonan');
 });
 
 Route::prefix('operator/sktm')->group(function() {
-    Route::get('/lihat/{id}', 'ReqSktmController@showPermohoanan');
-    Route::get('/sesuai/{id}', 'ReqSktmController@proses');
+    Route::get('/lihat/{id}', 'ReqSktmAdminController@showPermohoanan');
+    Route::get('/sesuai/{id}', 'ReqSktmAdminController@proses');
+    Route::post('/tangguhkan/{id}', 'ReqSktmAdminController@tangguhkan');
+    Route::post('/tolak/{id}', 'ReqSktmAdminController@tolak');
+    Route::post('/updatepermohonan/{id}', 'ReqSktmAdminController@updatepermohonan');
+    Route::get('/pdf/{id}/{service}', 'ReqSktmAdminController@pdf');
 });

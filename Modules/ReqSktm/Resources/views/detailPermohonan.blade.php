@@ -239,7 +239,7 @@
                         @endif
                     </form> --}}
                     
-                    <form action="{{ url('/user/layanan/sktm/updatepermohonan/'.$request->request_id) }}" id="formUbah" method="POST">
+                    <form action="{{ url('/operator/sktm/updatepermohonan/'.$request->request_id) }}" id="formUbah" method="POST">
                         @csrf
                         <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -1020,6 +1020,82 @@
                         @endforeach
                     </div>
                     <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card border-0">
+                                <div class="card-header">
+                                    <div class="modal-title">Preview Surat</div>
+                                </div>
+                                <div class="card-body">
+                                    <embed src="{{ url('operator/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card border-0">
+                                <div class="card-header">
+                                    <div class="modal-title">Daftar Verifikator</div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Urutan</th>
+                                                <th>Pegawai</th>
+                                                <th>Unit Kerja / Instansi</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>TONI MULYADI, S.E., M.M. Kepala Seksi Pemerintahan, Ketentraman dan Ketertiban Umum Kelurahan Cibeber</td>
+                                                <td>Kelurahan Cibeber</td>
+                                                <td>...</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>GUN GUN BAHRUL HAYAT, S.Pd. Sekretaris Kelurahan Cibeber</td>
+                                                <td>Kelurahan Cibeber</td>
+                                                <td>...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card border-0">
+                                <div class="card-header">
+                                    <div class="modal-title">Daftar Penandatangan</div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th>Urutan</th>
+                                                <th>Pegawai</th>
+                                                <th>Unit Kerja / Instansi</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>BAMBANG WAHYU PURWASTO, S.STP. Lurah Cibeber</td>
+                                                <td>Kelurahan Cibeber</td>
+                                                <td>...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12 text-end" id="div_btn">
                             
                         </div>
@@ -1056,7 +1132,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <embed src="{{ url('user/layanan/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
+                    <embed src="{{ url('operator/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
@@ -1073,7 +1149,7 @@
                     <h5 class="modal-title text-dark">Tolak Permohonan {{ $request->service_name }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('/user/layanan/sktm/tolak/'.$request->request_id) }}" id="formTolak" method="POST">
+                <form action="{{ url('/operator/sktm/tolak/'.$request->request_id) }}" id="formTolak" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -1099,7 +1175,7 @@
                     <h5 class="modal-title text-dark">Tangguhkan Permohonan {{ $request->service_name }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ url('/user/layanan/sktm/tangguhkan/'.$request->request_id) }}" id="formTangguhkan" method="POST">
+                <form action="{{ url('/operator/sktm/tangguhkan/'.$request->request_id) }}" id="formTangguhkan" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -1388,7 +1464,7 @@
                 if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
                     document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>';
                 } else {
-                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/verification/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai</button></a>';
+                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai</button></a>';
                 }
             } else {
                 // show tombol tolak dan tnagguhkan
