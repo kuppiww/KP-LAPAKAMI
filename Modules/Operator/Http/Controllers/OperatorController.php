@@ -81,7 +81,7 @@ class OperatorController extends Controller
     {
         $service = $this->_serviceRepository->getById($service_id);
         $service_slug = $service->slug;
-        return redirect('/verification/'.$service_slug.'/lihat/'.$id);
+        return redirect('/operator/'.$service_slug.'/lihat/'.$id);
     }
 
     /**
@@ -119,7 +119,7 @@ class OperatorController extends Controller
     {
         $user = Auth::guard('admin')->user();
         $filter['requests.kd_kel'] = $user->kd_kel;
-        $data = $this->_requestRepository->getAllByParams($filter);
+        $data = $this->_requestRepository->getAllByParamsAdmin($filter);
         if ($request->ajax()) {
             $datatable = DataTables::of($data)
             ->addIndexColumn()
@@ -136,17 +136,17 @@ class OperatorController extends Controller
                 return '<span class="badge bg-'.$permohonan->request_status_color.'">'.$permohonan->request_status_name.'</span>';
             });
             $datatables = $datatable->addColumn('action', function($permohonan){
-                $linkDetail= url('verification/detail');
-                if ($permohonan->request_status_id == 'SUBMITED' || $permohonan->request_status_id == 'EDITED') {
-                    $detailBtn = '<a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-info btn-light" data-toggle="tooltip" data-placement="top" title="Verifikasi">
-                        Verifkasi
-                    </a>';
-                } else {
+                $linkDetail= url('operator/detail');
+                // if ($permohonan->request_status_id == 'SUBMITED' || $permohonan->request_status_id == 'EDITED') {
+                //     $detailBtn = '<a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-info btn-light" data-toggle="tooltip" data-placement="top" title="Verifikasi">
+                //         Verifkasi
+                //     </a>';
+                // } else {
                     $detailBtn = '
                     <a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-icon btn-light rounded-circle p-1" data-toggle="tooltip" data-placement="top" title="Detail">
                         <i class="ri-arrow-right-line fs-6"></i>
                     </a>';
-                }
+                // }
                 return $detailBtn;
             });
     
