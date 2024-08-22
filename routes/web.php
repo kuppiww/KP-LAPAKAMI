@@ -137,6 +137,9 @@ Route::post('user/form-detail', [\App\Http\Controllers\UserController::class, 's
 
 Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 
+Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
+Route::delete('/user/verification-permohonan/delete/{nip}', [\App\Http\Controllers\UserController::class, 'deleteVerification'])->name('verification.delete');
+
 /* CMS Temporary */
 Route::get('/cms', function () {
     return view('layouts/cms');
