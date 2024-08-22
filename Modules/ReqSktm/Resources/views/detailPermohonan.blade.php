@@ -17,7 +17,7 @@
 
     <div class="row mb-4 align-items-center">
         <div class="col-md-6">
-            <h4 class="text-dark fw-bold mb-0">Verifikasi Permohonan Layanan</h4>
+            <h4 class="text-dark fw-bold mb-0">Detail Permohonan Layanan</h4>
             <p class="mb-0 text-muted">{{ $request->service_name }}</p>
         </div>
     </div>
@@ -1019,7 +1019,7 @@
                             <hr class="mt-2" style="border-top: 2px solid rgba(0, 0, 0, 0.3);">
                         @endforeach
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-12 mt-2">
                             <div class="card border-0">
                                 <div class="card-header">
@@ -1030,7 +1030,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-12 mt-2">
                             <div class="card border-0">
@@ -1048,18 +1048,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>TONI MULYADI, S.E., M.M. Kepala Seksi Pemerintahan, Ketentraman dan Ketertiban Umum Kelurahan Cibeber</td>
-                                                <td>Kelurahan Cibeber</td>
-                                                <td>...</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>GUN GUN BAHRUL HAYAT, S.Pd. Sekretaris Kelurahan Cibeber</td>
-                                                <td>Kelurahan Cibeber</td>
-                                                <td>...</td>
-                                            </tr>
+                                            @foreach ($listVerifikator as $listVer)
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
+                                                    <td>Kelurahan {{ $listVer->unit_kel }}</td>
+                                                    <td>...</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -1083,12 +1079,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>BAMBANG WAHYU PURWASTO, S.STP. Lurah Cibeber</td>
-                                                <td>Kelurahan Cibeber</td>
-                                                <td>...</td>
-                                            </tr>
+                                            @foreach ($listTTE as $list_tte)
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
+                                                    <td>Kelurahan Cibeber</td>
+                                                    <td>...</td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
