@@ -41,6 +41,8 @@ use App\Helpers\TtdHelper;
 use App\Mail\RequestNotifikasiMail;
 use App\Mail\RequestRejectedFinalMail;
 use DB;
+use Modules\Request\Repositories\PegawaiRepository;
+use Modules\Request\Repositories\ServiceSettingsRepository;
 use PDF;
 
 class ReqSktmAdminController extends Controller
@@ -61,6 +63,8 @@ class ReqSktmAdminController extends Controller
     protected $_sktmPlnRepository;
     protected $_requestAttachmentRepository;
     protected $_serviceRepository;
+    protected $_serviceSettingsRepository;
+    protected $_pegawaiRepository;
     protected $module;
     protected $_logHelper;
     protected $breadcrumbs;
@@ -87,6 +91,8 @@ class ReqSktmAdminController extends Controller
         $this->_sktmPlnRepository = new SktmPlnRepository;
         $this->_requestAttachmentRepository = new RequestAttachmentRepository;
         $this->_serviceRepository = new ServiceRepository;
+        $this->_serviceSettingsRepository = new ServiceSettingsRepository();
+        $this->_pegawaiRepository = new PegawaiRepository();
         $this->breadcrumbs = ['Ekonomi, Pemberdayaan Masyarakat dan Kesejahteraan Sosial', 'Tidak Mampu', 'Sekolah'];
 
         $this->module = "ReqBirth";
@@ -351,13 +357,24 @@ class ReqSktmAdminController extends Controller
         } else {
             $request_detail = $this->_sktmPlnRepository->getByParams($filter);
         }
+
+        $paramVerifikator['service_id'] = $request->service_id;
         
         $listJK = $this->_genderRepository->getAll();
         $listReligion = $this->_religionRepository->getAll();
         $listHospitals = $this->_hospitalRepository->getAll();
         $listHubKel = $this->_famRelationRepository->getAll();
+        $listService = $this->_serviceSettingsRepository->getByServiceId($paramVerifikator);
+        $listVerifikator = null;
+        $listTTE = null;
+        if ($listService) {
+            $listTTE = $this->_pegawaiRepository->getWherInByParam([$listService->role_setting_ttd, $listService->role_setting_ttd_kec]);
+            if ($listService->role_setting) {
+                $listVerifikator = $this->_pegawaiRepository->getWherInByParam(explode(",", $listService->role_setting));
+            }
+        }
 
-        return view('reqsktm::detailPermohonan', compact('request', 'listHubKel', 'listHospitals', 'request_detail', 'logs', 'request_docs', 'listJK', 'listReligion'));
+        return view('reqsktm::detailPermohonan', compact('request', 'listTTE', 'listVerifikator', 'listHubKel', 'listHospitals', 'request_detail', 'logs', 'request_docs', 'listJK', 'listReligion'));
     }
 
     public function pdf(Request $request, $id, $servicename)
