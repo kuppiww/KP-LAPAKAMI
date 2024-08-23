@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,12 +61,28 @@ class SysUsers extends Authenticatable
         return $this->user_password;
      }
 
-    public function getByNIK($nik)
+     public function getWherInByParam($params)
+     {
+         try {
+             return DB::table($this->table)
+                 ->select($this->table.'.*', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
+                 ->leftjoin('m_sub_districts', 'm_sub_districts.kd_sub_district', $this->table.'.kd_kel')
+                 ->leftjoin('m_districts', 'm_districts.kd_district', $this->table.'.kd_kec')
+                 ->whereIn($this->table.'.user_nip', $params)
+                 ->get();
+ 
+         } catch (Exception $e) {
+             return $e->getMessage();
+         }
+ 
+     }
+
+    public function getByNIP($nip)
     {
         try {
             return DB::connection($this->db)
                 ->table($this->table)
-                ->where('user_nik', '=', $nik)
+                ->where('user_nip', '=', $nip)
                 ->first();
         } catch (Exception $e) {
             return $e->getMessage();
@@ -114,6 +132,21 @@ class SysUsers extends Authenticatable
                 ->table($this->table)
                 ->where($params)
                 ->first();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getByPegawai(array $params, array $paramNotIn)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select($this->table.'.*', 'pegawai.nama')
+                ->leftjoin('pegawai', 'pegawai.nip', $this->table.'.user_nip')
+                ->whereNotIn('user_nip', $paramNotIn)
+                ->where($params)
+                ->get();
         } catch (Exception $e) {
             return $e->getMessage();
         }

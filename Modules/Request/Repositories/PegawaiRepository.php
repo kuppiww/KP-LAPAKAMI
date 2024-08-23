@@ -21,8 +21,9 @@ class PegawaiRepository extends QueryBuilderImplementation
     {
         try {
             return DB::table($this->table)
-                ->select($this->table.'.*', 'm_sub_districts.sub_district as unit_kel')
+                ->select($this->table.'.*', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
                 ->leftjoin('m_sub_districts', 'm_sub_districts.unit_key', $this->table.'.unit_key')
+                ->leftjoin('m_districts', 'm_districts.unit_key_kec', $this->table.'.unit_key')
                 ->whereIn($this->table.'.nip', $params)
                 ->get();
 

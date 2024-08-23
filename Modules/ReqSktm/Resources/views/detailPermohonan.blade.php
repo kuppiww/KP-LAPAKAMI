@@ -23,9 +23,13 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+            @if ($request->request_status_id == 'REJECTED_FINAL')
                 <div class="alert alert-warning" role="alert">
                     Permohonan ini sudah ditolak
+                </div>
+            @elseif($request->request_status_id == 'REJECTED')
+                <div class="alert alert-warning" role="alert">
+                    Permohonan ini sudah ditangguhkan
                 </div>
             @endif
         </div>
@@ -289,7 +293,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Jenis Kelamin</label><br>
                                                 {{ $request->gender }}
@@ -304,7 +308,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ $request->tmp_lahir }}
@@ -315,7 +319,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_lahir) }}
@@ -326,7 +330,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Agama</label><br>
                                                 {{ $request->religion }}
@@ -341,7 +345,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Pekerjaan</label><br>
                                                 {{ $request->pekerjaan }}
@@ -361,7 +365,7 @@
                                         <h5 class="text-dark">Informasi Surat Pengantar</h5>
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Nomor Surat Pengantar</label><br>
                                                 {{ $request->no_surat_pengantar }}
@@ -372,7 +376,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Surat Pengantar</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
@@ -383,7 +387,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Tetangga (RT)</label><br>
                                                 {{ $request->rt }}
@@ -394,7 +398,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Warga (RW)</label><br>
                                                 {{ $request->rw }}
@@ -448,7 +452,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Hubungan Keluarga</label><br>
                                                 {{ isset ($request_detail->nama_hub) ? $request_detail->nama_hub : null }}
@@ -472,7 +476,7 @@
                                     </div> -->
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ isset ($request_detail->tgl_lahir_pasien) ? DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) : null }}
@@ -485,7 +489,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ isset ($request_detail->tmp_lahir_pasien) ? $request_detail->tmp_lahir_pasien : null }}
@@ -498,7 +502,7 @@
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                                             <p>
                                                 <label class="form-label">Nama Rumah Sakit</label><br>
                                                 {{ isset ($request_detail->name) ? $request_detail->name : null }}
@@ -516,7 +520,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
                             <div class="text-right mt-2">
                                 <button type="submit" class="btn btn-primary">Ubah</button>
                             </div>
@@ -580,6 +584,160 @@
 
     <div class="row mt-2">
         <div class="col-md-12">
+            <div class="card p-2 border-0 mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card border-0">
+                                <div class="card-header">
+                                    <div class="modal-title">Daftar Verifikator</div>
+                                </div>
+                                <div class="card-body">
+                                    <p>Verifikator Kelurahan</p>
+                                    @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
+                                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikator" >Tambah</button>
+                                    @endif
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Urutan</th>
+                                                <th width="35%">Pegawai</th>
+                                                <th width="20%">Unit Kerja / Instansi</th>
+                                                <th width="20%">Status</th>
+                                                <th width="20%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listVerifikator as $listVer)
+                                                @if ($listVer->unit_kel != null)
+                                                    <tr>
+                                                        <td>{{ $listVer->verification_number + 1 }}</td>
+                                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
+                                                        <td>
+                                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
+                                                        </td>
+                                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
+                                                        <td>
+                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && !$isPegKec)
+                                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    <p>Verifikator Kecamatan</p>
+                                    @if ($isPegKec && $group == 'operatorkecamatan')
+                                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikatorKec" >Tambah</button>
+                                    @endif
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Urutan</th>
+                                                <th width="35%">Pegawai</th>
+                                                <th width="20%">Unit Kerja / Instansi</th>
+                                                <th width="20%">Status</th>
+                                                <th width="20%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listVerifikator as $listVer)
+                                                @if ($listVer->unit_kel == null)
+                                                    <tr>
+                                                        <td>{{ $listVer->verification_number + 1 }}</td>
+                                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
+                                                        <td>
+                                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
+                                                        </td>
+                                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
+                                                        <td>
+                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && $isPegKec)
+                                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
+                                                            @else
+                                                                -
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-2 border-0 mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card border-0">
+                                <div class="card-header">
+                                    <div class="modal-title">Daftar Penandatangan</div>
+                                </div>
+                                <div class="card-body">
+                                    <p>Penandatangan Kelurahan</p>
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Urutan</th>
+                                                <th width="35%">Pegawai</th>
+                                                <th width="20%">Unit Kerja / Instansi</th>
+                                                <th width="20%">Status</th>
+                                                <th width="20%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listTTE as $list_tte)
+                                                @if ($list_tte->unit_kel != null)
+                                                    <tr>
+                                                        <td>{{ $list_tte->tte_number + 1 }}</td>
+                                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
+                                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
+                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name }}</span></td>
+                                                        <td><button class="btn btn-info btn-sm">Edit</button></td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <p>Penandatangan Kecamatan</p>
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Urutan</th>
+                                                <th width="35%">Pegawai</th>
+                                                <th width="20%">Unit Kerja / Instansi</th>
+                                                <th width="20%">Status</th>
+                                                <th width="20%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($listTTE as $list_tte)
+                                                @if ($list_tte->unit_kel == null)
+                                                    <tr>
+                                                        <td>{{ $list_tte->tte_number + 1 }}</td>
+                                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
+                                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
+                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name }}</span></td>
+                                                        <td><button class="btn btn-info btn-sm">Edit</button></td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card p-2 border-0">
                 <div class="card-body">
                     <div class="row">
@@ -637,7 +795,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -702,7 +860,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -754,7 +912,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -824,7 +982,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -853,7 +1011,7 @@
                                     <embed src="/storage/files/request_sktm/rekom_sekolah/{{ $request_doc->request_attachment_file }}" class="w-100" width="" height="300" type="application/pdf">
                                 </div>
                                 <div class="col-md-5"></div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -928,7 +1086,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -992,7 +1150,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
+                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
                                 <div class="col-md-1">
                                     <label class="form-label"></label><br>
                                     <div class="checkbox-wrapper-12">
@@ -1031,68 +1189,6 @@
                             </div>
                         </div>
                     </div> --}}
-                    <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Daftar Verifikator</div>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th>Urutan</th>
-                                                <th>Pegawai</th>
-                                                <th>Unit Kerja / Instansi</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listVerifikator as $listVer)
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
-                                                    <td>Kelurahan {{ $listVer->unit_kel }}</td>
-                                                    <td>...</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Daftar Penandatangan</div>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th>Urutan</th>
-                                                <th>Pegawai</th>
-                                                <th>Unit Kerja / Instansi</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listTTE as $list_tte)
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
-                                                    <td>Kelurahan Cibeber</td>
-                                                    <td>...</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12 text-end" id="div_btn">
                             
@@ -1165,6 +1261,95 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalFormAddVerifikatorKec" tabindex="-1" aria-labelledby="modalFormAddVerifikatorKecLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">Tambah Verifikator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url('/verifikator/add/'.$request->request_id.'/kec/sktm') }}" id="formAddVerKel" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3 form-group">
+                                <label class="form-label">Pilih Pegawai</label>
+                                <select class="form-control" name="pegawai" id="pegawai">
+                                    <option value="">-- Pilih --</option>
+                                    @foreach ($listPegawaiKec as $item)
+                                        <option value="{{ $item->user_id }}">{{ $item->user_nip.' - '.$item->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary" >Tambah</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalFormAddVerifikator" tabindex="-1" aria-labelledby="modalFormAddVerifikatorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">Tambah Verifikator</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url('/verifikator/add/'.$request->request_id.'/kel/sktm') }}" id="formAddVerKel" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3 form-group">
+                                <label class="form-label">Pilih Pegawai</label>
+                                <select class="form-control" name="pegawai" id="pegawai">
+                                    <option value="">-- Pilih --</option>
+                                    @foreach ($listPegawaiKel as $item)
+                                        <option value="{{ $item->user_id }}">{{ $item->user_nip.' - '.$item->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary" >Tambah</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @foreach ($listVerifikator as $list)
+        <div class="modal fade" id="modalDelVerifikatorKec{{$list->req_verification_id}}" tabindex="-1" aria-labelledby="modalDelVerifikatorKecLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-dark">Hapus Verifikator</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3 form-group">
+                                Apakah anda yakin ingin menghapus <b>{{$list->nama}}</b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tidak</button>
+                        <a href="{{ url('verifikator/del/'.$list->req_verification_id.'/'.$list->request_id.'/sktm') }}">
+                            <button type="button" class="btn btn-primary" >Ya, Hapus</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    
 
     <div class="modal fade" id="modalTangguhkan" tabindex="-1" aria-labelledby="modalTangguhkanLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -1316,6 +1501,31 @@
                     minlength : "RW harus 3 angka",
                     maxlength : "RW harus 3 angka",
                 },
+            },
+            errorElement: "em",
+            errorClass: "invalid-feedback",
+            errorPlacement: function(error, element) {
+                // Add the `help-block` class to the error element
+                $(element).parents('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-valid").removeClass("is-invalid");
+            }
+        });
+
+        $("#formAddVerKel").validate({
+            rules: {
+                pegawai : {
+                    required: true
+                },
+            },
+            messages: {
+                pegawai : {
+                    required: "Pegawai tidak boleh kosong"
+                }
             },
             errorElement: "em",
             errorClass: "invalid-feedback",

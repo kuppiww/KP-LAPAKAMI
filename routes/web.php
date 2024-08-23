@@ -138,3 +138,7 @@ Route::get('/cms', function () {
     return view('layouts/cms');
 });
 /* End CMS Temporary */
+
+// crud verifikator
+Route::post('/verifikator/add/{id}/{jenis}/{service}', [\App\Http\Controllers\VerifikatorController::class, 'storeverification']);
+Route::get('/verifikator/del/{id}/{request}/{service}', [\App\Http\Controllers\VerifikatorController::class, 'deleteverification']);
