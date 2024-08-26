@@ -8,10 +8,10 @@
 @section('content')
     <!-- Back Button -->
     <div class="mb-4 d-flex align-items-center">
-        <a href="{{ url('operator') }}" class="btn btn-lg btn-icon btn-light rounded-circle py-1 me-3">
+        <a href="{{ url('tte') }}" class="btn btn-lg btn-icon btn-light rounded-circle py-1 me-3">
             <i class="ri-arrow-left-line"></i>
         </a>
-        <a href="{{ url('operator') }}" class="d-inline-block">Kembali</a>
+        <a href="{{ url('tte') }}" class="d-inline-block">Kembali</a>
     </div>
     <!-- End Back Button -->
 
@@ -51,494 +51,200 @@
         <div class="col-md-8">
             <div class="card p-2 border-0">
                 <div class="card-body">
-                    {{-- <form action="{{ url('/user/layanan/sktm/updatepermohonan/'.$request->request_id) }}" id="formUbah" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card-title">Informasi Pemohon</div>
-                            </div>
-                            <hr style="border-top: 2px solid rgba(0, 0, 0, 0.3);">
-                            <div class="col-md-4">
-                                <p>
-                                    <label class="form-label">NIK</label><br>
-                                    {{ Masking::number($request->nik, 4) }}
-                                </p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>
-                                    <label class="form-label">Nomor Kartu Keluarga</label><br>
-                                    {{ Masking::number($request->no_kk, 4) }}
-                                </p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>
-                                    <label class="form-label">Nama Lengkap</label><br>
-                                    {{ $request->nama_warga }}
-                                </p>
-                            </div>
-    
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                    <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-user-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-user" type="button" role="tab" aria-controls="pills-user"
+                                aria-selected="true">Informasi Pemohon</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-service-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-service" type="button" role="tab" aria-controls="pills-service"
+                                aria-selected="false">Informasi Layanan</button>
+                        </li>
+
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-pasien-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-pasien" type="button" role="tab" aria-controls="pills-pasien"
+                                aria-selected="false">Informasi Pasien</button>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-user" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+                            <div class="row">
+                                <div class="col-md-4">
                                     <p>
-                                        <label class="form-label">No Surat Pengantar</label><br>
-                                        {{ $request->no_surat_pengantar }}
+                                        <label class="form-label">Nomor Induk Kependudukan</label><br>
+                                        {{ Masking::number($request->nik, 4) }}
                                     </p>
-                                @else
-                                    <label class="form-label">No Surat Pengantar</label>
-                                    <input type="text" class="form-control" name="no_surat_pengantar" id="no_surat_pengantar" value="{{ $request->no_surat_pengantar }}" >
-                                @endif
-                            </div>
-    
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
                                     <p>
-                                        <label class="form-label">Tanggal Surat Pengantar</label><br>
-                                        {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
+                                        <label class="form-label">Nomor Kartu Keluarga</label><br>
+                                        {{ Masking::number($request->no_kk, 4) }}
                                     </p>
-                                @else
-                                    <label class="form-label">Tanggal Surat Pengantar</label>
-                                    <input type="date" class="form-control" name="tgl_surat_pengantar" id="tgl_surat_pengantar" value="{{ $request->tgl_surat_pengantar }}" >
-                                @endif
-                            </div>
-                            
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
+                                    <p>
+                                        <label class="form-label">Nama Lengkap</label><br>
+                                        {{ $request->nama_warga }}
+                                    </p>
+                                </div>
+                                <div class="col-md-12">
+                                    <p>
+                                        <label class="form-label">Alamat Lengkap</label><br>
+                                        {{ $request->user_alamat }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
                                     <p>
                                         <label class="form-label">Jenis Kelamin</label><br>
                                         {{ $request->gender }}
                                     </p>
-                                @else
-                                    <label class="form-label">Jenis Kelamin</label>
-                                    <select class="form-control" name="gender" id="gender">
-                                        @foreach ($listJK as $item)
-                                            <option {{ ($item->id_gender) == $request->id_jenkel ? 'selected' : ''}} value="{{ $item->id_gender }}">{{ $item->gender }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
-                            </div>
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
                                     <p>
                                         <label class="form-label">Tempat Lahir</label><br>
                                         {{ $request->tmp_lahir }}
                                     </p>
-                                @else
-                                    <label class="form-label">Tempat Lahir</label>
-                                    <input type="text" class="form-control" name="tmp_lahir" id="tmp_lahir" value="{{ $request->tmp_lahir }}">
-                                @endif
-                            </div>
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
                                     <p>
                                         <label class="form-label">Tanggal Lahir</label><br>
                                         {{ DateFormatHelper::dateIn($request->tgl_lahir) }}
                                     </p>
-                                @else
-                                    <label class="form-label">Tanggal Lahir</label>
-                                    <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir" value="{{ $request->tgl_lahir }}" >
-                                @endif
-                            </div>
-                            <div class="col-md-4">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
                                     <p>
                                         <label class="form-label">Agama</label><br>
                                         {{ $request->religion }}
                                     </p>
-                                @else
-                                    <label class="form-label">Agama</label>
-                                    <select class="form-control" name="religion" id="religion">
-                                        @foreach ($listReligion as $items)
-                                            <option {{ ($items->id_religion) == $request->id_agama ? 'selected' : ''}} value="{{ $items->id_religion }}">{{ $items->religion }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
-                            </div>
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-4">
                                     <p>
                                         <label class="form-label">Pekerjaan</label><br>
                                         {{ $request->pekerjaan }}
                                     </p>
-                                @else
-                                    <label class="form-label">Pekerjaan</label>
-                                    <input type="text" class="form-control" name="pekerjaan" id="pekerjaan" value="{{ $request->pekerjaan }}" >
-                                @endif
+                                </div>
                             </div>
-    
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-service" role="tabpanel" aria-labelledby="pills-profile-tab"
+                            tabindex="0">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <h5 class="text-dark">Informasi Surat Pengantar</h5>
+                                </div>
+                                <div class="col-md-6">
                                     <p>
-                                        <label class="form-label">RT</label><br>
+                                        <label class="form-label">Nomor Surat Pengantar</label><br>
+                                        {{ $request->no_surat_pengantar }}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Tanggal Surat Pengantar</label><br>
+                                        {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Rukun Tetangga (RT)</label><br>
                                         {{ $request->rt }}
                                     </p>
-                                @else
-                                    <label class="form-label">RT</label>
-                                    <input type="text" class="form-control" name="rt" id="rt" value="{{ $request->rt }}" >
-                                @endif
-                            </div>
-    
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-6">
                                     <p>
-                                        <label class="form-label">RW</label><br>
+                                        <label class="form-label">Rukun Warga (RW)</label><br>
                                         {{ $request->rw }}
                                     </p>
-                                @else
-                                    <label class="form-label">RW</label>
-                                    <input type="text" class="form-control" name="rw" id="rw" value="{{ $request->rw }}" >
-                                @endif
-                            </div>
-    
-                            <div class="col-md-4 form-group">
-                                <p>
-                                    <label class="form-label">Alamat Lengkap</label><br>
-                                    {{ $request->user_alamat }}
-                                </p>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="card-title">Informasi Pasien</div>
-                            </div>
-                            <hr style="border-top: 2px solid rgba(0, 0, 0, 0.3);">
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
+                                </div>
+                                <div class="col-md-12">
                                     <p>
-                                        <label class="form-label">Nama Pasien</label><br>
-                                        {{ $request_detail->nama_pasien }}
+                                        <label class="form-label">Kelurahan</label><br>
+                                        {{ $request->sub_district }}
                                     </p>
-                                @else
-                                    <label class="form-label">Nama Pasien</label>
-                                    <input class="form-control" type="text" name="nama_pasien" id="nama_pasien" value="{{ $request_detail->nama_pasien }}" >
-                                @endif
-                            </div>
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
-                                    <p>
-                                        <label class="form-label">Tempat Lahir Pasien</label><br>
-                                        {{ $request_detail->tmp_lahir_pasien }}
-                                    </p>
-                                @else
-                                    <label class="form-label">Tempat Lahir Pasien</label>
-                                    <input type="text" class="form-control" name="tmp_lahir_pasien" id="tmp_lahir_pasien" value="{{ $request_detail->tmp_lahir_pasien }}">
-                                @endif
-                            </div>
-                            <div class="col-md-4 form-group">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
-                                    <p>
-                                        <label class="form-label">Tanggal Lahir Pasien</label><br>
-                                        {{ DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) }}
-                                    </p>
-                                @else
-                                    <label class="form-label">Tanggal Lahir Pasien</label>
-                                    <input type="date" class="form-control" name="tgl_lahir_pasien" id="tgl_lahir_pasien" value="{{ $request_detail->tgl_lahir_pasien }}" >
-                                @endif
-                            </div>
-
-                            <div class="col-md-4">
-                                @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED')
-                                    <p>
-                                        <label class="form-label">Rumah Sakit</label><br>
-                                        {{ $request_detail->name }}
-                                    </p>
-                                @else
-                                    <label class="form-label">Rumah Sakit</label>
-                                    <select class="form-control" name="id_rumkit" id="id_rumkit">
-                                        @foreach ($listHospitals as $items)
-                                            <option {{ ($items->id_hospital) == $request_detail->id_rumkit ? 'selected' : ''}} value="{{ $items->id_hospital }}">{{ $items->name }}</option>
-                                        @endforeach
-                                    </select>
-                                @endif
+                                </div>
+                                
                             </div>
                         </div>
-                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED')
-                        <div class="text-right mt-2">
-                            <button type="submit" class="btn btn-primary">Ubah</button>
-                        </div>
-                        @endif
-                    </form> --}}
-                    
-                    <form action="{{ url('/operator/sktm/updatepermohonan/'.$request->request_id) }}" id="formUbah" method="POST">
-                        @csrf
-                        <ul class="nav nav-pills mb-4" id="pills-tab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-user-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-user" type="button" role="tab" aria-controls="pills-user"
-                                    aria-selected="true">Informasi Pemohon</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-service-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-service" type="button" role="tab" aria-controls="pills-service"
-                                    aria-selected="false">Informasi Layanan</button>
-                            </li>
 
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pills-pasien-tab" data-bs-toggle="pill"
-                                    data-bs-target="#pills-pasien" type="button" role="tab" aria-controls="pills-pasien"
-                                    aria-selected="false">Informasi Pasien</button>
-                            </li>
-
-                        </ul>
-
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-user" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p>
-                                            <label class="form-label">Nomor Induk Kependudukan</label><br>
-                                            {{ Masking::number($request->nik, 4) }}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <label class="form-label">Nomor Kartu Keluarga</label><br>
-                                            {{ Masking::number($request->no_kk, 4) }}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p>
-                                            <label class="form-label">Nama Lengkap</label><br>
-                                            {{ $request->nama_warga }}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <p>
-                                            <label class="form-label">Alamat Lengkap</label><br>
-                                            {{ $request->user_alamat }}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Jenis Kelamin</label><br>
-                                                {{ $request->gender }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Jenis Kelamin</label>
-                                            <select class="form-control" name="gender" id="gender">
-                                                @foreach ($listJK as $item)
-                                                    <option {{ ($item->id_gender) == $request->id_jenkel ? 'selected' : ''}} value="{{ $item->id_gender }}">{{ $item->gender }}</option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Tempat Lahir</label><br>
-                                                {{ $request->tmp_lahir }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Tempat Lahir</label>
-                                            <input type="text" class="form-control" name="tmp_lahir" id="tmp_lahir" value="{{ $request->tmp_lahir }}">
-                                        @endif
-                                    </div>
-                                    <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Tanggal Lahir</label><br>
-                                                {{ DateFormatHelper::dateIn($request->tgl_lahir) }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Tanggal Lahir</label>
-                                            <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir" value="{{ $request->tgl_lahir }}" >
-                                        @endif
-                                    </div>
-                                    <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Agama</label><br>
-                                                {{ $request->religion }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Agama</label>
-                                            <select class="form-control" name="religion" id="religion">
-                                                @foreach ($listReligion as $items)
-                                                    <option {{ ($items->id_religion) == $request->id_agama ? 'selected' : ''}} value="{{ $items->id_religion }}">{{ $items->religion }}</option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Pekerjaan</label><br>
-                                                {{ $request->pekerjaan }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Pekerjaan</label>
-                                            <input type="text" class="form-control" name="pekerjaan" id="pekerjaan" value="{{ $request->pekerjaan }}" >
-                                        @endif
-                                    </div>
+                        <div class="tab-pane fade" id="pills-pasien" role="tabpanel" aria-labelledby="pills-pasien-tab"
+                            tabindex="0">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <h5 class="text-dark">Informasi Pasien</h5>
                                 </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="pills-service" role="tabpanel" aria-labelledby="pills-profile-tab"
-                                tabindex="0">
-                                <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <h5 class="text-dark">Informasi Surat Pengantar</h5>
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Nomor Surat Pengantar</label><br>
-                                                {{ $request->no_surat_pengantar }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">No Surat Pengantar</label>
-                                            <input type="text" class="form-control" name="no_surat_pengantar" id="no_surat_pengantar" value="{{ $request->no_surat_pengantar }}" >
-                                        @endif
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Tanggal Surat Pengantar</label><br>
-                                                {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Tanggal Surat Pengantar</label>
-                                            <input type="date" class="form-control" name="tgl_surat_pengantar" id="tgl_surat_pengantar" value="{{ $request->tgl_surat_pengantar }}" >
-                                        @endif
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Rukun Tetangga (RT)</label><br>
-                                                {{ $request->rt }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Rukun Tetangga (RT)</label>
-                                            <input type="text" class="form-control" name="rt" id="rt" value="{{ $request->rt }}" >
-                                        @endif
-                                    </div>
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Rukun Warga (RW)</label><br>
-                                                {{ $request->rw }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Rukun Warga (RW)</label>
-                                            <input type="text" class="form-control" name="rw" id="rw" value="{{ $request->rw }}" >
-                                        @endif
-                                    </div>
-                                    <div class="col-md-12">
-                                        <p>
-                                            <label class="form-label">Kelurahan</label><br>
-                                            {{ $request->sub_district }}
-                                        </p>
-                                    </div>
-                                    
+                                
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Untuk keperluan diri sendiri</label><br>
+                                        {{ $request_detail->peruntukan == 1 ? 'Ya' : 'Tidak' }}
+                                    </p>
                                 </div>
-                            </div>
 
-                            <div class="tab-pane fade" id="pills-pasien" role="tabpanel" aria-labelledby="pills-pasien-tab"
-                                tabindex="0">
-                                <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <h5 class="text-dark">Informasi Pasien</h5>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
+                                <div class="col-md-6">
+                                    {{-- @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED') --}}
                                         <p>
-                                            <label class="form-label">Untuk keperluan diri sendiri</label><br>
-                                            {{ $request_detail->peruntukan == 1 ? 'Ya' : 'Tidak' }}
+                                            <label class="form-label">Nama Pasien</label><br>
+                                            {{ isset ($request_detail->nama_pasien) ? $request_detail->nama_pasien : null }}
                                         </p>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        {{-- @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED') --}}
-                                            <p>
-                                                <label class="form-label">Nama Pasien</label><br>
-                                                {{ isset ($request_detail->nama_pasien) ? $request_detail->nama_pasien : null }}
-                                            </p>
-                                        {{-- @else
-                                            <label class="form-label">Nama Pasien</label>
-                                            <input class="form-control" type="text" name="nama_pasien" id="nama_pasien" value="{{ $request_detail->nama_pasien }}" >
-                                        @endif --}}
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <p>
-                                            <label class="form-label">No Jamkesmas</label><br>
-                                            {{ isset ($request_detail->no_jamkesmas) ? $request_detail->no_jamkesmas : '-' }}
-                                        </p>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Hubungan Keluarga</label><br>
-                                                {{ isset ($request_detail->nama_hub) ? $request_detail->nama_hub : null }}
-
-                                            </p>
-                                        @else
-                                            <label class="form-label">Hubungan Keluarga</label>
-                                            <select class="form-control" name="id_hub_kel" id="id_hub_kel">
-                                                @foreach ($listHubKel as $item)
-                                                    <option {{ ($item->id_hub) == $request_detail->id_hub_kel ? 'selected' : ''}} value="{{ $item->id_hub }}">{{ $item->nama_hub }}</option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-                                    </div>
-
-                                    <!-- <div class="col-md-6">
-                                        <p>
-                                            <label class="form-label">Nomor KIP</label><br>
-                                            {{ isset ($request_detail->no_kip) ? $request_detail->no_kip : '-' }}
-                                        </p>
-                                    </div> -->
-
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Tanggal Lahir</label><br>
-                                                {{ isset ($request_detail->tgl_lahir_pasien) ? DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) : null }}
-
-                                            </p>
-                                        @else
-                                            <label class="form-label">Tanggal Lahir</label>
-                                            <input type="date" class="form-control" name="tgl_lahir_pasien" id="tgl_lahir_pasien" value="{{ $request_detail->tgl_lahir_pasien }}" >
-                                        @endif
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Tempat Lahir</label><br>
-                                                {{ isset ($request_detail->tmp_lahir_pasien) ? $request_detail->tmp_lahir_pasien : null }}
-
-                                            </p>
-                                        @else
-                                            <label class="form-label">Tempat Lahir</label>
-                                            <input type="text" class="form-control" name="tmp_lahir_pasien" id="tmp_lahir_pasien" value="{{ $request_detail->tmp_lahir_pasien }}">
-                                        @endif
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                                            <p>
-                                                <label class="form-label">Nama Rumah Sakit</label><br>
-                                                {{ isset ($request_detail->name) ? $request_detail->name : null }}
-                                            </p>
-                                        @else
-                                            <label class="form-label">Rumah Sakit</label>
-                                            <select class="form-control" name="id_rumkit" id="id_rumkit">
-                                                @foreach ($listHospitals as $items)
-                                                    <option {{ ($items->id_hospital) == $request_detail->id_rumkit ? 'selected' : ''}} value="{{ $items->id_hospital }}">{{ $items->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-                                    </div>
-                                    
+                                    {{-- @else
+                                        <label class="form-label">Nama Pasien</label>
+                                        <input class="form-control" type="text" name="nama_pasien" id="nama_pasien" value="{{ $request_detail->nama_pasien }}" >
+                                    @endif --}}
                                 </div>
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">No Jamkesmas</label><br>
+                                        {{ isset ($request_detail->no_jamkesmas) ? $request_detail->no_jamkesmas : '-' }}
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Hubungan Keluarga</label><br>
+                                        {{ isset ($request_detail->nama_hub) ? $request_detail->nama_hub : null }}
+
+                                    </p>
+                                </div>
+
+                                <!-- <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Nomor KIP</label><br>
+                                        {{ isset ($request_detail->no_kip) ? $request_detail->no_kip : '-' }}
+                                    </p>
+                                </div> -->
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Tanggal Lahir</label><br>
+                                        {{ isset ($request_detail->tgl_lahir_pasien) ? DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) : null }}
+
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Tempat Lahir</label><br>
+                                        {{ isset ($request_detail->tmp_lahir_pasien) ? $request_detail->tmp_lahir_pasien : null }}
+
+                                    </p>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <p>
+                                        <label class="form-label">Nama Rumah Sakit</label><br>
+                                        {{ isset ($request_detail->name) ? $request_detail->name : null }}
+                                    </p>
+                                </div>
+                                
                             </div>
                         </div>
-                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
-                            <div class="text-right mt-2">
-                                <button type="submit" class="btn btn-primary">Ubah</button>
-                            </div>
-                        @endif
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -854,29 +560,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input id="check_file_ktp" type="checkbox" name="check_file_ktp" value="false"/>
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_RT_RW')
                                 <div class="col-md-6">
                                     <label class="form-label">Surat Pengantar RT/RW</label><br>
@@ -919,29 +603,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_rt_rw" id="check_file_rt_rw" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_KK')
                                 <div class="col-md-6">
                                     <label class="form-label">Kartu Keluarga</label><br>
@@ -971,29 +633,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_kk" id="check_file_kk" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_PERNYATAAN')
                                 <div class="col-md-6">
                                     <label class="form-label">Surat Pernyataan</label><br>
@@ -1041,58 +681,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_pernyataan" id="check_file_pernyataan" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_REKOMENDASI_SEKOLAH')
                                 <div class="col-md-6">
                                     <label class="form-label">Surat Rekomendasi Sekolah</label><br>
                                     <embed src="/storage/files/request_sktm/rekom_sekolah/{{ $request_doc->request_attachment_file }}" class="w-100" width="" height="300" type="application/pdf">
                                 </div>
                                 <div class="col-md-5"></div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_rekomendasi_sekolah" id="check_file_rekomendasi_sekolah" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_RUJUKAN_RS')
                                 <div class="col-md-6">
                                     <label class="form-label">Surat Rujukan Rumah Sakit</label><br>
@@ -1145,29 +741,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_rujukan_rs" id="check_file_rujukan_rs" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @elseif ($request_doc->request_attachment_note == 'FILE_JAMKESMAS')
                                 <div class="col-md-6">
                                     <label class="form-label">Jamkesmas</label><br>
@@ -1209,45 +783,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'EDITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'VERIFIED_KEC' || $request->request_status_id == 'VERIFIED')
-                                <div class="col-md-1">
-                                    <label class="form-label"></label><br>
-                                    <div class="checkbox-wrapper-12">
-                                        <div class="cbx">
-                                            <input type="checkbox" name="check_file_jamkesmas" id="check_file_jamkesmas" value="false">
-                                            <label for=""></label>
-                                            <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
-                                                <path d="M2 8.36364L6.23077 12L13 2"></path>
-                                            </svg>
-                                        </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-                                            <defs>
-                                            <filter id="goo-12">
-                                                <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
-                                                <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
-                                                <feblend in="SourceGraphic" in2="goo-12"></feblend>
-                                            </filter>
-                                            </defs>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @endif
+                                <div class="col-md-1"></div>
                             @endif
                             <hr class="mt-2" style="border-top: 2px solid rgba(0, 0, 0, 0.3);">
                         @endforeach
                     </div>
-                    {{-- <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Preview Surat</div>
-                                </div>
-                                <div class="card-body">
-                                    <embed src="{{ url('operator/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="row">
                         <div class="col-md-12 text-end" id="div_btn">
                             
@@ -1321,7 +861,33 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modalFormAddVerifikatorKec" tabindex="-1" aria-labelledby="modalFormAddVerifikatorKecLabel" aria-hidden="true">
+    <div class="modal fade" id="modalTTE" tabindex="-1" aria-labelledby="modalTTELabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark">Isi Passpharse</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url('/tte/sktm/add/'.$request->request_id) }}" id="formAddPasspharse" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 mb-3 form-group">
+                                <label class="form-label">Passpharse</label>
+                                <input type="text" name="passpharse" id="passpharse">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary" >Kirim</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {{-- <div class="modal fade" id="modalFormAddVerifikatorKec" tabindex="-1" aria-labelledby="modalFormAddVerifikatorKecLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -1381,9 +947,9 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 
-    @foreach ($listVerifikator as $list)
+    {{-- @foreach ($listVerifikator as $list)
         <div class="modal fade" id="modalDelVerifikatorKec{{$list->req_verification_id}}" tabindex="-1" aria-labelledby="modalDelVerifikatorKecLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
@@ -1446,7 +1012,7 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @endforeach --}}
     
 
     <div class="modal fade" id="modalTangguhkan" tabindex="-1" aria-labelledby="modalTangguhkanLabel" aria-hidden="true">
@@ -1688,15 +1254,39 @@
                 $(element).addClass("is-valid").removeClass("is-invalid");
             }
         });
+
+        $("#formAddPasspharse").validate({
+            rules: {
+                passpharse : {
+                    required: true
+                },
+            },
+            messages: {
+                passpharse : {
+                    required: "Passpharse tidak boleh kosong"
+                },
+            },
+            errorElement: "em",
+            errorClass: "invalid-feedback",
+            errorPlacement: function(error, element) {
+                // Add the `help-block` class to the error element
+                $(element).parents('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).addClass("is-valid").removeClass("is-invalid");
+            }
+        });
     </script>
     <script type="text/javascript">
         var jmlhDocs = '{{ count($request_docs) }}';
         let jmlhCeklis = 0;
         var id = '{{ $request->request_id }}';
         var status = '{{ $request->request_status_id }}';
-        var group = '{{ $group }}';
 
-        if (status === 'PROCCESS' || status === 'PROCCESS_KEC') {
+        if (status === 'VERIFICATION_KEL') {
             jmlhCeklis = jmlhDocs;
             setChecklist('check_file_ktp');
             setChecklist('check_file_rt_rw');
@@ -1816,10 +1406,10 @@
 
         function setButton() {
             if (jmlhCeklis == jmlhDocs) {
-                if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
-                    if (group === 'pkelurahan' || group === 'pkecamatan') {
-                        document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
-                    }
+                // hide tombol tolak dan tnagguhkan
+                // show tombol sesuai
+                if (status === 'VERIFICATION_KEL') {
+                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<button data-bs-toggle="modal" data-bs-target="#modalTTE" class="btn btn-primary" id="btn_tanda_tangan">Tanda Tangan</button>';
                 } else {
                     document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
                 }

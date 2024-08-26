@@ -55,17 +55,29 @@ class RequestRepository extends QueryBuilderImplementation
         }
     }
 
-    public function getAllByParamsAdmin(array $params)
+    public function getAllByParamsAdmin(array $params, $is_peg_kec, $datakel)
     {
         try {
-            return DB::connection($this->db)
+            $sql = DB::connection($this->db)
                 ->table($this->table)
-                ->select('requests.*', 'services.service_name', 'request_status.request_status_name_alias as request_status_name', 'request_status.request_status_color_alias as request_status_color', )
+                ->select(
+                    'requests.*',
+                    'services.service_name',
+                    'request_status.request_status_name as request_status_name',
+                    'request_status.request_status_color as request_status_color'
+                )
                 ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
-                ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id')
-                ->where($params)
-                ->orderBy('created_at', 'desc')
-                ->get();
+                ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id');
+            if ($params != array()) {
+                $sql->where($params);
+            }
+            if ($is_peg_kec) {
+                $sql->whereIn('requests.request_status_id', ['SUBMITED_KEC', 'VERIFIED_KEC', 'PROCCESS_KEC']);
+                $sql->whereIn('requests.kd_kel', $datakel);
+            }
+            $result = $sql->orderBy('requests.created_at', 'desc')->get();
+
+            return $result;
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -130,12 +142,18 @@ class RequestRepository extends QueryBuilderImplementation
 
     public function getTTD($id)
     {
+        // if ($is_kec) {
+        //     $field = 'requests_ttes.user_id_kec';
+        // } else {
+        //     $field = 'requests_ttes.user_id';
+        // }
         return DB::connection($this->db)
         ->table('requests_ttes')
         ->select('pegawai.nama as ttd_name', 'pegawai.nip as ttd_nip')
         ->leftJoin('sys_users', 'sys_users.user_id', '=', 'requests_ttes.user_id')
         ->leftJoin('pegawai', 'pegawai.nip', '=', 'sys_users.user_nip')
         ->where('requests_ttes.request_id', $id)
+        // ->where($field, '!=', null)
         ->first();
     }
 

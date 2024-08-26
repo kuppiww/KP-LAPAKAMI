@@ -32,5 +32,6 @@
     "SysTasks": true,
     "Verification": true,
     "ChangeKK": true,
-    "Operator": true
+    "Operator": true,
+    "TTE": true
 }

@@ -3,6 +3,7 @@
 namespace Modules\Request\Repositories;
 
 use App\Implementations\QueryBuilderImplementation;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class RequestLogRepository extends QueryBuilderImplementation
@@ -42,6 +43,21 @@ class RequestLogRepository extends QueryBuilderImplementation
                 ->leftJoin('request_status', 'request_status.request_status_id', '=', 'request_logs.request_status_id')
                 ->where($params)
                 ->orderBy('request_log_id', 'DESC')
+                ->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getKonseptor($request_id)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select('request_logs.*', 'sys_users.user_name')
+                ->leftJoin('sys_users', 'sys_users.user_id', '=', 'request_logs.created_by')
+                ->where('request_status_id', 'PROCCESS')
+                ->where('request_id', $request_id)
                 ->get();
         } catch (Exception $e) {
             return $e->getMessage();
