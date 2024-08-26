@@ -125,12 +125,28 @@
                         <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
-                        href="{{ url('operator') }}">
-                        <i class="ri-file-line me-2 fs-5"></i> Operator
-                    </a>
-                </li>
+                @if (Auth::guard('admin')->user()->group_id == 'operatorkelurahan' || Auth::guard('admin')->user()->group_id == 'operatorkecamatan' )
+                    <li class="nav-item">
+                        <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                            href="{{ url('operator') }}">
+                            <i class="ri-file-line me-2 fs-5"></i> Operator
+                        </a>
+                    </li>
+                @endif
+                @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
+                    <li class="nav-item">
+                        <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                            href="{{ url('operator') }}">
+                            <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @if (Request::segment(1) == 'tte') active @endif"
+                            href="{{ url('tte') }}">
+                            <i class="ri-file-line me-2 fs-5"></i> TTE
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
                         href="{{ url('ubah-kk') }}">
@@ -182,12 +198,28 @@
                                 <i class="ri-user-5-line me-2 fs-5"></i> Akun Masyarakat
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
-                                href="{{ url('operator') }}">
-                                <i class="ri-file-line me-2 fs-5"></i> Operator
-                            </a>
-                        </li>
+                        @if (Auth::guard('admin')->user()->group_id == 'operatorkelurahan' || Auth::guard('admin')->user()->group_id == 'operatorkecamatan' )
+                            <li class="nav-item">
+                                <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                                    href="{{ url('operator') }}">
+                                    <i class="ri-file-line me-2 fs-5"></i> Operator
+                                </a>
+                            </li>
+                        @endif
+                        @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
+                            <li class="nav-item">
+                                <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
+                                    href="{{ url('operator') }}">
+                                    <i class="ri-file-line me-2 fs-5"></i> Verifikasi
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @if (Request::segment(1) == 'tte') active @endif"
+                                    href="{{ url('tte') }}">
+                                    <i class="ri-file-line me-2 fs-5"></i> TTE
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link @if (Request::segment(1) == 'ubah-kk') active @endif"
                                 href="{{ url('ubah-kk') }}">

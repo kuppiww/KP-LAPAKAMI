@@ -152,6 +152,21 @@ class SysUsers extends Authenticatable
         }
     }
 
+    public function getByTTE(array $params, array $paramNotIn)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select($this->table.'.*', 'pegawai.nama')
+                ->leftjoin('pegawai', 'pegawai.nip', $this->table.'.user_nip')
+                ->whereNotIn('user_nip', $paramNotIn)
+                ->where($params)
+                ->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function updateData(array $data, $id)
     {
         try {

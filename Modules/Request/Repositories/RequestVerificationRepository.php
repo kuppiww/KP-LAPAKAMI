@@ -26,7 +26,7 @@ class RequestVerificationRepository extends QueryBuilderImplementation
 
         try {
             DB::beginTransaction();
-            DB::table($this->table)->where('request_id', '=', $id)->update($data['requests']);
+            DB::table($this->table)->where('req_verification_id', '=', $id)->update($data['requests']);
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollback();
@@ -60,7 +60,7 @@ class RequestVerificationRepository extends QueryBuilderImplementation
         $user = Auth::guard('admin')->user();
         if ($jenis == 'kel') {
             $where[] = ['kd_kel', $user->kd_kel];
-            $where[] = ['group_id', 'pekelurahan'];
+            $where[] = ['group_id', 'pkelurahan'];
         } else {
             $where[] = ['kd_kec', $user->kd_kec];
             $where[] = ['group_id', 'pkecamatan'];
@@ -79,6 +79,7 @@ class RequestVerificationRepository extends QueryBuilderImplementation
         $getLastNumberId = DB::table($this->table)
             ->select('verification_number')
             ->whereIn('user_id', $dataVerifikatorExis)
+            ->where('request_id', $request_id)
             ->orderBy('verification_number', 'DESC')
             ->first();
         return $getLastNumberId->verification_number+1;

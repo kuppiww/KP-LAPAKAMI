@@ -1,0 +1,11 @@
+{
+    "name": "TTE",
+    "alias": "tte",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\TTE\\Providers\\TTEServiceProvider"
+    ],
+    "files": []
+}

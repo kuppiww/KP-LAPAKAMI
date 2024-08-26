@@ -83,7 +83,7 @@ class VerifikatorController extends Controller
         $this->_requestVerificationRepository->insert($data);
         DB::commit();
 
-        return redirect('/operator/'.$service.'/lihat/'.$id);
+        return redirect('/operator/'.$service.'/lihat/'.$id)->with('success', 'Berhasil menambah verifikator');
     }
 
     public function deleteverification($id, $request_id, $service)
@@ -94,13 +94,19 @@ class VerifikatorController extends Controller
         if (!$getService) {
             return redirect(url('404'));
         }
-
+        $params['request_id'] = $request_id;
         if ($user->is_kecamatan_employee) {
             $params['kd_kec'] = $user->kd_kec;
             $params['group_id'] = 'pkecamatan';
         } else {
             $params['kd_kel'] = $user->kd_kel;
-            $params['group_id'] = 'pekelurahan';
+            $params['group_id'] = 'pkelurahan';
+        }
+
+        $getVerification = $this->_requestVerificationRepository->getById($id);
+
+        if (!$getVerification) {
+            return redirect(url('404'));
         }
         
         DB::beginTransaction();
@@ -108,24 +114,27 @@ class VerifikatorController extends Controller
         DB::commit();
 
         $dataBeforeDel = $this->_requestVerificationRepository->getByParams($params);
-        
+
         foreach ($dataBeforeDel as $key => $value) {
-            $data[] = [$value->verification_number, $value->req_verification_id];
-            // $data[]['verification_number'] = $value->verification_number;
-        }
-
-        $data = array_values($data);
-        foreach ($data as $index => &$item) {
-            $item[0] = (string)$index;
-        }
-
-        foreach ($data as $key => $value) {
-            $dataVer['verification_number'] = $value[0];
+            $dataVer['verification_number'] = $key;
+            $data['req_verification_id'] = $value->req_verification_id;
             DB::beginTransaction();
-            $this->_requestVerificationRepository->update($dataVer, $value[1]);
+            $this->_requestVerificationRepository->update($dataVer, $data['req_verification_id']);
             DB::commit();
         }
 
-        return redirect('/operator/'.$service.'/lihat/'.$request_id);
+        // $data = array_values($data);
+        // foreach ($data as $index => &$item) {
+        //     $item[0] = (string)$index;
+        // }
+
+        // foreach ($data as $key => $value) {
+        //     $dataVer['verification_number'] = $value[0];
+        //     DB::beginTransaction();
+        //     $this->_requestVerificationRepository->update($dataVer, $value[1]);
+        //     DB::commit();
+        // }
+
+        return redirect('/operator/'.$service.'/lihat/'.$request_id)->with('success', 'Berhasil menghapus verifikator');
     }
 }
