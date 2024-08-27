@@ -51,7 +51,7 @@
 			    <ul class="navbar-nav ms-auto">
 			      	<li class="nav-item dropdown">
 			          	<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-			            	<div class="btn btn-icon bg-light rounded-circle me-3 text-primary"><i class="ri-user-line fs-5"></i></div><span class="me-1">{{ Auth::user()->user_nama }}</span>
+			            	<div class="btn btn-icon bg-light rounded-circle me-3 text-primary"><i class="ri-user-line fs-5"></i></div><span class="me-1">{{ Auth::user()->user_nama ?? Auth::guard('admin')->user()->user_name }}</span>
 			          	</a>
 			          	<ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
 				            <li>

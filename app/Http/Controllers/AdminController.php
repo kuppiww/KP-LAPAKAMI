@@ -253,7 +253,8 @@ class AdminController extends Controller
     {
         $data = json_decode($request->session()->get('data'));
         $data_user = $request->session()->get('data_user');
-        Auth::logout();
+        Auth::guard('admin')->logout();
+        Auth::guard('web')->logout();
         if ($data != null) {
             // $this->_SSOController->_setLogSSO($data_user->preferred_username, 'LOGOUT');
             // config("auth.sso_host")
