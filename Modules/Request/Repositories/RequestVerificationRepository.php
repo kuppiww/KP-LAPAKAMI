@@ -55,6 +55,31 @@ class RequestVerificationRepository extends QueryBuilderImplementation
         }
     }
 
+    public function getIsVerifikator($params)
+    {
+        try {
+            $data = DB::table($this->table)
+                ->select($this->table.'.*', 'sign_status.sign_status_name', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee', 'pegawai.nama', 'pegawai.jabatan', 'pegawai.nip', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
+                ->leftjoin('sys_users', 'sys_users.user_id', $this->table.'.user_id')
+                ->leftjoin('sign_status', 'sign_status.sign_status_id', $this->table.'.status')
+                ->leftjoin('m_sub_districts', 'm_sub_districts.kd_sub_district', 'sys_users.kd_kel')
+                ->leftjoin('m_districts', 'm_districts.kd_district', 'sys_users.kd_kec')
+                ->leftjoin('pegawai', 'pegawai.nip', 'sys_users.user_nip')
+                ->where($params)
+                ->orderBy($this->table.'.verification_number', 'ASC')
+                ->first();
+
+            if ($data->status == 'ACCEPTED') {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function getLastID($jenis, $request_id)
     {
         $user = Auth::guard('admin')->user();
@@ -84,6 +109,38 @@ class RequestVerificationRepository extends QueryBuilderImplementation
             ->first();
         return $getLastNumberId->verification_number+1;
         // dd($jenis, $request_id, $existing, $dataVerifikatorExis, $getLastNumberId->verification_number);
+    }
+
+    public function getAllByParamsAdmin(array $params, $group, $is_peg_kec, $datakel)
+    {
+        try {
+            $sql = DB::connection($this->db)
+                ->table($this->table)
+                ->select(
+                    'requests.*',
+                    'services.service_name',
+                    'request_status.request_status_name_backend as request_status_name',
+                    'request_status.request_status_color as request_status_color'
+                )
+                ->leftJoin('requests', 'requests.request_id', $this->table.'.request_id')
+                ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
+                ->leftJoin('request_status', 'request_status.request_status_id', '=', 'requests.request_status_id');
+            if ($params != array()) {
+                $sql->where($params);
+            }
+            // if ($is_peg_kec) {
+            //     $sql->whereIn('requests.request_status_id', ['SUBMITED_KEC', 'VERIFIED_KEC', 'PROCCESS_KEC', 'VERIFICATION_KEC']);
+            //     $sql->whereIn('requests.kd_kel', $datakel);
+            // }
+            // if ($group == 'pkelurahan') {
+            //     $sql->whereNotIn('requests.request_status_id', ['SUBMITED']);
+            // }
+            $result = $sql->orderBy('created_at', 'desc')->get();
+
+            return $result;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
 }

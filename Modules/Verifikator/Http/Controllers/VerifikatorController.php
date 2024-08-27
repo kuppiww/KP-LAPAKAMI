@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Operator\Http\Controllers;
+namespace Modules\Verifikator\Http\Controllers;
 
 use App\Helpers\DateFormatHelper;
 use App\Helpers\LogHelper;
@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Request\Repositories\RequestAttachmentRepository;
 use Modules\Request\Repositories\RequestLogRepository;
 use Modules\Request\Repositories\RequestRepository;
+use Modules\Request\Repositories\RequestVerificationRepository;
 use Modules\Request\Repositories\ServiceRepository;
 use Modules\User\Repositories\SubDistrictRepository;
 use Yajra\DataTables\Facades\DataTables;
 
-class OperatorController extends Controller
+class VerifikatorController extends Controller
 {
     protected $_requestRepository;
     protected $_requestLogRepository;
@@ -25,6 +26,7 @@ class OperatorController extends Controller
     protected $_logHelper;
     protected $_dateFormatHelper;
     protected $_subDistrictRepository;
+    protected $_requestVerificationRepository;
 
     public function __construct(){
 
@@ -36,8 +38,9 @@ class OperatorController extends Controller
         $this->_requestAttachmentRepository     = new RequestAttachmentRepository;
         $this->_serviceRepository               = new ServiceRepository;
         $this->_subDistrictRepository = new SubDistrictRepository;
+        $this->_requestVerificationRepository = new RequestVerificationRepository;
 
-        $this->module      = "Operator";
+        $this->module      = "Verifikator";
         $this->_logHelper  = new LogHelper;
         $this->_dateFormatHelper = new DateFormatHelper;
 
@@ -49,11 +52,8 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        // $user = Auth::guard('admin')->user();
-        // $filter['requests.kd_kel'] = $user->kd_kel;
         $services= $this->_serviceRepository->getAllByParams(['is_select' => true]);
-        // $requests  = $this->_requestRepository->getAll();
-        return view('operator::index', compact('services'));
+        return view('verifikator::index', compact('services'));
     }
 
     /**
@@ -62,7 +62,7 @@ class OperatorController extends Controller
      */
     public function create()
     {
-        return view('operator::create');
+        return view('verifikator::create');
     }
 
     /**
@@ -84,7 +84,8 @@ class OperatorController extends Controller
     {
         $service = $this->_serviceRepository->getById($service_id);
         $service_slug = $service->slug;
-        return redirect('/operator/'.$service_slug.'/lihat/'.$id);
+        return redirect('/verifikator/'.$service_slug.'/lihat/'.$id);
+        // return view('verifikator::show');
     }
 
     /**
@@ -94,7 +95,7 @@ class OperatorController extends Controller
      */
     public function edit($id)
     {
-        return view('operator::edit');
+        return view('verifikator::edit');
     }
 
     /**
@@ -121,19 +122,18 @@ class OperatorController extends Controller
     public function listpermohonan(Request $request)
     {
         $datakel = null;
-        $filter = array();
         $user = Auth::guard('admin')->user();
-        if ($user->is_kecamatan_employee) {
-            $param['kd_district'] = $user->kd_kec;
-            $kec = $this->_subDistrictRepository->getAllByParams($param);
-            foreach ($kec as $key => $value) {
-                $datakel[] = $value->kd_sub_district;
-            }
-        } else {
-            $filter['requests.kd_kel'] = $user->kd_kel;
-        }
+        // if ($user->is_kecamatan_employee) {
+        //     $param['kd_district'] = $user->kd_kec;
+        //     $kec = $this->_subDistrictRepository->getAllByParams($param);
+        //     foreach ($kec as $key => $value) {
+        //         $datakel[] = $value->kd_sub_district;
+        //     }
+        // } else {
+            $filter['requests_verifications.user_id'] = $user->user_id;
+        // }
 
-        $data = $this->_requestRepository->getAllByParamsAdmin($filter, $user->group_id, $user->is_kecamatan_employee, $datakel);
+        $data = $this->_requestVerificationRepository->getAllByParamsAdmin($filter, $user->group_id, $user->is_kecamatan_employee, $datakel);
         if ($request->ajax()) {
             $datatable = DataTables::of($data)
             ->addIndexColumn()
@@ -150,7 +150,7 @@ class OperatorController extends Controller
                 return '<span class="badge bg-'.$permohonan->request_status_color.'">'.$permohonan->request_status_name.'</span>';
             });
             $datatables = $datatable->addColumn('action', function($permohonan){
-                $linkDetail= url('operator/detail');
+                $linkDetail= url('verifikator/detail');
                 // if ($permohonan->request_status_id == 'SUBMITED' || $permohonan->request_status_id == 'EDITED') {
                 //     $detailBtn = '<a href="'.$linkDetail.'/'. $permohonan->request_id.'/'.$permohonan->service_id.'" class="btn btn-info btn-light" data-toggle="tooltip" data-placement="top" title="Verifikasi">
                 //         Verifkasi

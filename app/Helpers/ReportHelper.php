@@ -272,15 +272,15 @@ class ReportHelper {
 		$tdwidthone = '512px';
 		$tdwidthan  = '48px';
 		$tdwidthtwo = '510px';
-		$backgroundColor = '';
-		$color = 'black';
+		$backgroundColor = 'red';
+		$color = 'white';
 		$align = 'left';
 		$tglSurat = self::setFormatTanggal($tgl_surat);
 
-		if ($request_status != 'APPROVED' || $request_status != 'APPROVED_KEC') {
+		if ($request_status == 'APPROVED' || $request_status == 'APPROVED_KEC' || $request_status == 'TTE' || $request_status == 'TTE_KEC' ) {
 			$align = 'left';
-			$backgroundColor = 'red';
-			$color = 'white';
+			$backgroundColor = 'white';
+			$color = 'black';
 		}
 
 		$tglsurat = '<table align="'.$align.'" width="'.$tablewidth.'" border="0" autoresize="0">'.

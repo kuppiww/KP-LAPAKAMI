@@ -26,7 +26,7 @@ class RequestTteRepository extends QueryBuilderImplementation
         try {
 
             return DB::table($this->table)
-                ->select($this->table.'.*', 'sign_status.sign_status_name_alias', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee', 'pegawai.nama', 'pegawai.jabatan', 'pegawai.nip', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
+                ->select($this->table.'.*', 'sign_status.sign_status_name_tte', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee', 'pegawai.nama', 'pegawai.jabatan', 'pegawai.nip', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
                 ->leftjoin('sys_users', 'sys_users.user_id', $this->table.'.user_id')
                 ->leftjoin('m_sub_districts', 'm_sub_districts.kd_sub_district', 'sys_users.kd_kel')
                 ->leftjoin('m_districts', 'm_districts.kd_district', 'sys_users.kd_kec')
@@ -87,6 +87,22 @@ class RequestTteRepository extends QueryBuilderImplementation
         try {
             DB::beginTransaction();
             DB::table($this->table)->where('req_tte_id', '=', $id)->update($data['requests']);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
+    public function updateStatusByUser($data, $req_id, $user_id)
+    {
+        $data['requests']['status'] = $data['status'];
+        $data['requests']['updated_at'] = date('Y-m-d h:i:s');
+        $data['requests']['updated_by'] = $data['updated_by'];
+
+        try {
+            DB::beginTransaction();
+            DB::table($this->table)->where('request_id', '=', $req_id)->where('user_id', '=', $user_id)->update($data['requests']);
             DB::commit();
         } catch (\Throwable $e) {
             DB::rollback();

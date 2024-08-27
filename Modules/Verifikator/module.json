@@ -1,0 +1,11 @@
+{
+    "name": "Verifikator",
+    "alias": "verifikator",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Verifikator\\Providers\\VerifikatorServiceProvider"
+    ],
+    "files": []
+}

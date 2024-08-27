@@ -135,8 +135,8 @@
                 @endif
                 @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
                     <li class="nav-item">
-                        <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
-                            href="{{ url('operator') }}">
+                        <a class="nav-link @if (Request::segment(1) == 'verifikator') active @endif"
+                            href="{{ url('verifikator') }}">
                             <i class="ri-file-line me-2 fs-5"></i> Verifikasi
                         </a>
                     </li>
@@ -208,8 +208,8 @@
                         @endif
                         @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
                             <li class="nav-item">
-                                <a class="nav-link @if (Request::segment(1) == 'operator') active @endif"
-                                    href="{{ url('operator') }}">
+                                <a class="nav-link @if (Request::segment(1) == 'verifikator') active @endif"
+                                    href="{{ url('verifikator') }}">
                                     <i class="ri-file-line me-2 fs-5"></i> Verifikasi
                                 </a>
                             </li>
@@ -333,7 +333,7 @@
                     cancelButtonText: 'Batal',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location = "{{ url('logout') }}";
+                        window.location = "{{ url('logout-admin') }}";
                     }
                 })
             });

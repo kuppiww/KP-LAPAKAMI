@@ -57,7 +57,7 @@ class NotificationHelper{
 		$dalamproses = 'Selamat permohonan layanan yang anda ajukan melalui aplikasi Lapakami dalam proses';
         $prosespermohonan = 'proses permohonan dapat anda lihat melalui Lapakami menggunakan akun anda dengan detail permohonan sebagai berikut.';
         $catatan = null;
-        if ($status == 'APPROVED') {
+        if ($status == 'APPROVED' || $status == 'APPROVED_KEC') {
             $redaksi = 'Selamat permohonan layanan yang anda ajukan melalui aplikasi Lapakami telah selesai, dokumen hasil permohonan dapat anda unduh melalui Lapakami menggunakan akun anda dengan detail permohonan sebagai berikut.';
             $statusname = 'Selesai';
         } else if ($status == 'VERIFIED') {
