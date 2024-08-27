@@ -306,7 +306,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Jenis Kelamin</label><br>
                                                 {{ $request->gender }}
@@ -321,7 +321,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ $request->tmp_lahir }}
@@ -332,7 +332,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_lahir) }}
@@ -343,7 +343,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Agama</label><br>
                                                 {{ $request->religion }}
@@ -358,7 +358,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Pekerjaan</label><br>
                                                 {{ $request->pekerjaan }}
@@ -378,7 +378,7 @@
                                         <h5 class="text-dark">Informasi Surat Pengantar</h5>
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Nomor Surat Pengantar</label><br>
                                                 {{ $request->no_surat_pengantar }}
@@ -389,7 +389,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Surat Pengantar</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
@@ -400,7 +400,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Tetangga (RT)</label><br>
                                                 {{ $request->rt }}
@@ -411,7 +411,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Warga (RW)</label><br>
                                                 {{ $request->rw }}
@@ -465,7 +465,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Hubungan Keluarga</label><br>
                                                 {{ isset ($request_detail->nama_hub) ? $request_detail->nama_hub : null }}
@@ -489,7 +489,7 @@
                                     </div> -->
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ isset ($request_detail->tgl_lahir_pasien) ? DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) : null }}
@@ -502,7 +502,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ isset ($request_detail->tmp_lahir_pasien) ? $request_detail->tmp_lahir_pasien : null }}
@@ -515,7 +515,7 @@
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Nama Rumah Sakit</label><br>
                                                 {{ isset ($request_detail->name) ? $request_detail->name : null }}
@@ -533,7 +533,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                        @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'EDITED' )
                             <div class="text-right mt-2">
                                 <button type="submit" class="btn btn-primary">Ubah</button>
                             </div>
@@ -712,7 +712,7 @@
                                                         <td>{{ $list_tte->tte_number + 1 }}</td>
                                                         <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
                                                         <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
-                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_alias }}</span></td>
+                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_tte }}</span></td>
                                                         <td>
                                                             @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
                                                                 <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
@@ -743,7 +743,7 @@
                                                         <td>{{ $list_tte->tte_number + 1 }}</td>
                                                         <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
                                                         <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
-                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_alias }}</span></td>
+                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_tte }}</span></td>
                                                         <td>
                                                             @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
                                                                 <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
@@ -1695,6 +1695,7 @@
         var id = '{{ $request->request_id }}';
         var status = '{{ $request->request_status_id }}';
         var group = '{{ $group }}';
+        var isVerifikator = '{{ $isVerifikator }}';
 
         if (status === 'PROCCESS' || status === 'PROCCESS_KEC') {
             jmlhCeklis = jmlhDocs;
@@ -1818,7 +1819,9 @@
             if (jmlhCeklis == jmlhDocs) {
                 if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
                     if (group === 'pkelurahan' || group === 'pkecamatan') {
-                        document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
+                        if (!isVerifikator) {
+                            document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
+                        }
                     }
                 } else {
                     document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';

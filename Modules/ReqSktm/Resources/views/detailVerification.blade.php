@@ -1286,9 +1286,8 @@
         var id = '{{ $request->request_id }}';
         var status = '{{ $request->request_status_id }}';
         var group = '{{ $group }}';
-        var service_is_kec = '{{ $request->service_is_kec }}';
 
-        if (status === 'APPROVED' || status === 'APPROVED_KEC' || status === 'VERIFICATION_KEL' || status === 'VERIFICATION_KEC' || status === 'TTE_KEL' || status === 'TTE_KEC') {
+        if (status === 'VERIFICATION_KEL' || status === 'PROCCESS_KEC' || status === 'PROCCESS' || status === 'VERIFICATION_KEC' || status === 'TTE_KEL') {
             jmlhCeklis = jmlhDocs;
             setChecklist('check_file_ktp');
             setChecklist('check_file_rt_rw');
@@ -1410,27 +1409,23 @@
             if (jmlhCeklis == jmlhDocs) {
                 // hide tombol tolak dan tnagguhkan
                 // show tombol sesuai
-                var btn_tolak = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>';
-                var btn_tangguhkan = '<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>';
-                var btn_preview = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>';
-                var btn_finish = '<a href="/tte/sktm/finish/'+id+'" ><button class="btn btn-primary" id="btn_finsih">Finish</button></a>';
                 if (status === 'VERIFICATION_KEL' || status === 'VERIFICATION_KEC') {
-                    document.getElementById('div_btn').innerHTML = btn_tolak+'&nbsp;&nbsp;'+btn_tangguhkan+'&nbsp;&nbsp;'+btn_preview+'&nbsp;&nbsp;<button data-bs-toggle="modal" data-bs-target="#modalTTE" class="btn btn-primary" id="btn_tanda_tangan">Tanda Tangan</button>';
-                } else if (status === 'TTE_KEL' && service_is_kec){
-                    document.getElementById('div_btn').innerHTML = '<a href="/tte/sktm/send/'+id+'" ><button class="btn btn-primary" id="btn_send_to_kec">Kirim ke Kecamatan</button></a>';
-                } else if (status === 'TTE_KEL' && !service_is_kec){
-                    document.getElementById('div_btn').innerHTML = btn_finish;
-                } else if (status === 'TTE_KEC' && service_is_kec ){
-                    document.getElementById('div_btn').innerHTML = btn_finish;
-                } else if(status === 'APPROVED' || status === 'APPROVED_KEC') {
-                    document.getElementById('div_btn').innerHTML = btn_preview;
+                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<button data-bs-toggle="modal" data-bs-target="#modalTTE" class="btn btn-primary" id="btn_tanda_tangan">Tanda Tangan</button>';
+                } else if (status === 'TTE_KEL'){
+                    document.getElementById('div_btn').innerHTML = '<a href="/tte/sktm/send/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Kirim ke Kecamatan</button></a>';
+                } else if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
+                    if (group === 'pkelurahan' || group === 'pkecamatan') {
+                        // if (!isVerifikator) {
+                            document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/verifikator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
+                        // }
+                    }
                 } else {
-                    document.getElementById('div_btn').innerHTML = btn_preview+'&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
+                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
                 }
             } else {
                 // show tombol tolak dan tnagguhkan
                 // hode tombol sesuai
-                document.getElementById('div_btn').innerHTML = btn_tolak+"&nbsp;&nbsp;"+btn_tangguhkan;
+                document.getElementById('div_btn').innerHTML = "<button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalTolak' id='btn_tolak'>Tolak</button>&nbsp;&nbsp;<button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalTangguhkan' id='btn_tangguhkan'>Tangguhkan</button>";
             }
         }
 

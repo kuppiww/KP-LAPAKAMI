@@ -35,4 +35,12 @@ Route::prefix('operator/sktm')->group(function() {
 Route::prefix('tte/sktm')->group(function() {
     Route::get('/lihat/{id}', 'ReqSktmAdminController@showTTE');
     Route::post('/add/{id}', 'ReqSktmAdminController@addTTE');
+    Route::get('/send/{id}', 'ReqSktmAdminController@movetokec');
+    Route::get('/finish/{id}', 'ReqSktmAdminController@finish');
+});
+
+Route::prefix('verifikator/sktm')->group(function() {
+    Route::get('/lihat/{id}', 'ReqSktmAdminController@showVerifikator');
+    Route::get('/verifikasi/{id}/', 'ReqSktmAdminController@verifikasi');
+    // Route::post('/add/{id}', 'VerifikatorController@addTTE');
 });
