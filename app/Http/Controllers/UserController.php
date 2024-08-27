@@ -19,7 +19,7 @@ use App\Mail\UserVerificationMail;
 // Use App\User;
 use App\Helpers\LogHelper;
 use App\Helpers\CheckSiak;
-
+use App\Models\SysUsers;
 use App\Models\User;
 use App\Models\UserTemp;
 use Session;
@@ -28,6 +28,8 @@ use AuthenticatesUsers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Modules\Request\Repositories\ServiceRepository;
+use Modules\Users\Repositories\SysUsersRepository;
 use Modules\Users\Repositories\UsersRepository;
 
 class UserController extends Controller
@@ -43,6 +45,8 @@ class UserController extends Controller
         $this->_logHelper           = new LogHelper;
         $this->_fcmHelper           = new FCMHelper;
         $this->_SSOController = new SSOController;
+        $this->_servicesRepository = new ServiceRepository;
+        $this->_sysuserRepository = new SysUsersRepository;
     }
 
     public function login(Request $request)
@@ -691,9 +695,17 @@ class UserController extends Controller
 
     public function showForm()
     {
+        $param['is_active'] = true;
+        $data_layanan = $this->_servicesRepository->getAllByParams($param);
+        $param['sys_users.group_id'] = 'pkelurahan';
+        $data_verifikator_kelurahan = $this->_sysuserRepository->getAllByParams($param);
+        $param['sys_users.group_id'] = 'pkecamatan';
+        $data_verifikator_kecamatan = $this->_sysuserRepository->getAllByParams($param);
+
+
 
         // dd('here');
-        return view('users.services.form-detail');
+        return view('users.services.form-detail', compact('data_layanan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan'));
     }
     public function submitForm(Request $request)
     {

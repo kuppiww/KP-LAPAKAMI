@@ -53,6 +53,20 @@ class SysUsersRepository extends QueryBuilderImplementation
         } catch (Exception $e) {
             return $e->getMessage();
         }
-    } 
+    }
 
+    public function getAllByParams(array $params)
+    {
+        try {
+            return DB::connection($this->db)
+                ->table($this->table)
+                ->select($this->table . '.*', 'pegawai.nama')
+                ->join('sys_user_groups', 'sys_user_groups.group_id', '=', 'sys_users.group_id')
+                ->leftJoin('pegawai', 'pegawai.nip', $this->table . '.user_nip')
+                ->where($params)
+                ->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
