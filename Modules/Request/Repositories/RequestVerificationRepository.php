@@ -55,7 +55,115 @@ class RequestVerificationRepository extends QueryBuilderImplementation
         }
     }
 
-    public function getIsVerifikator($params)
+    public function getIsVerifikator($params, $group, $request_id)
+    {
+        try {
+            $res['isVerified'] = 'false';
+            $res['pesan'] = null;
+            if ($group == 'pkecamatan') {
+                $isVerifiedPegKel = $this->isVerifiedPegKel($request_id);
+                $dataUrutan = $this->cekUrutanVerifikatorKec($request_id, $params['requests_verifications.user_id']);
+                if ($isVerifiedPegKel) {
+                    // ini cari urutannya.
+                    if ($dataUrutan['urutan'] == 0) {
+                        if ($dataUrutan['status'] == 'NEEDS_CLARIFICATION') {
+                            // belum bisa verifikasi, karena belum di cek sama operator
+                            $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena operator kelurahan belum melakukan pengecekan data permohonan';
+                        } elseif ($dataUrutan['status'] == 'AWAITING_RESPONSE') {
+                            // boleh verifikasi, karna sudah di cek oleh operator
+                            $res['isVerified'] = 'true';
+                            $res['pesan'] = 'Anda sudah bisa melakukan verifikasi';
+                        } elseif ($dataUrutan['status'] == 'ACCEPTED') {
+                            // tidak bisa verifikasi lagi
+                            $res['pesan'] = 'Anda sudah menyetujui permohonan';
+                        } else {
+                            // tidak bisa verifikasi lagi
+                            $res['pesan'] = 'Anda sudah menolak permohonan';
+                        }
+                    } else {
+                        $urutanSebelum = $dataUrutan['nomor_urutan_sebelumnya']+1;
+                        // ini yg urutannya bukan yg pertama
+                        if ($dataUrutan['status_urutan_sebelumnya'] == 'NEEDS_CLARIFICATION') {
+                            // ini belum bisa verifikasi, karena  belum di cek sama operator
+                            $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena operator kecamatan belum melakukan pengecekan data permohonan';
+                        } elseif ($dataUrutan['status_urutan_sebelumnya'] == 'AWAITING_RESPONSE') {
+                            // ini belum bisa verifikasi, karena urutan sebelumnya belum verifikasi
+                            $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena verifikator urutan ke '.$urutanSebelum.' belum melakukan verifikasi data permohonan';
+                        } elseif ($dataUrutan['status_urutan_sebelumnya'] == 'ACCEPTED') {
+                            // boleh verifikasi, karna yang sebelumnya verifikasi
+                            $res['isVerified'] = 'true';
+                            $res['pesan'] = 'Anda sudah bisa melakukan verifikasi';
+                        } else {
+                            // ini belum bisa verifikasi, karena urutan sebelumnya menolak
+                            $res['pesan'] = 'Anda sudah menolak permohonan';
+                        }
+                    }
+                } else {
+                    $res['isVerified'] = 'false';
+                    $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena verifikator kelurahan belum melakukan verifikasi data permohonan';
+                }
+            } else {
+                $dataUrutan = $this->cekUrutanVerifikatorKel($request_id, $params['requests_verifications.user_id']);
+                if ($dataUrutan['urutan'] == 0) {
+                    if ($dataUrutan['status'] == 'NEEDS_CLARIFICATION') {
+                        // belum bisa verifikasi, karena belum di cek sama operator
+                        $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena operator kelurahan belum melakukan pengecekan data permohonan';
+                    } elseif ($dataUrutan['status'] == 'AWAITING_RESPONSE') {
+                        // boleh verifikasi, karna sudah di cek oleh operator
+                        $res['isVerified'] = 'true';
+                        $res['pesan'] = 'Anda sudah bisa melakukan verifikasi';
+                    } elseif ($dataUrutan['status'] == 'ACCEPTED') {
+                        // tidak bisa verifikasi lagi
+                        $res['pesan'] = 'Anda sudah menyetujui permohonan';
+                    } else {
+                        // tidak bisa verifikasi lagi
+                        $res['pesan'] = 'Anda sudah menolak permohonan';
+                    }
+                } else {
+                    $urutanSebelum = $dataUrutan['nomor_urutan_sebelumnya']+1;
+                    if ($dataUrutan['status_urutan_sebelumnya'] == 'NEEDS_CLARIFICATION') {
+                        // ini belum bisa verifikasi, karena  belum di cek sama operator
+                        $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena operator kecamatan belum melakukan pengecekan data permohonan';
+                    } elseif ($dataUrutan['status_urutan_sebelumnya'] == 'AWAITING_RESPONSE') {
+                        // ini belum bisa verifikasi, karena urutan sebelumnya belum verifikasi
+                        $res['pesan'] = 'Mohon maaf Anda belum bisa melakukan verifikasi, karena verifikator urutan ke '.$urutanSebelum.' belum melakukan verifikasi data permohonan';
+                    } elseif ($dataUrutan['status_urutan_sebelumnya'] == 'ACCEPTED') {
+                        // boleh verifikasi, karna yang sebelumnya verifikasi
+                        $res['isVerified'] = 'true';
+                        $res['pesan'] = 'Anda sudah bisa melakukan verifikasi';
+                    } else {
+                        // ini belum bisa verifikasi, karena urutan sebelumnya menolak
+                        $res['pesan'] = 'Anda sudah menolak permohonan';
+                    }
+                }
+            }
+            return $res;
+            // $data = DB::table($this->table)
+            //     ->select($this->table.'.*', 'sign_status.sign_status_name', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee', 'pegawai.nama', 'pegawai.jabatan', 'pegawai.nip', 'm_sub_districts.sub_district as unit_kel', 'm_districts.district as unit_kec')
+            //     ->leftjoin('sys_users', 'sys_users.user_id', $this->table.'.user_id')
+            //     ->leftjoin('sign_status', 'sign_status.sign_status_id', $this->table.'.status')
+            //     ->leftjoin('m_sub_districts', 'm_sub_districts.kd_sub_district', 'sys_users.kd_kel')
+            //     ->leftjoin('m_districts', 'm_districts.kd_district', 'sys_users.kd_kec')
+            //     ->leftjoin('pegawai', 'pegawai.nip', 'sys_users.user_nip')
+            //     ->where($params)
+            //     ->orderBy($this->table.'.verification_number', 'ASC')
+            //     ->first();
+            // dd($data, $group);
+            // if ($data->status == 'ACCEPTED') {
+            //     return true;
+            // } else {
+            //     return false;
+            // }
+
+        } catch (Exception $e) {
+            $res['isVerified'] = false;
+            $res['pesan'] = null;
+            $res['error'] = $e->getMessage(); 
+            return $res;
+        }
+    }
+
+    public function isVerifiedPegKel($request_id)
     {
         try {
             $data = DB::table($this->table)
@@ -65,17 +173,84 @@ class RequestVerificationRepository extends QueryBuilderImplementation
                 ->leftjoin('m_sub_districts', 'm_sub_districts.kd_sub_district', 'sys_users.kd_kel')
                 ->leftjoin('m_districts', 'm_districts.kd_district', 'sys_users.kd_kec')
                 ->leftjoin('pegawai', 'pegawai.nip', 'sys_users.user_nip')
-                ->where($params)
+                ->where('requests_verifications.request_id', $request_id)
+                ->where('sys_users.is_kecamatan_employee', false)
                 ->orderBy($this->table.'.verification_number', 'ASC')
-                ->first();
+                ->get();
 
-            if ($data->status == 'ACCEPTED') {
-                return true;
-            } else {
-                return false;
+            $verified = true;
+            foreach ($data as $key => $value) {
+                if ($value->status == 'AWAITING_RESPONSE') {
+                    $verified = false;
+                }
             }
+            return $verified;
 
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function cekUrutanVerifikatorKec($request_id, $user_id)
+    {
+        try {
+            $sql = DB::table($this->table)
+                ->select($this->table.'.*', 'sign_status.sign_status_name', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee')
+                ->leftjoin('sys_users', 'sys_users.user_id', $this->table.'.user_id')
+                ->leftjoin('sign_status', 'sign_status.sign_status_id', $this->table.'.status')
+                ->where('requests_verifications.request_id', $request_id)
+                ->where('sys_users.is_kecamatan_employee', true);
+
+            $result = $sql->orderBy($this->table.'.verification_number', 'ASC')->get();
+            $dataUrutan = $sql->where('requests_verifications.user_id', $user_id)->orderBy($this->table.'.verification_number', 'ASC')->first();
+            $data['urutan'] = $dataUrutan->verification_number;
+            $data['status'] = $dataUrutan->status;
+            $data['status_urutan_sebelumnya'] = null;
+
+            foreach ($result as $key => $value) {
+                if ($value->verification_number < $dataUrutan->verification_number) {
+                    $data['status_urutan_sebelumnya'] = $value->status;
+                    $data['nomor_urutan_sebelumnya'] = $value->verification_number;
+                } else if ($value->verification_number > $dataUrutan->verification_number) {
+                    $data['status_urutan_sesudahnya'] = $value->status;
+                    $data['nomor_urutan_sesudahnya'] = $value->verification_number;
+                }
+            }
+            return $data;
+
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function cekUrutanVerifikatorKel($request_id, $user_id)
+    {
+        try {
+            $sql = DB::table($this->table)
+                ->select($this->table.'.*', 'sign_status.sign_status_name', 'sign_status.sign_status_color', 'sys_users.is_kecamatan_employee')
+                ->leftjoin('sys_users', 'sys_users.user_id', $this->table.'.user_id')
+                ->leftjoin('sign_status', 'sign_status.sign_status_id', $this->table.'.status')
+                ->where('requests_verifications.request_id', $request_id)
+                ->where('sys_users.is_kecamatan_employee', false);
+
+            $result = $sql->orderBy($this->table.'.verification_number', 'ASC')->get();
+            $dataUrutan = $sql->where('requests_verifications.user_id', $user_id)->orderBy($this->table.'.verification_number', 'ASC')->first();
+            $data['urutan'] = $dataUrutan->verification_number;
+            $data['status'] = $dataUrutan->status;
+            $data['status_urutan_sebelumnya'] = null;
+
+            foreach ($result as $key => $value) {
+                if ($value->verification_number < $dataUrutan->verification_number) {
+                    $data['status_urutan_sebelumnya'] = $value->status;
+                    $data['nomor_urutan_sebelumnya'] = $value->verification_number;
+                } else if ($value->verification_number > $dataUrutan->verification_number) {
+                    $data['status_urutan_sesudahnya'] = $value->status;
+                    $data['nomor_urutan_sesudahnya'] = $value->verification_number;
+                }
+            }
+            return $data;
+
+        } catch (\Throwable $e) {
             return $e->getMessage();
         }
     }

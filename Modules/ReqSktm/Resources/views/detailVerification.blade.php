@@ -1,4 +1,4 @@
-@extends('layouts.userblank')
+@extends('layouts.userblankadmin')
 @section('title')
     Verifikasi Permohonan Layanan
 @endsection
@@ -35,6 +35,11 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+                {{ $isVerifikator['pesan'] }}
+            </div>
+        </div>
         <div class="col-md-12">
             @if (session('success'))
                 <div class="alert alert-success" role="alert">
@@ -283,9 +288,9 @@
                                 @endif
                                 <div class="tl-content w-100">
                                     @if ($loop->iteration === 1)
-                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name_backend }}</p>
                                     @else
-                                        <p class="mb-1">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1">{{ $log->request_status_name_backend }}</p>
                                     @endif
                                     @if($log->request_status_id == "REJECTED_FINAL" || $log->request_status_id == "REJECTED")
                                         <div class="tl-date text-muted">{{ $log->request_log_note }}</div>
@@ -350,7 +355,7 @@
                                     </table>
 
                                     <p>Verifikator Kecamatan</p>
-                                    @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
+                                    @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC')
                                         <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikatorKec" >Tambah</button>
                                     @endif
                                     <table class="table table-bordered table-responsive">
@@ -374,7 +379,7 @@
                                                         </td>
                                                         <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
                                                         <td>
-                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && $isPegKec)
+                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && $isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC')
                                                                 <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
                                                             @else
                                                                 -
@@ -1286,6 +1291,8 @@
         var id = '{{ $request->request_id }}';
         var status = '{{ $request->request_status_id }}';
         var group = '{{ $group }}';
+        var statusVerifikator = '{{ $isVerifikator["isVerified"] }}';
+        
 
         if (status === 'VERIFICATION_KEL' || status === 'PROCCESS_KEC' || status === 'PROCCESS' || status === 'VERIFICATION_KEC' || status === 'TTE_KEL') {
             jmlhCeklis = jmlhDocs;
@@ -1409,23 +1416,27 @@
             if (jmlhCeklis == jmlhDocs) {
                 // hide tombol tolak dan tnagguhkan
                 // show tombol sesuai
+                var btn_tolak = "<button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalTolak' id='btn_tolak'>Tolak</button>";
+                var btn_tangguhkan = '<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>';
+                var btn_preview = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>';
+
                 if (status === 'VERIFICATION_KEL' || status === 'VERIFICATION_KEC') {
-                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<button data-bs-toggle="modal" data-bs-target="#modalTTE" class="btn btn-primary" id="btn_tanda_tangan">Tanda Tangan</button>';
+                    document.getElementById('div_btn').innerHTML = btn_tolak+'&nbsp;&nbsp;'+btn_tangguhkan+'&nbsp;&nbsp;'+btn_preview+'&nbsp;&nbsp;<button data-bs-toggle="modal" data-bs-target="#modalTTE" class="btn btn-primary" id="btn_tanda_tangan">Tanda Tangan</button>';
                 } else if (status === 'TTE_KEL'){
                     document.getElementById('div_btn').innerHTML = '<a href="/tte/sktm/send/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Kirim ke Kecamatan</button></a>';
                 } else if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
                     if (group === 'pkelurahan' || group === 'pkecamatan') {
-                        // if (!isVerifikator) {
-                            document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/verifikator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
-                        // }
+                        if (statusVerifikator == 'true') {
+                            document.getElementById('div_btn').innerHTML = btn_tolak+'&nbsp;&nbsp;'+btn_tangguhkan+'&nbsp;&nbsp;'+btn_preview+'&nbsp;&nbsp;<a href="/verifikator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
+                        }
                     }
                 } else {
-                    document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
+                    document.getElementById('div_btn').innerHTML = btn_preview+'&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
                 }
             } else {
                 // show tombol tolak dan tnagguhkan
                 // hode tombol sesuai
-                document.getElementById('div_btn').innerHTML = "<button class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalTolak' id='btn_tolak'>Tolak</button>&nbsp;&nbsp;<button class='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalTangguhkan' id='btn_tangguhkan'>Tangguhkan</button>";
+                document.getElementById('div_btn').innerHTML = btn_tolak+"&nbsp;&nbsp;"+btn_tangguhkan;
             }
         }
 

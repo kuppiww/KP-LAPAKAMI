@@ -91,7 +91,7 @@ class AdminController extends Controller
         }
 
         if (Auth::guard('admin')->attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'is_active' => 1])) {
-            return redirect()->intended('user/admin');
+            return redirect('/user/admin');
         } else {
             return redirect('/backend')->with('error', 'username atau kata sandi salah');
         }

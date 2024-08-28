@@ -45,6 +45,7 @@ use App\Models\SysUsers;
 // use DB;
 use Illuminate\Support\Facades\DB;
 use Modules\Request\Repositories\PegawaiRepository;
+use Modules\Request\Repositories\RequestSignLogRepository;
 use Modules\Request\Repositories\RequestTteRepository;
 use Modules\Request\Repositories\RequestVerificationRepository;
 use Modules\Request\Repositories\ServiceSettingsRepository;
@@ -77,6 +78,7 @@ class ReqSktmAdminController extends Controller
     protected $_requestTteRepository;
     protected $_requestVerificationRepository;
     protected $_dataReqHelper;
+    protected $_requestSignLogRepository;
 
     public function __construct()
     {
@@ -105,6 +107,7 @@ class ReqSktmAdminController extends Controller
         $this->_sysUserRepository = new SysUsers();
         $this->_requestTteRepository = new RequestTteRepository();
         $this->_requestVerificationRepository = new RequestVerificationRepository();
+        $this->_requestSignLogRepository = new RequestSignLogRepository();
         $this->breadcrumbs = ['Ekonomi, Pemberdayaan Masyarakat dan Kesejahteraan Sosial', 'Tidak Mampu', 'Sekolah'];
 
         $this->module = "ReqBirth";
@@ -228,10 +231,12 @@ class ReqSktmAdminController extends Controller
             $this->_dataReqHelper->updateStatus($this->_requestRepository, $status, $request->request_id);
             $this->_logRequest($request->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
             $this->_requestVerificationRepository->updateStatus($status, $dataverifikator[0]->req_verification_id);
+            $this->_signLogRequest($request->request_id, $status['status'], 'VERIFICATION', $user->user_id);
             DB::commit();
         } else {
             DB::beginTransaction();
             $this->_requestVerificationRepository->updateStatus($status, $dataverifikator[0]->req_verification_id);
+            $this->_signLogRequest($request->request_id, $status['status'], 'VERIFICATION', $user->user_id);
             DB::commit();
         }
         return redirect('/operator')->with('success', 'Berhasil mengupdate status');
@@ -271,9 +276,11 @@ class ReqSktmAdminController extends Controller
         DB::beginTransaction();
         foreach ($listTTE as $key => $val_tte) {
             $this->_requestTteRepository->updateStatus($status, $val_tte->req_tte_id);
+            $this->_signLogRequest($request->request_id, $status['status'], 'TTE', $val_tte->user_id);
         }
         foreach ($listVerifikator as $key => $val_ver) {
             $this->_requestVerificationRepository->updateStatus($status, $val_ver->req_verification_id);
+            $this->_signLogRequest($request->request_id, $status['status'], 'VERIFICATION', $val_ver->user_id);
         }
         DB::commit();
 
@@ -558,12 +565,8 @@ class ReqSktmAdminController extends Controller
         $listTTEKec = $this->_sysUserRepository->getByTTE($param_peg_kec, $dataNotTTE);
         $isPegKec = $user->is_kecamatan_employee;
         $group = $user->group_id;
-        $isVerifikator = false;
-        if ($group == 'pkelurahan' || $group == 'pkecamatan') {
-            $param_cek['requests_verifications.user_id'] = $user->user_id;
-            $param_cek['requests_verifications.request_id'] = $id;
-            $isVerifikator = $this->_requestVerificationRepository->getIsVerifikator($param_cek);
-        }
+        $isVerifikator['isVerified'] = false;
+        $isVerifikator['pesan'] = null;
         $list['listKonseptor'] = $this->_requestLogRepository->getKonseptor($request->request_id);
 
         return view('reqsktm::detailPermohonan', compact('request', 'isVerifikator', 'list', 'listTTEKec', 'listTTEKel', 'group', 'isPegKec', 'listPegawaiKec', 'listPegawaiKel', 'listTTE', 'listVerifikator', 'listHubKel', 'listHospitals', 'request_detail', 'logs', 'request_docs', 'listJK', 'listReligion'));
@@ -712,11 +715,12 @@ class ReqSktmAdminController extends Controller
         $listTTEKec = $this->_sysUserRepository->getByTTE($param_peg_kec, $dataNotTTE);
         $isPegKec = $user->is_kecamatan_employee;
         $group = $user->group_id;
-        $isVerifikator = false;
+        $isVerifikator['isVerified'] = 'false';
+        $isVerifikator['pesan'] = null;
         if ($group == 'pkelurahan' || $group == 'pkecamatan') {
             $param_cek['requests_verifications.user_id'] = $user->user_id;
             $param_cek['requests_verifications.request_id'] = $id;
-            $isVerifikator = $this->_requestVerificationRepository->getIsVerifikator($param_cek);
+            $isVerifikator = $this->_requestVerificationRepository->getIsVerifikator($param_cek, $group, $request->request_id);
         }
         $list['listKonseptor'] = $this->_requestLogRepository->getKonseptor($request->request_id);
 
@@ -753,10 +757,28 @@ class ReqSktmAdminController extends Controller
         }
         $statusTTE['status'] = 'ACCEPTED'; 
         $statusTTE['updated_by'] = $user->user_id;
+
+        if ($datarequest->service_id == 'REQ_SKTM_HEALTH') {
+            $param['request_id'] = $datarequest->request_id;
+            $repo = $this->_sktmHealthRepository;
+            $detailrequest = $this->_sktmHealthRepository->getByParams($param);
+        }
+
+        if ($detailrequest->no_surat == null) {
+            $no_surat = Surat::getNoSurat($repo, date('Y'), $datarequest->kd_kel, $this->breadcrumbs);
+            $data['tgl_surat'] = date('Y-m-d');
+            $data['no_surat'] = $no_surat;
+            $data['masa_berlaku'] = date('Y-m-d',strtotime('+1 month',strtotime($data['tgl_surat'])));
+        }
+
         DB::beginTransaction();
+        if ($detailrequest->no_surat == null) {
+            $repo->updateData($data, $datarequest->request_id);
+        }
         $this->_requestTteRepository->updateStatusByUser($statusTTE, $datarequest->request_id, $user->user_id);
         $this->_dataReqHelper->updateStatus($this->_requestRepository, $status, $datarequest->request_id);
         $this->_logRequest($datarequest->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
+        $this->_signLogRequest($detailrequest->request_id, $statusTTE['status'], $status['request_status_id'], $user->user_id);
         DB::commit();
 
         return redirect('/tte/'.$slug.'/lihat/'.$datarequest->request_id)->with('successs', 'Berhasil melakukan tte');
@@ -765,6 +787,7 @@ class ReqSktmAdminController extends Controller
     public function finish(Request $request, $id)
     {
         $slug = $request->segment(2);
+        $user = Auth::guard('admin')->user();
         
         $getService     = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
         
@@ -790,15 +813,9 @@ class ReqSktmAdminController extends Controller
             $f_ttd = TtdHelper::getFttd($repo, $ttd->ttd_nip);
             $l_ttd = TtdHelper::getLttd($repo, $ttd->ttd_nip);
             // update data
-            // set nomor surat
-            $no_surat = Surat::getNoSurat($repo, date('Y'), $pengajuan->kd_kel, $this->breadcrumbs);
             $data['f_ttd'] = $f_ttd;
             $data['l_ttd'] = $l_ttd;
             $data['nip_ttd'] = $ttd->ttd_nip;
-            $data['tgl_surat'] = date('Y-m-d');
-            $data['no_surat'] = $no_surat;
-            $data['tgl_surat'] = date('Y-m-d');
-            $data['masa_berlaku'] = date('Y-m-d',strtotime('+1 month',strtotime($data['tgl_surat'])));
 
             if ($pengajuan->service_is_kec) {
                 $status['request_status_id'] = 'APPROVED_KEC';
@@ -808,6 +825,7 @@ class ReqSktmAdminController extends Controller
 
             DB::beginTransaction();
             $repo->updateData($data, $datarequest->request_id);
+            $this->_signLogRequest($pengajuan->request_id, $status['request_status_id'], 'TTE', $user->user_id);
             $this->_dataReqHelper->updateStatus($this->_requestRepository, $status, $pengajuan->request_id);
             $this->_logRequest($pengajuan->request_id, $status['request_status_id'], 'Diperbaharui oleh ');
             if ($id != null) {
@@ -893,6 +911,7 @@ class ReqSktmAdminController extends Controller
     public function tangguhkan(Request $request, $id)
     {
         $slug = $request->segment(2);
+        $user = Auth::guard('admin')->user();
 
         // Validation service
         $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
@@ -918,6 +937,7 @@ class ReqSktmAdminController extends Controller
         $this->_dataReqHelper->updateStatus($this->_requestRepository, $status, $id);
         // $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $id);
         $this->_logRequest($id, $status['request_status_id'], 'Ditolak oleh ');
+        $this->_signLogRequest($request->request_id, 'DENIED', 'VERIFICATION/TTE', $user->user_id);
         DB::commit();
 
         if ($id != null) {
@@ -939,6 +959,7 @@ class ReqSktmAdminController extends Controller
     public function tolak(Request $request, $id)
     {
         $slug = $request->segment(2);
+        $user = Auth::guard('admin')->user();
 
         // Validation service
         $getService = $this->_serviceRepository->getByParams(['slug' => $slug, 'is_active' => 'true']);
@@ -964,6 +985,7 @@ class ReqSktmAdminController extends Controller
         // $this->_requestRepository->updateStatus(DataHelper::_normalizeParams($status, false, true), $id);
         $this->_dataReqHelper->updateStatus($this->_requestRepository, $status, $id);
         $this->_logRequest($id, $status['request_status_id'], $request->keterangan);
+        $this->_signLogRequest($request->request_id, 'DENIED', 'VERIFICATION/TTE', $user->user_id);
 
         if ($id != null) {
             $data_email = array(
@@ -1064,7 +1086,7 @@ class ReqSktmAdminController extends Controller
 
     private function _logRequest($req_id, $stat_id, $note_log)
     {
-        $user_name = Auth::user()->user_id;
+        $user_name = Auth::guard('admin')->user()->user_id;
         $request['request_id'] = $req_id;
         $request['request_status_id'] = $stat_id;
         if ($stat_id == 'REJECTED_FINAL' || $stat_id == 'REJECTED') {
@@ -1074,5 +1096,15 @@ class ReqSktmAdminController extends Controller
         }
 
         $this->_requestLogRepository->insert(DataHelper::_normalizeParams($request, true));
+    }
+
+    private function _signLogRequest($req_id, $stat_id, $type_sign, $user_id)
+    {
+        $request['request_id'] = $req_id;
+        $request['user_id'] = $user_id;
+        $request['status'] = $stat_id;
+        $request['type_sign'] = $type_sign;
+
+        $this->_requestSignLogRepository->insert(DataHelper::_normalizeParams($request, true));
     }
 }
