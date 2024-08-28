@@ -1,4 +1,4 @@
-@extends('layouts.userblank')
+@extends('layouts.userblankadmin')
 @section('title')
     Verifikasi Permohonan Layanan
 @endsection
@@ -283,9 +283,9 @@
                                 @endif
                                 <div class="tl-content w-100">
                                     @if ($loop->iteration === 1)
-                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name_backend }}</p>
                                     @else
-                                        <p class="mb-1">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1">{{ $log->request_status_name_backend }}</p>
                                     @endif
                                     @if($log->request_status_id == "REJECTED_FINAL" || $log->request_status_id == "REJECTED")
                                         <div class="tl-date text-muted">{{ $log->request_log_note }}</div>
