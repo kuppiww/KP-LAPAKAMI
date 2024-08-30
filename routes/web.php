@@ -133,12 +133,12 @@ Route::get('/callback-sso',     [\App\Http\Controllers\SSOController::class, 'ss
 Route::get('/personal-info-sso', [\App\Http\Controllers\SSOController::class, 'connectUser'])->name('sso.connect');
 
 Route::get('user/form-detail', [\App\Http\Controllers\UserController::class, 'showform']);
-Route::post('user/form-detail', [\App\Http\Controllers\UserController::class, 'submitform']);
 
 Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 
 Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 Route::delete('/user/verification-permohonan/delete/{nip}', [\App\Http\Controllers\UserController::class, 'deleteVerification'])->name('verification.delete');
+Route::post('user/form-detail/submit', [App\Http\Controllers\UserController::class, 'submitForm'])->name('sumbit');
 
 /* CMS Temporary */
 Route::get('/cms', function () {

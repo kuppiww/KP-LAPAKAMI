@@ -709,16 +709,19 @@ class UserController extends Controller
     }
     public function submitForm(Request $request)
     {
-        // Validasi dan simpan data
-        $validatedData = $request->validate([
-            'nama_layanan' => 'required|string|max:255',
-            'nama_kelurahan' => 'required|string|max:255',
-            'nama_kecamatan' => 'required|string|max:255',
-            'paraf_kelurahan' => 'required|string',
-            'tanda_tangan_kelurahan' => 'required|string',
-            'paraf_kecamatan' => 'required|string',
-            'tanda_tangan_kecamatan' => 'required|string',
+        $validated = $request->validate([
+            'nama_layanan' => 'required',
+            'nama_kelurahan' => 'required',
+            'verifikator_kelurahan' => 'required|array',
+            'ttd_kelurahan' => 'required',
+            'nama_kecamatan' => 'required',
+            'verifikator_kecamatan' => 'required|array',
+            'ttd_kecamatan' => 'required',
         ]);
+
+
+        dd($request->all());
+
 
         // Simpan data ke database atau proses lainnya
 
