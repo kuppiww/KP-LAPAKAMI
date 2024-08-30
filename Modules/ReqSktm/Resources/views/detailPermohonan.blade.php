@@ -1,4 +1,4 @@
-@extends('layouts.userblank')
+@extends('layouts.userblankadmin')
 @section('title')
     Verifikasi Permohonan Layanan
 @endsection
@@ -306,7 +306,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Jenis Kelamin</label><br>
                                                 {{ $request->gender }}
@@ -321,7 +321,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ $request->tmp_lahir }}
@@ -332,7 +332,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_lahir) }}
@@ -343,7 +343,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Agama</label><br>
                                                 {{ $request->religion }}
@@ -358,7 +358,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Pekerjaan</label><br>
                                                 {{ $request->pekerjaan }}
@@ -378,7 +378,7 @@
                                         <h5 class="text-dark">Informasi Surat Pengantar</h5>
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Nomor Surat Pengantar</label><br>
                                                 {{ $request->no_surat_pengantar }}
@@ -389,7 +389,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Surat Pengantar</label><br>
                                                 {{ DateFormatHelper::dateIn($request->tgl_surat_pengantar) }}
@@ -400,7 +400,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Tetangga (RT)</label><br>
                                                 {{ $request->rt }}
@@ -411,7 +411,7 @@
                                         @endif
                                     </div>
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Rukun Warga (RW)</label><br>
                                                 {{ $request->rw }}
@@ -465,7 +465,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Hubungan Keluarga</label><br>
                                                 {{ isset ($request_detail->nama_hub) ? $request_detail->nama_hub : null }}
@@ -489,7 +489,7 @@
                                     </div> -->
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tanggal Lahir</label><br>
                                                 {{ isset ($request_detail->tgl_lahir_pasien) ? DateFormatHelper::dateIn($request_detail->tgl_lahir_pasien) : null }}
@@ -502,7 +502,7 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Tempat Lahir</label><br>
                                                 {{ isset ($request_detail->tmp_lahir_pasien) ? $request_detail->tmp_lahir_pasien : null }}
@@ -515,7 +515,7 @@
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                                        @if ($request->request_status_id == 'REJECTED_FINAL' || $request->request_status_id == 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC' || $request->request_status_id == 'PROCCESS' || $request->request_status_id == 'PROCCESS_KEC')
                                             <p>
                                                 <label class="form-label">Nama Rumah Sakit</label><br>
                                                 {{ isset ($request_detail->name) ? $request_detail->name : null }}
@@ -533,7 +533,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if ($request->request_status_id != 'REJECTED_FINAL' && $request->request_status_id != 'REJECTED' || $request->request_status_id == 'APPROVED' || $request->request_status_id == 'APPROVED_KEC')
+                        @if ($request->request_status_id == 'SUBMITED' || $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'EDITED_KEC' || $request->request_status_id == 'EDITED' )
                             <div class="text-right mt-2">
                                 <button type="submit" class="btn btn-primary">Ubah</button>
                             </div>
@@ -566,7 +566,7 @@
             <div class="card p-2 border-0">
                 <div class="card-body">
                     <h5 class="text-dark text-center mb-2">Status Pelayanan</h5>
-                    <div class="timeline-status" style="overflow-y: scroll;height: 130px;">
+                    <div class="timeline-status" style="overflow-y: scroll;height: 215px;">
 
                         @foreach ($logs as $log)
                             <div class="tl-item @if($loop->iteration == 1) active @endif">
@@ -577,9 +577,9 @@
                                 @endif
                                 <div class="tl-content w-100">
                                     @if ($loop->iteration === 1)
-                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1 text-dark fw-semibold">{{ $log->request_status_name_backend }}</p>
                                     @else
-                                        <p class="mb-1">{{ $log->request_status_name }}</p>
+                                        <p class="mb-1">{{ $log->request_status_name_backend }}</p>
                                     @endif
                                     @if($log->request_status_id == "REJECTED_FINAL" || $log->request_status_id == "REJECTED")
                                         <div class="tl-date text-muted">{{ $log->request_log_note }}</div>
@@ -595,210 +595,203 @@
         </div>
     </div>
 
-    <div class="row mt-2">
-        <div class="col-md-12">
-            <div class="card p-2 border-0 mb-2">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Daftar Verifikator</div>
-                                </div>
-                                <div class="card-body">
-                                    <p>Verifikator Kelurahan</p>
-                                    @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
-                                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikator" >Tambah</button>
-                                    @endif
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">Urutan</th>
-                                                <th width="35%">Pegawai</th>
-                                                <th width="20%">Unit Kerja / Instansi</th>
-                                                <th width="20%">Status</th>
-                                                <th width="20%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listVerifikator as $listVer)
-                                                @if ($listVer->unit_kel != null)
-                                                    <tr>
-                                                        <td>{{ $listVer->verification_number + 1 }}</td>
-                                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
-                                                        <td>
-                                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
-                                                        </td>
-                                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
-                                                        <td>
-                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && !$isPegKec)
-                                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+    <div class="accordion mt-2" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Daftar Verifikator
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    <p>Verifikator Kelurahan</p>
+                    @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
+                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikator" >Tambah</button>
+                    @endif
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="5%">Urutan</th>
+                                <th width="35%">Pegawai</th>
+                                <th width="20%">Unit Kerja / Instansi</th>
+                                <th width="20%">Status</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($listVerifikator as $listVer)
+                                @if ($listVer->unit_kel != null)
+                                    <tr>
+                                        <td>{{ $listVer->verification_number + 1 }}</td>
+                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
+                                        <td>
+                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
+                                        </td>
+                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
+                                        <td>
+                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && !$isPegKec)
+                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                                    <p>Verifikator Kecamatan</p>
-                                    @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
-                                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikatorKec" >Tambah</button>
-                                    @endif
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">Urutan</th>
-                                                <th width="35%">Pegawai</th>
-                                                <th width="20%">Unit Kerja / Instansi</th>
-                                                <th width="20%">Status</th>
-                                                <th width="20%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listVerifikator as $listVer)
-                                                @if ($listVer->unit_kel == null)
-                                                    <tr>
-                                                        <td>{{ $listVer->verification_number + 1 }}</td>
-                                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
-                                                        <td>
-                                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
-                                                        </td>
-                                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
-                                                        <td>
-                                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && $isPegKec)
-                                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <p>Verifikator Kecamatan</p>
+                    @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
+                        <button class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#modalFormAddVerifikatorKec" >Tambah</button>
+                    @endif
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="5%">Urutan</th>
+                                <th width="35%">Pegawai</th>
+                                <th width="20%">Unit Kerja / Instansi</th>
+                                <th width="20%">Status</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($listVerifikator as $listVer)
+                                @if ($listVer->unit_kel == null)
+                                    <tr>
+                                        <td>{{ $listVer->verification_number + 1 }}</td>
+                                        <td>{{ $listVer->nama }} {{ $listVer->jabatan }}</td>
+                                        <td>
+                                            {{ (!$listVer->is_kecamatan_employee) ? 'Kelurahan '.$listVer->unit_kel : 'Kecamatan '.$listVer->unit_kec }}
+                                        </td>
+                                        <td><span class="badge bg-{{ $listVer->sign_status_color }}">{{ $listVer->sign_status_name }}</span></td>
+                                        <td>
+                                            @if ($listVer->status == 'NEEDS_CLARIFICATION' && $isPegKec)
+                                                <button data-bs-toggle="modal" data-bs-target="#modalDelVerifikatorKec{{$listVer->req_verification_id}}" class="btn btn-danger btn-sm">Hapus</button>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="card p-2 border-0 mb-2">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Daftar Penandatangan</div>
-                                </div>
-                                <div class="card-body">
-                                    <p>Penandatangan Kelurahan</p>
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">Urutan</th>
-                                                <th width="35%">Pegawai</th>
-                                                <th width="20%">Unit Kerja / Instansi</th>
-                                                <th width="20%">Status</th>
-                                                <th width="20%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listTTE as $list_tte)
-                                                @if ($list_tte->unit_kel != null)
-                                                    <tr>
-                                                        <td>{{ $list_tte->tte_number + 1 }}</td>
-                                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
-                                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
-                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_alias }}</span></td>
-                                                        <td>
-                                                            @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
-                                                                <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    <p>Penandatangan Kecamatan</p>
-                                    <table class="table table-bordered table-responsive">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">Urutan</th>
-                                                <th width="35%">Pegawai</th>
-                                                <th width="20%">Unit Kerja / Instansi</th>
-                                                <th width="20%">Status</th>
-                                                <th width="20%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($listTTE as $list_tte)
-                                                @if ($list_tte->unit_kel == null)
-                                                    <tr>
-                                                        <td>{{ $list_tte->tte_number + 1 }}</td>
-                                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
-                                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
-                                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_alias }}</span></td>
-                                                        <td>
-                                                            @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
-                                                                <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
-                                                            @else
-                                                                -
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Daftar Penandatangan
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <p>Penandatangan Kelurahan</p>
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="5%">Urutan</th>
+                                <th width="35%">Pegawai</th>
+                                <th width="20%">Unit Kerja / Instansi</th>
+                                <th width="20%">Status</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($listTTE as $list_tte)
+                                @if ($list_tte->unit_kel != null)
+                                    <tr>
+                                        <td>{{ $list_tte->tte_number + 1 }}</td>
+                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
+                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
+                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_tte }}</span></td>
+                                        <td>
+                                            @if (!$isPegKec && $group == 'operatorkelurahan' && $request->request_status_id == 'SUBMITED' || $request->request_status_id == 'VERIFIED')
+                                                <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <p>Penandatangan Kecamatan</p>
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="5%">Urutan</th>
+                                <th width="35%">Pegawai</th>
+                                <th width="20%">Unit Kerja / Instansi</th>
+                                <th width="20%">Status</th>
+                                <th width="20%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($listTTE as $list_tte)
+                                @if ($list_tte->unit_kel == null)
+                                    <tr>
+                                        <td>{{ $list_tte->tte_number + 1 }}</td>
+                                        <td>{{ $list_tte->nama }} {{ $list_tte->jabatan }}</td>
+                                        <td>{{ (!$list_tte->is_kecamatan_employee) ? 'Kelurahan '.$list_tte->unit_kel : 'Kecamatan '.$list_tte->unit_kec }}</td>
+                                        <td><span class="badge bg-{{ $list_tte->sign_status_color }}">{{ $list_tte->sign_status_name_tte }}</span></td>
+                                        <td>
+                                            @if ($isPegKec && $group == 'operatorkecamatan' && $request->request_status_id == 'SUBMITED_KEC' || $request->request_status_id == 'VERIFIED_KEC')
+                                                <button data-bs-toggle="modal" data-bs-target="#modalEditTTE{{$list_tte->req_tte_id}}" class="btn btn-info btn-sm">Ubah</button>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
-                <div class="card p-2 border-0 mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mt-2">
-                                <div class="card border-0">
-                                    <div class="card-header">
-                                        <div class="modal-title">Operator / Konseptor</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <table class="table table-bordered table-responsive">
-                                            <thead>
-                                                <tr>
-                                                    <th width="40%">Nama</th>
-                                                    <th width="40%">Jabatan</th>
-                                                    <th width="20%">Tanggal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($list['listKonseptor'] as $konseptor)
-                                                    <tr>
-                                                        <td>{{ $konseptor->user_name }}</td>
-                                                        <td>Operator</td>
-                                                        <td>{{ DateFormatHelper::dateInFull($konseptor->created_at) }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        </div>
+        @if (Auth::guard('admin')->user()->group_id == 'pkelurahan' || Auth::guard('admin')->user()->group_id == 'pkecamatan' )
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Operator / Konseptor
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse">
+                <div class="accordion-body">
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <th width="40%">Nama</th>
+                                <th width="40%">Jabatan</th>
+                                <th width="20%">Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($list['listKonseptor'] as $konseptor)
+                                <tr>
+                                    <td>{{ $konseptor->user_name }}</td>
+                                    <td>Operator</td>
+                                    <td>{{ DateFormatHelper::dateInFull($konseptor->created_at) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            @endif
-            <div class="card p-2 border-0">
-                <div class="card-body">
+            </div>
+        </div>
+        @endif
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Berkas Persyaratan
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse">
+                <div class="accordion-body">
                     <div class="row">
                         @foreach ($request_docs as $request_doc)
                             @if ($request_doc->request_attachment_note == 'FILE_KTP')
@@ -1236,26 +1229,26 @@
                             <hr class="mt-2" style="border-top: 2px solid rgba(0, 0, 0, 0.3);">
                         @endforeach
                     </div>
-                    {{-- <div class="row">
-                        <div class="col-md-12 mt-2">
-                            <div class="card border-0">
-                                <div class="card-header">
-                                    <div class="modal-title">Preview Surat</div>
-                                </div>
-                                <div class="card-body">
-                                    <embed src="{{ url('operator/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
-                    <div class="row">
-                        <div class="col-md-12 text-end" id="div_btn">
-                            
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-end" id="div_btn">
+                        
                     </div>
                 </div>
             </div>
         </div>
+        {{-- <div class="row">
+            <div class="col-md-12 mt-2">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <div class="modal-title">Preview Surat</div>
+                    </div>
+                    <div class="card-body">
+                        <embed src="{{ url('operator/sktm/pdf/'. $request->request_id .'/sktm') }}" class="w-100" width="" height="500" type="application/pdf">
+                    </div>
+                </div>
+            </div>
+        </div> --}}
     </div>
 
     <!-- Modal -->
@@ -1695,6 +1688,7 @@
         var id = '{{ $request->request_id }}';
         var status = '{{ $request->request_status_id }}';
         var group = '{{ $group }}';
+        var isVerifikator = '{{ $isVerifikator["isVerified"] }}';
 
         if (status === 'PROCCESS' || status === 'PROCCESS_KEC') {
             jmlhCeklis = jmlhDocs;
@@ -1817,9 +1811,11 @@
         function setButton() {
             if (jmlhCeklis == jmlhDocs) {
                 if (status === 'PROCCESS_KEC' || status === 'PROCCESS') {
-                    if (group === 'pkelurahan' || group === 'pkecamatan') {
-                        document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
-                    }
+                    // if (group === 'pkelurahan' || group === 'pkecamatan') {
+                    //     if (!isVerifikator) {
+                    //         document.getElementById('div_btn').innerHTML = '<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalTolak" id="btn_tolak">Tolak</button>&nbsp;&nbsp;<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTangguhkan" id="btn_tangguhkan">Tangguhkan</button>&nbsp;&nbsp;<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/verifikasi/'+id+'" ><button class="btn btn-primary" id="btn_verifikasi">Verifikasi</button></a>';
+                    //     }
+                    // }
                 } else {
                     document.getElementById('div_btn').innerHTML = '<button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modalPDF" id="btn_preview">Preview</button>&nbsp;&nbsp;<a href="/operator/sktm/sesuai/'+id+'" ><button class="btn btn-primary" id="btn_sesuai">Sesuai / Kirim Konsep</button></a>';
                 }

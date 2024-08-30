@@ -134,6 +134,18 @@ class SktmHealthRepository extends QueryBuilderImplementation
         }
     }
 
+    public function updateData(array $data, $id)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table($this->table)->where('request_id', '=', $id)->update($data);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
+    }
+
     public function getLastNoSurat($year, $kodeKelurahan)
     {
         $result = DB::connection($this->db)

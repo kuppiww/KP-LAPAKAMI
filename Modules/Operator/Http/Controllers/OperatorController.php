@@ -133,7 +133,7 @@ class OperatorController extends Controller
             $filter['requests.kd_kel'] = $user->kd_kel;
         }
 
-        $data = $this->_requestRepository->getAllByParamsAdmin($filter, $user->is_kecamatan_employee, $datakel);
+        $data = $this->_requestRepository->getAllByParamsAdmin($filter, $user->group_id, $user->is_kecamatan_employee, $datakel);
         if ($request->ajax()) {
             $datatable = DataTables::of($data)
             ->addIndexColumn()

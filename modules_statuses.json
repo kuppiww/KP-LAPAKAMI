@@ -33,5 +33,6 @@
     "Verification": true,
     "ChangeKK": true,
     "Operator": true,
-    "TTE": true
+    "TTE": true,
+    "Verifikator": true
 }

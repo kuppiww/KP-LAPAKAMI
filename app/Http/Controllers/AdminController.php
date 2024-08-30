@@ -54,7 +54,7 @@ class AdminController extends Controller
     public function backend(Request $request)
     {
         if (Auth::check()) {
-            return redirect('/user/beranda');
+            return redirect('/admin/dashboard');
         }
         return view('auth.loginBackend');
 
@@ -91,7 +91,7 @@ class AdminController extends Controller
         }
 
         if (Auth::guard('admin')->attempt(['user_username' => $credentials['user_username'], 'user_password' => $credentials['user_password'], 'is_active' => 1])) {
-            return redirect()->intended('user/admin');
+            return redirect('/user/admin');
         } else {
             return redirect('/backend')->with('error', 'username atau kata sandi salah');
         }
@@ -260,7 +260,7 @@ class AdminController extends Controller
             // config("auth.sso_host")
             return redirect()->to('https://polakami.cimahikota.go.id/logout');
         } else {
-            return redirect()->route('login');
+            return redirect()->route('backend');
         }
     }
 

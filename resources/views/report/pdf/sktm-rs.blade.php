@@ -90,7 +90,7 @@
         </p>
     @else
     @endif --}}
-    <p style="margin-top: 0px;text-align:center;{{ ($pengajuan->request_status_id == 'APPROVED') ? '' : 'color:red;' }}">
+    <p style="margin-top: 0px;text-align:center;{{ ($pengajuan->request_status_id == 'APPROVED' || $pengajuan->request_status_id == 'APPROVED_KEC' || $pengajuan->request_status_id == 'TTE' || $pengajuan->request_status_id == 'TTE_KEC') ? '' : 'color:red;' }}">
         Nomor : {{ $data->no_surat ?? '${nomor_surat}' }}
     </p>
 

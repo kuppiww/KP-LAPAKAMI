@@ -117,6 +117,7 @@ Route::get('/kirim-ulang-email/{id}', [\App\Http\Controllers\UserController::cla
 Route::post('/masuk', [\App\Http\Controllers\UserController::class, 'authenticate']);
 Route::post('/backend', [\App\Http\Controllers\AdminController::class, 'authenticate']);
 Route::get('/logout', [\App\Http\Controllers\UserController::class, 'logout'])->middleware('auth');
+Route::get('/logout-admin', [\App\Http\Controllers\AdminController::class, 'logout'])->middleware('auth:admin');
 Route::get('user/activation/{nik}/{token}', [\App\Http\Controllers\UserController::class, 'activation']);
 Route::get('/daftar', [\App\Http\Controllers\UserController::class, 'register']);
 Route::get('/lupa-sandi', [\App\Http\Controllers\UserController::class, 'forgot']);

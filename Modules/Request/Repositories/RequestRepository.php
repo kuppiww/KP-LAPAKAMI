@@ -55,7 +55,7 @@ class RequestRepository extends QueryBuilderImplementation
         }
     }
 
-    public function getAllByParamsAdmin(array $params, $is_peg_kec, $datakel)
+    public function getAllByParamsAdmin(array $params, $group, $is_peg_kec, $datakel)
     {
         try {
             $sql = DB::connection($this->db)
@@ -63,7 +63,7 @@ class RequestRepository extends QueryBuilderImplementation
                 ->select(
                     'requests.*',
                     'services.service_name',
-                    'request_status.request_status_name as request_status_name',
+                    'request_status.request_status_name_backend as request_status_name',
                     'request_status.request_status_color as request_status_color'
                 )
                 ->leftJoin('services', 'services.service_id', '=', 'requests.service_id')
@@ -72,8 +72,11 @@ class RequestRepository extends QueryBuilderImplementation
                 $sql->where($params);
             }
             if ($is_peg_kec) {
-                $sql->whereIn('requests.request_status_id', ['SUBMITED_KEC', 'VERIFIED_KEC', 'PROCCESS_KEC']);
+                $sql->whereIn('requests.request_status_id', ['SUBMITED_KEC', 'VERIFIED_KEC', 'PROCCESS_KEC', 'VERIFICATION_KEC']);
                 $sql->whereIn('requests.kd_kel', $datakel);
+            }
+            if ($group == 'pkelurahan') {
+                $sql->whereNotIn('requests.request_status_id', ['SUBMITED']);
             }
             $result = $sql->orderBy('requests.created_at', 'desc')->get();
 
@@ -140,7 +143,7 @@ class RequestRepository extends QueryBuilderImplementation
         }
     }
 
-    public function getTTD($id)
+    public function getTTD($id, $is_kec)
     {
         // if ($is_kec) {
         //     $field = 'requests_ttes.user_id_kec';
@@ -153,6 +156,7 @@ class RequestRepository extends QueryBuilderImplementation
         ->leftJoin('sys_users', 'sys_users.user_id', '=', 'requests_ttes.user_id')
         ->leftJoin('pegawai', 'pegawai.nip', '=', 'sys_users.user_nip')
         ->where('requests_ttes.request_id', $id)
+        ->where('sys_users.is_kecamatan_employee', $is_kec)
         // ->where($field, '!=', null)
         ->first();
     }

@@ -11,7 +11,7 @@ class QrCodeHelper
     // remove encode (xml) tag
     public static function generate($content, $size = 50, $status_request)
     {
-        if ($status_request == 'APPROVED') {
+        if ($status_request == 'APPROVED' || $status_request == 'APPROVED_KEC' || $status_request == 'TTE' || $status_request == 'TTE_KEC') {
             $qrcode = QrCode::size($size)->generate($content);
         } else {
             // $qrcode = QrCode::color(255, 0, 0)->size($size)->generate($content);
