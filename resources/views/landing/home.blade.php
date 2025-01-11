@@ -6,7 +6,7 @@
 	<div class="container bg-hero">
 		<div class="row">
 			<div class="col-md-6 text-left">
-				<h1 class="text-dark fw-bold">Layanan Publik Kecamatan Kelurahan Kota Cimahi</h1>
+				<h1 class="text-dark fw-bold">Layanan Publik Masyarakat Kota Cimahi</h1>
 				<p class="text-muted lead">Memberikan kemudahan pelayanan masyarakat Kota Cimahi secara online.</p>
 				<a href="{{ url('daftar') }}" class="btn btn-lg btn-primary rounded-pill px-4 mt-3">Daftar Sekarang</a>
 			</div>
@@ -19,52 +19,52 @@
 <div class="pt-6">
 	<div class="container">
 		<div class="">
-            <div class="splide">
+			<div class="splide">
 
-            	<div class="row mb-5">
-            		<div class="col-md-6 text-center text-md-start">
-            			<h2 class="fw-bold text-dark">Layanan Tersedia</h2>
+				<div class="row mb-5">
+					<div class="col-md-6 text-center text-md-start">
+						<h2 class="fw-bold text-dark">Layanan Tersedia</h2>
 						<p class="text-muted mb-0">Layanan yang dapat diakses oleh masyarakat</p>
-            		</div>
-            		<div class="col-md-6 d-none d-md-block">
-            			<div class="splide__arrows text-end h-100">
+					</div>
+					<div class="col-md-6 d-none d-md-block">
+						<div class="splide__arrows text-end h-100">
 							<button class="splide__arrow splide__arrow--prev d-inline-block me-5">
 								<i class="ri-arrow-left-s-line"></i>
 							</button>
 							<button class="splide__arrow splide__arrow--next d-inline-block">
 								<i class="ri-arrow-right-s-line"></i>
 							</button>
-					  </div>
+						</div>
 
-            		</div>
-            	</div>
+					</div>
+				</div>
 
-                <div class="row splide__track">
-                    <div class="splide__list">
+				<div class="row splide__track">
+					<div class="splide__list">
 
-                    	@if(sizeof($services) > 0)
+						@if(sizeof($services) > 0)
 
-                    		@foreach($services as $service)
+						@foreach($services as $service)
 
-                    			<div class="col-md-3 splide__slide text-center">
-		                        	<a href="{{ url('layanan/'. $service->slug) }}">
-										<div class="card border-0 rounded-4 service-card p-3 h-100 mx-3">
-											<div class="card-body">
-												<div class="service-icon-bg bg-white mx-auto d-flex align-items-center justify-content-center">
-													<img src="{{ url('storage/images/service/'. $service->service_icon) }}" height="42px" alt="{{ $service->service_name }}" />
-												</div>
-												<h5 class="mx-4 mt-4 mb-0">{{ $service->service_name }}</h5>
-											</div>
-										</div> 
-									</a>
+						<div class="col-md-3 splide__slide text-center">
+							<a href="{{ url('layanan/'. $service->slug) }}">
+								<div class="card border-0 rounded-4 service-card p-3 h-100 mx-3">
+									<div class="card-body">
+										<div class="service-icon-bg bg-white mx-auto d-flex align-items-center justify-content-center">
+											<img src="{{ url('storage/images/service/'. $service->service_icon) }}" height="42px" alt="{{ $service->service_name }}" />
+										</div>
+										<h5 class="mx-4 mt-4 mb-0">{{ $service->service_name }}</h5>
+									</div>
 								</div>
+							</a>
+						</div>
 
-                    		@endforeach
+						@endforeach
 
-                    	@endif
+						@endif
 
-                        <!-- <div class="col-md-3 splide__slide text-center">
-                        	<a href="{{ url('layanan') }}">
+						<div class="col-md-3 splide__slide text-center">
+							<a href="{{ url('layanan') }}">
 								<div class="card border-0 rounded-4 service-card p-3 h-100 mx-3">
 									<div class="card-body">
 										<div class="service-icon-bg bg-white mx-auto d-flex align-items-center justify-content-center">
@@ -72,7 +72,7 @@
 										</div>
 										<h5 class="mx-4 mt-4 mb-0">Surat Keterangan Belum Menikah</h5>
 									</div>
-								</div> 
+								</div>
 							</a>
 						</div>
 						<div class="col-md-3 splide__slide text-center">
@@ -158,11 +158,11 @@
 									</div>
 								</div>
 							</a>
-						</div> -->
-                    </div>        
-                </div>
-           	</div>
-        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 	</div>
 </div>
@@ -175,99 +175,99 @@
 		<p class="text-muted mb-0">Alur proses pelayanan yang akan dilalui oleh masyarakat</p>
 	</div>
 	<!-- Timeline Large -->
-    <section class="ps-timeline-sec d-none d-md-block">
-        <div class="container">
-            <ol class="ps-timeline">
-                <li>
-                    <div class="img-handler-top">
-                        <img src="{{ asset('assets/img/lapakami-icon-apply.png') }}"  alt="Pengajuan" />
-                    </div>
-                    <div class="ps-bot">
-                    	<h5 class="text-start text-md-center text-dark fw-bold">Pengajuan</h5>
-                        <p>Permohonan diajukan oleh pemohon melalui aplikasi Lapakami</p>
-                    </div>
-                    <span class="ps-sp-top">01</span>
-                </li>
-                <li>
-                    <div class="img-handler-bot">
-                        <img src="{{ asset('assets/img/lapakami-icon-verify.png') }}" alt="Verifikasi Berkas" />
-                    </div>
-                    <div class="ps-top">
-                        <h5 class="text-start text-md-center text-dark fw-bold">Verifikasi Berkas</h5>
-                        <p>Proses verifikasi berkas permohonan yang sudah dilampirkan</p>
-                    </div>
-                    <span class="ps-sp-bot">02</span>
-                </li>
-                <li>
-                    <div class="img-handler-top">
-                        <img src="{{ asset('assets/img/lapakami-icon-sign.png') }}" alt="Pembuatan Dokumen" />
-                    </div>
-                    <div class="ps-bot">
-                        <h5 class="text-start text-md-center text-dark fw-bold">Pembuatan Dokumen</h5>
-                        <p>Proses pembuatan dokumen permohonan oleh pihak terkait yang berwenang</p>
-                    </div>
-                    <span class="ps-sp-top">03</span>
-                </li>
-                <li>
-                    <div class="img-handler-bot">
-                        <img src="{{ asset('assets/img/lapakami-icon-send.png') }}" alt="Selesai" />
-                    </div>
-                    <div class="ps-top">
-                        <h5 class="text-start text-md-center text-dark fw-bold">Selesai</h5>
-                        <p>Dokumen permohonan akan dikirimkan melalui aplikasi Lapakami dan juga email pemohon</p>
-                    </div>
-                    <span class="ps-sp-bot">04</span>
-                </li>
-            </ol>
-        </div>
-    </section>
-    <!-- End Timeline Large -->
+	<section class="ps-timeline-sec d-none d-md-block">
+		<div class="container">
+			<ol class="ps-timeline">
+				<li>
+					<div class="img-handler-top">
+						<img src="{{ asset('assets/img/lapakami-icon-apply.png') }}" alt="Pengajuan" />
+					</div>
+					<div class="ps-bot">
+						<h5 class="text-start text-md-center text-dark fw-bold">Pengajuan</h5>
+						<p>Permohonan diajukan oleh pemohon melalui aplikasi Lapakami</p>
+					</div>
+					<span class="ps-sp-top">01</span>
+				</li>
+				<li>
+					<div class="img-handler-bot">
+						<img src="{{ asset('assets/img/lapakami-icon-verify.png') }}" alt="Verifikasi Berkas" />
+					</div>
+					<div class="ps-top">
+						<h5 class="text-start text-md-center text-dark fw-bold">Verifikasi Berkas</h5>
+						<p>Proses verifikasi berkas permohonan yang sudah dilampirkan</p>
+					</div>
+					<span class="ps-sp-bot">02</span>
+				</li>
+				<li>
+					<div class="img-handler-top">
+						<img src="{{ asset('assets/img/lapakami-icon-sign.png') }}" alt="Pembuatan Dokumen" />
+					</div>
+					<div class="ps-bot">
+						<h5 class="text-start text-md-center text-dark fw-bold">Pembuatan Dokumen</h5>
+						<p>Proses pembuatan dokumen permohonan oleh pihak terkait yang berwenang</p>
+					</div>
+					<span class="ps-sp-top">03</span>
+				</li>
+				<li>
+					<div class="img-handler-bot">
+						<img src="{{ asset('assets/img/lapakami-icon-send.png') }}" alt="Selesai" />
+					</div>
+					<div class="ps-top">
+						<h5 class="text-start text-md-center text-dark fw-bold">Selesai</h5>
+						<p>Dokumen permohonan akan dikirimkan melalui aplikasi Lapakami dan juga email pemohon</p>
+					</div>
+					<span class="ps-sp-bot">04</span>
+				</li>
+			</ol>
+		</div>
+	</section>
+	<!-- End Timeline Large -->
 
-    <!-- Timeline Mobile -->
-    <section class="mt-4 d-block d-md-none">
-    	<div class="container">
-    		<div class="row align-items-center mb-3">
-    			<div class="col-3 text-center">
-    				<img src="{{ asset('assets/img/lapakami-icon-apply.png') }}"  alt="Pengajuan" height="50px" />
-    			</div>
-    			<div class="col-9">
-    				<h5 class="text-start text-md-center text-dark fw-bold">1. Pengajuan</h5>
-        			<p>Pemohonan diajukan oleh pemohon melalui aplikasi Lapakami</p>
-    			</div>
-    		</div>
-    		
-  			<div class="row align-items-center mb-3">
-    			<div class="col-3 text-center">
-	  				<img src="{{ asset('assets/img/lapakami-icon-verify.png') }}" alt="Verifikasi Berkas" height="50px" />
-	  			</div>
-    			<div class="col-9">
-		    		<h5 class="text-start text-md-center text-dark fw-bold">2. Verifikasi Berkas</h5>
-		            <p>Proses verifikasi berkas pemohonan yang sudah dilampirkan</p>
-		        </div>
-	        </div>
+	<!-- Timeline Mobile -->
+	<section class="mt-4 d-block d-md-none">
+		<div class="container">
+			<div class="row align-items-center mb-3">
+				<div class="col-3 text-center">
+					<img src="{{ asset('assets/img/lapakami-icon-apply.png') }}" alt="Pengajuan" height="50px" />
+				</div>
+				<div class="col-9">
+					<h5 class="text-start text-md-center text-dark fw-bold">1. Pengajuan</h5>
+					<p>Pemohonan diajukan oleh pemohon melalui aplikasi Lapakami</p>
+				</div>
+			</div>
 
-	        <div class="row align-items-center mb-3">
-    			<div class="col-3 text-center">
-	    			<img src="{{ asset('assets/img/lapakami-icon-sign.png') }}" alt="Pembuatan Dokumen" height="50px" />
-	    		</div>
-    			<div class="col-9">
-		    		<h5 class="text-start text-md-center text-dark fw-bold">3. Pembuatan Dokumen</h5>
-		            <p>Proses pembuatan dokumen pemohonan oleh pihak terkait yang berwenang</p>
-		        </div>
-	        </div>
-    		
-    		<div class="row align-items-center mb-3">
-    			<div class="col-3 text-center">
-	    			<img src="{{ asset('assets/img/lapakami-icon-send.png') }}" alt="Selesai" height="50px"/>
-	    		</div>
-    			<div class="col-9">
-		    		<h5 class="text-start text-md-center text-dark fw-bold">4. Selesai</h5>
-		            <p>Dokumen pemohonan akan dikirimkan melalui aplikasi Lapakami dan juga email pemohon</p>
-		        </div>
-	        </div>
-    	</div>	
-    </section>
-    <!-- End Timeline Mobile -->
+			<div class="row align-items-center mb-3">
+				<div class="col-3 text-center">
+					<img src="{{ asset('assets/img/lapakami-icon-verify.png') }}" alt="Verifikasi Berkas" height="50px" />
+				</div>
+				<div class="col-9">
+					<h5 class="text-start text-md-center text-dark fw-bold">2. Verifikasi Berkas</h5>
+					<p>Proses verifikasi berkas pemohonan yang sudah dilampirkan</p>
+				</div>
+			</div>
+
+			<div class="row align-items-center mb-3">
+				<div class="col-3 text-center">
+					<img src="{{ asset('assets/img/lapakami-icon-sign.png') }}" alt="Pembuatan Dokumen" height="50px" />
+				</div>
+				<div class="col-9">
+					<h5 class="text-start text-md-center text-dark fw-bold">3. Pembuatan Dokumen</h5>
+					<p>Proses pembuatan dokumen pemohonan oleh pihak terkait yang berwenang</p>
+				</div>
+			</div>
+
+			<div class="row align-items-center mb-3">
+				<div class="col-3 text-center">
+					<img src="{{ asset('assets/img/lapakami-icon-send.png') }}" alt="Selesai" height="50px" />
+				</div>
+				<div class="col-9">
+					<h5 class="text-start text-md-center text-dark fw-bold">4. Selesai</h5>
+					<p>Dokumen pemohonan akan dikirimkan melalui aplikasi Lapakami dan juga email pemohon</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- End Timeline Mobile -->
 </div>
 <!-- End Timeline Process -->
 

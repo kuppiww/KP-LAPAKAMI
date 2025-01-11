@@ -27,8 +27,28 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_username', 'user_password', 'user_phone', 'user_email', 'user_nik', 'user_kk', 'user_nama', 'user_id_agama', 'user_tmp_lahir', 'user_tgl_lahir',
-        'user_id_jenkel', 'user_pekerjaan', 'kd_kec', 'kd_kel', 'user_rw', 'user_rt', 'user_alamat', 'user_is_simkel', 'user_id_simkel', 'group_id', 'created_at', 'updated_at' 
+        'user_username',
+        'user_password',
+        'user_phone',
+        'user_email',
+        'user_nik',
+        'user_kk',
+        'user_nama',
+        'user_id_agama',
+        'user_tmp_lahir',
+        'user_tgl_lahir',
+        'user_id_jenkel',
+        'user_pekerjaan',
+        'kd_kec',
+        'kd_kel',
+        'user_rw',
+        'user_rt',
+        'user_alamat',
+        'user_is_simkel',
+        'user_id_simkel',
+        'group_id',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -50,17 +70,17 @@ class User extends Authenticatable
     //     'email_verified_at' => 'datetime',
     // ];
 
-    protected $primaryKey 	= "user_id";
+    protected $primaryKey     = "user_id";
 
     /**
      * Get the password for the user.
      *
      * @return string
      */
-    public function getAuthPassword() 
+    public function getAuthPassword()
     {
         return $this->user_password;
-     }
+    }
 
     public function getByNIK($nik)
     {
@@ -72,7 +92,7 @@ class User extends Authenticatable
         } catch (Exception $e) {
             return $e->getMessage();
         }
-    } 
+    }
 
     public function getByAdmin($nik)
     {
@@ -85,7 +105,7 @@ class User extends Authenticatable
             return $e->getMessage();
         }
     }
-    
+
     public function getByEmail($email)
     {
         try {
@@ -97,7 +117,7 @@ class User extends Authenticatable
             return $e->getMessage();
         }
     }
-    
+
     public function getById($id)
     {
         try {

@@ -13,6 +13,24 @@ class DistrictRepository extends QueryBuilderImplementation
     public function __construct()
     {
         $this->table = 'm_districts';
-        $this->pk = 'kd_sub_district';
+        $this->pk = 'kd_district';
+    }
+
+    public function getAllByParams($params)
+    {
+        try {
+
+            $query = DB::table($this->table);
+
+
+            foreach ($params as $key => $value) {
+                $query->where($key, $value);
+            }
+
+
+            return $query->get();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

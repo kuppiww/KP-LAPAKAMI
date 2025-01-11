@@ -16,6 +16,7 @@ use App\Helpers\FCMHelper;
 use App\Repositories\UserForgotRepository;
 use App\Mail\UserForgotPasswordMail;
 use App\Mail\UserVerificationMail;
+
 // Use App\User;
 use App\Helpers\LogHelper;
 use App\Models\User;
@@ -26,8 +27,12 @@ use AuthenticatesUsers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
-use Modules\Users\Repositories\SysUsersRepository;
 use Modules\Users\Repositories\UsersRepository;
+use Modules\Request\Repositories\ServiceRepository;
+use Modules\Users\Repositories\SysUsersRepository;
+use Modules\User\Repositories\DistrictRepository;
+use Modules\User\Repositories\SubDistrictRepository;
+
 
 class AdminController extends Controller
 {
@@ -37,10 +42,17 @@ class AdminController extends Controller
     protected $_forgotRepository;
     protected $_logHelper;
     protected $_fcmHelper;
+    protected $_servicesRepository;
     protected $_sysUsersRepository;
+    protected $_mdistrictsRepository;
+    protected $_msubdistrictsRepository;
 
-    public function __construct()
-    {
+    public function __construct(
+        SysUsersRepository $sysUsersRepository,
+        ServiceRepository $servicesRepository,
+        DistrictRepository $mdistrictsRepository,
+        SubDistrictRepository $msubdistrictsRepository
+    ) {
 
         $this->_userRepository      = new User;
         $this->_userTemp = new UserTemp;
@@ -48,7 +60,10 @@ class AdminController extends Controller
         $this->_logHelper           = new LogHelper;
         $this->_fcmHelper           = new FCMHelper;
         $this->_SSOController = new SSOController;
-        $this->_sysUsersRepository = new SysUsersRepository;
+        $this->_sysUsersRepository = $sysUsersRepository;
+        $this->_servicesRepository = $servicesRepository;
+        $this->_mdistrictsRepository = $mdistrictsRepository;
+        $this->_msubdistrictsRepository = $msubdistrictsRepository;
     }
 
     public function backend(Request $request)
@@ -57,7 +72,6 @@ class AdminController extends Controller
             return redirect('/admin/dashboard');
         }
         return view('auth.loginBackend');
-
     }
 
     public function username()
@@ -95,14 +109,12 @@ class AdminController extends Controller
         } else {
             return redirect('/backend')->with('error', 'username atau kata sandi salah');
         }
-
     }
 
     public function setting()
     {
 
         return view('user.setting');
-
     }
 
     public function changepassword(Request $request)
@@ -118,7 +130,6 @@ class AdminController extends Controller
         $this->_userRepository->update(DataHelper::_normalizeParams(['user_password' => $password], false, true), Auth::user()->user_id);
 
         return redirect('setting')->with('message', 'Kata sandi berhasil diubah');
-
     }
 
     public function sendforgot(Request $request)
@@ -158,11 +169,9 @@ class AdminController extends Controller
             $this->_forgotRepository->insert(DataHelper::_normalizeParams($value, false));
 
             return redirect('/lupa-sandi')->with('message', 'Lupa kata sandi berhasil dikirim melalui email!');
-
         } catch (Exception $e) {
             return redirect('/lupa-sandi')->with('error', 'Terjadi kesalahan!');
         }
-
     }
 
     public function reset($id, $token)
@@ -215,12 +224,10 @@ class AdminController extends Controller
 
         if (!$getToken) {
             return redirect('/reset-sandi' . '/' . $request->input('id') . '/' . $token)->with('error', 'Token tidak valid');
-
         }
 
         if ($getToken->forgot_expired < date('Y-m-d H:i:s')) {
             return redirect('/reset-sandi' . '/' . $request->input('id') . '/' . $token)->with('error', 'Token sudah kadaluarsa');
-
         }
 
         DB::beginTransaction();
@@ -246,7 +253,6 @@ class AdminController extends Controller
         $this->_fcmHelper->saveToken($request->input('token'), Auth::user()->user_id, $request->header('User-Agent'));
 
         return true;
-
     }
 
     public function logout(Request $request)
@@ -274,7 +280,7 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), $this->_registerRules()['rules'], $this->_registerRules()['messages']);
         $token = md5(sha1($request->user_nik . time() . uniqid()));
-        $param = "?client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$request['user_nik']."&id=".env('APPLICATION_ID');
+        $param = "?client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $request['user_nik'] . "&id=" . env('APPLICATION_ID');
         // dd($validator->messages());
         unset($request['repassword']);
         $password = Hash::make($request['user_password']);
@@ -289,7 +295,7 @@ class AdminController extends Controller
             $email = $request['user_email'];
             $nama = $request['user_nama'];
 
-            
+
             //email yan dimasukan sebelum nya salah tp belum aktif
             // if (!$getUser->user_is_active) {
             //     $this->_userRepository->updateData(DataHelper::_normalizeParams(['user_password' => $password], false, false), $getUser->user_id);
@@ -298,7 +304,7 @@ class AdminController extends Controller
             // }
 
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
-                return redirect('/daftar'.$param)->withErrors($validator)->withInput();
+                return redirect('/daftar' . $param)->withErrors($validator)->withInput();
             } else {
                 return redirect('/daftar')->withErrors($validator)->withInput();
             }
@@ -324,13 +330,13 @@ class AdminController extends Controller
 
         $nikEnc = Crypt::encryptString($request['user_nik']);
         $data_email = [];
-        $param = "?client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$data['user_username']."&id=".env('APPLICATION_ID');
+        $param = "?client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $data['user_username'] . "&id=" . env('APPLICATION_ID');
 
         DB::beginTransaction();
         // dd($data, $request->all());
 
         // $store = $this->_userRepository->insertGetId(DataHelper::_normalizeParams($request->all()), 'user_id');
-        
+
         $store = $this->_userTemp->insertGetId(DataHelper::_normalizeParams($data), 'user_id');
 
         $id_enc = Crypt::encryptString($store);
@@ -340,13 +346,13 @@ class AdminController extends Controller
             if (!empty($request->client_id) && !empty($request->token) && !empty($request->client_secret)) {
                 $is_SSO = true;
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL,config("auth.sso_api_host"). "/"."service"."/create");
+                curl_setopt($ch, CURLOPT_URL, config("auth.sso_api_host") . "/" . "service" . "/create");
                 curl_setopt($ch, CURLOPT_POST, 1);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=".$request->client_id."&client_secret=".$request->client_secret."&token=".$request->token."&user_id=".$request['user_nik']."&id=".env('APPLICATION_ID'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, "client_id=" . $request->client_id . "&client_secret=" . $request->client_secret . "&token=" . $request->token . "&user_id=" . $request['user_nik'] . "&id=" . env('APPLICATION_ID'));
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $result = curl_exec ($ch);
-                curl_close ($ch);
+                $result = curl_exec($ch);
+                curl_close($ch);
             }
             $data_email = array(
                 'name' => $request['user_nama'],
@@ -395,9 +401,7 @@ class AdminController extends Controller
 
         if ($is_validate) {
             $message = "Anda sudah pernah mendaftar, silahkan cek email untuk melakukan aktivasi";
-
-        }
-        ;
+        };
 
         return $this->_sendMailActivation($data_email, $message, false);
     }
@@ -410,23 +414,23 @@ class AdminController extends Controller
             Mail::to($data['email'])->send(new UserVerificationMail($data));
             return redirect('/daftar/selesai/' . $data['user_id'])->with('message', $message);
         }
-
     }
 
-    public function activationSso($nik, $token, $data, $messages, $param) {
+    public function activationSso($nik, $token, $data, $messages, $param)
+    {
         $nikDec = Crypt::decryptString($nik);
         $getUserByToken = $this->_userTemp->getByParams(['user_email_token' => $token, 'user_nik' => $nikDec]);
         $getUser = $this->_userRepository->getByNIK($nikDec);
 
         if ($getUser) {
             $message = "Akun sudah pernah berhasil diaktifasi";
-            return redirect('/masuk'.$param)->with('error', $message);
+            return redirect('/masuk' . $param)->with('error', $message);
         }
 
         // Token Validation
         if (!$getUserByToken) {
             $message = "Izin akses gagal, Token tidak valid!";
-            return redirect('/masuk'.$param)->with('error', $message);
+            return redirect('/masuk' . $param)->with('error', $message);
         }
 
         $id = $getUserByToken->user_id;
@@ -489,7 +493,6 @@ class AdminController extends Controller
             $message = "Validasi Email Gagal, Token tidak valid!";
             if (!Auth::check()) {
                 return redirect('/masuk')->with('error', $message);
-
             }
             return redirect('/user/profil')->with('error', $message);
         }
@@ -539,7 +542,6 @@ class AdminController extends Controller
         );
 
         return $rules;
-
     }
 
     private function _registerRules()
@@ -560,7 +562,6 @@ class AdminController extends Controller
         );
 
         return array('rules' => $rules, 'messages' => $messages);
-
     }
 
     /**
@@ -600,6 +601,24 @@ class AdminController extends Controller
         }
 
         return ResponseHelper::setResponse(200, 'Sukses', $result);
+    }
 
+    public function showForm()
+    {
+        $param['is_active'] = true;
+        $data_layanan = $this->_servicesRepository->getAllByParams($param);
+        $param['sys_users.group_id'] = 'pkelurahan';
+        $data_verifikator_kelurahan = $this->_sysUsersRepository->getAllByParams($param);
+        $param['sys_users.group_id'] = 'pkecamatan';
+        $data_verifikator_kecamatan = $this->_sysUsersRepository->getAllByParams($param);
+        $params['district'] = 'Cimahi Selatan';
+        $data_nama_kecamatan = $this->_mdistrictsRepository->getAllByParams($params);
+        $params['kd_district'] = '01';
+        $data_nama_kelurahan = $this->_msubdistrictsRepository->getAllByParams($params);
+
+
+
+        // dd('here');
+        return view('users.services.form-detail', compact('data_layanan', 'data_nama_kelurahan', 'data_nama_kecamatan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan'));
     }
 }

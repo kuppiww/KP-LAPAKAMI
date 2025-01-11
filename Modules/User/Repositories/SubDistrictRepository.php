@@ -5,6 +5,7 @@ namespace Modules\User\Repositories;
 use App\Implementations\QueryBuilderImplementation;
 use Illuminate\Support\Facades\DB;
 
+
 class SubDistrictRepository extends QueryBuilderImplementation
 {
 
@@ -16,18 +17,15 @@ class SubDistrictRepository extends QueryBuilderImplementation
         $this->pk = 'kd_sub_district';
     }
 
-    //overide
-    public function getAll()
-    {
-        try {
-            return DB::connection($this->db)
-                ->table($this->table)
-                ->select('m_sub_districts.*', 'm_districts.district')
-                ->join('m_districts', 'm_districts.kd_district', '=', 'm_sub_districts.kd_district')
-                ->get();
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
 
+    public function getAllByParams($params)
+    {
+        $query = DB::table('m_sub_districts');
+
+        if (!empty($params['kd_district'])) {
+            $query->where('kd_district', $params['kd_district']);
+        }
+
+        return $query->get();
+    }
 }

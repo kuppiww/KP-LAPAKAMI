@@ -133,7 +133,9 @@ Route::get('login-sso', [\App\Http\Controllers\SSOController::class, 'getUrlSSO'
 Route::get('/callback-sso',     [\App\Http\Controllers\SSOController::class, 'ssoCallback'])->name('sso.callback');
 Route::get('/personal-info-sso', [\App\Http\Controllers\SSOController::class, 'connectUser'])->name('sso.connect');
 
-Route::get('user/form-detail', [\App\Http\Controllers\UserController::class, 'showform']);
+// Route::middleware(['auth', 'verified', 'role:Superadmin'])->group(function () {
+Route::get('user/services/form-detail', [\App\Http\Controllers\AdminController::class, 'showform']);
+// });
 
 Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 

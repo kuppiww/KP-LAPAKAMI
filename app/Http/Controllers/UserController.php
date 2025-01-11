@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\ResponseHelper;
 
 use App\Http\Controllers\Controller;
@@ -23,21 +24,27 @@ use App\Models\SysUsers;
 use App\Models\User;
 use App\Models\UserTemp;
 use Session;
-use DB;
 use AuthenticatesUsers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Validation\Rule;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
+use Modules\User\Repositories\DistrictRepository;
+use Modules\User\Repositories\SubDistrictRepository;
 use Modules\Request\Repositories\ServiceRepository;
 use Modules\Users\Repositories\SysUsersRepository;
-use Modules\Users\Repositories\UsersRepository;
+
+
 
 class UserController extends Controller
 {
     protected $_SSOController;
 
-    public function __construct()
-    {
+    public function __construct(
+        SysUsersRepository $sysUsersRepository,
+        ServiceRepository $servicesRepository,
+        DistrictRepository $mdistrictsRepository,
+        SubDistrictRepository $msubdistrictsRepository
+    ) {
 
         $this->_userRepository      = new User;
         $this->_userTemp = new UserTemp;
@@ -45,8 +52,10 @@ class UserController extends Controller
         $this->_logHelper           = new LogHelper;
         $this->_fcmHelper           = new FCMHelper;
         $this->_SSOController = new SSOController;
-        $this->_servicesRepository = new ServiceRepository;
-        $this->_sysuserRepository = new SysUsersRepository;
+        $this->_sysUsersRepository = $sysUsersRepository;
+        $this->_servicesRepository = $servicesRepository;
+        $this->_mdistrictsRepository = $mdistrictsRepository;
+        $this->_msubdistrictsRepository = $msubdistrictsRepository;
     }
 
     public function login(Request $request)
@@ -693,39 +702,60 @@ class UserController extends Controller
         return ResponseHelper::setResponse(200, 'Sukses', $result);
     }
 
-    public function showForm()
-    {
-        $param['is_active'] = true;
-        $data_layanan = $this->_servicesRepository->getAllByParams($param);
-        $param['sys_users.group_id'] = 'pkelurahan';
-        $data_verifikator_kelurahan = $this->_sysuserRepository->getAllByParams($param);
-        $param['sys_users.group_id'] = 'pkecamatan';
-        $data_verifikator_kecamatan = $this->_sysuserRepository->getAllByParams($param);
+    // public function showForm()
+    // {
+    //     $param['is_active'] = true;
+    //     $data_layanan = $this->_servicesRepository->getAllByParams($param);
+    //     $param['sys_users.group_id'] = 'pkelurahan';
+    //     $data_verifikator_kelurahan = $this->_sysuserRepository->getAllByParams($param);
+    //     $param['sys_users.group_id'] = 'pkecamatan';
+    //     $data_verifikator_kecamatan = $this->_sysuserRepository->getAllByParams($param);
+    //     $params['district'] = 'Cimahi Selatan';
+    //     $data_nama_kecamatan = $this->_mdistrictsRepository->getAllByParams($params);
+    //     $params['kd_district'] = '01';
+    //     $data_nama_kelurahan = $this->_msubdistrictsRepository->getAllByParams($params);
 
 
 
-        // dd('here');
-        return view('users.services.form-detail', compact('data_layanan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan'));
-    }
+    //     // dd('here');
+    //     return view('users.services.form-detail', compact('data_layanan', 'data_nama_kelurahan', 'data_nama_kecamatan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan'));
+    // }
     public function submitForm(Request $request)
     {
+        // Validasi data input
         $validated = $request->validate([
-            'nama_layanan' => 'required',
-            'nama_kelurahan' => 'required',
-            'verifikator_kelurahan' => 'required|array',
-            'ttd_kelurahan' => 'required',
-            'nama_kecamatan' => 'required',
-            'verifikator_kecamatan' => 'required|array',
-            'ttd_kecamatan' => 'required',
+            'Nama_Layanan' => 'required',
+            'Kelurahan' => 'required',
+            'Nama_verification_kelurahan' => 'required|array',
+            'Nama_Penandatangan_kelurahan' => 'required',
+            'Kecamatan' => 'required',
+            'Nama_verification_kecamatan' => 'required|array',
+            'Nama_Penandatangan_Kecamatan' => 'required',
+            'No_surat' => 'required',
         ]);
 
+        // Debugging: tampilkan data yang diterima
+        // dd($validated);
 
-        dd($request->all());
+        try {
+            // Simpan data utama ke tabel `Pengajuan_approved`
+            $permohonanId = DB::table('Pengajuan_approved')->insertGetId([
+                'Nama_Layanan' => $validated['Nama_Layanan'],
+                'Kelurahan' => $validated['Kelurahan'],
+                'Nama_verification_kelurahan' => json_encode($validated['Nama_verification_kelurahan']), // Simpan array sebagai JSON
+                'Nama_Penandatangan_kelurahan' => $validated['Nama_Penandatangan_kelurahan'],
+                'Kecamatan' => $validated['Kecamatan'],
+                'Nama_verification_kecamatan' => json_encode($validated['Nama_verification_kecamatan']), // Simpan array sebagai JSON
+                'Nama_Penandatangan_Kecamatan' => $validated['Nama_Penandatangan_Kecamatan'],
+                'No_surat' => $validated['No_surat'],
+            ]);
 
-
-        // Simpan data ke database atau proses lainnya
-
-        return redirect()->back()->with('success', 'Data berhasil disimpan!');
+            // Redirect dengan pesan sukses
+            return redirect()->back()->with('success', 'Data berhasil disimpan!');
+        } catch (\Exception $e) {
+            // Tangani error dan tampilkan pesan error untuk debugging
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
     }
 
 
