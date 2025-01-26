@@ -134,14 +134,14 @@ Route::get('/callback-sso',     [\App\Http\Controllers\SSOController::class, 'ss
 Route::get('/personal-info-sso', [\App\Http\Controllers\SSOController::class, 'connectUser'])->name('sso.connect');
 
 // Route::middleware(['auth', 'verified', 'role:Superadmin'])->group(function () {
-Route::get('user/services/form-detail', [\App\Http\Controllers\AdminController::class, 'showform']);
+Route::get('user/services/form-detail/{request_id}', [\App\Http\Controllers\AdminController::class, 'showform']);
+Route::post('user/services/form-detail', [\App\Http\Controllers\AdminController::class, 'storeform']);
 // });
 
-Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 
-Route::get('/user/verification-permohonan', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
+Route::get('/user/verification-permohonan/', [\App\Http\Controllers\UserController::class, 'showVerification'])->name('verification.permohonan');
 Route::delete('/user/verification-permohonan/delete/{nip}', [\App\Http\Controllers\UserController::class, 'deleteVerification'])->name('verification.delete');
-Route::post('user/form-detail/submit', [App\Http\Controllers\UserController::class, 'submitForm'])->name('sumbit');
+// Route::post('user/form-detail/submit', [App\Http\Controllers\UserController::class, 'submitForm'])->name('sumbit');
 
 /* CMS Temporary */
 Route::get('/cms', function () {

@@ -22,7 +22,7 @@ class DashboardAdminController extends Controller
         $this->middleware('auth:admin');
 
         $this->_requestRepository   = new RequestRepository;
-        
+
         $this->module  = "Dashboard";
     }
 
@@ -31,22 +31,21 @@ class DashboardAdminController extends Controller
 
         $user = Auth::guard('admin')->user();
 
-        $filter['requests.kd_kel'] = $user->kd_kel;
         $filter['requests.request_status_id'] = 'SUBMITED';
 
-        $requests  = $this->_requestRepository->getSomeByParams(4, $filter); 
+        $requests  = $this->_requestRepository->getSomeByParams(10, $filter);
 
         $filter['requests.request_status_id'] = 'SUBMITED';
-        $counts['submitted'] = $this->_requestRepository->countByParams($filter); 
+        $counts['submitted'] = $this->_requestRepository->countByParams($filter);
 
         $filter['requests.request_status_id'] = 'VERIFIED';
-        $counts['verified'] = $this->_requestRepository->countByParams($filter); 
+        $counts['verified'] = $this->_requestRepository->countByParams($filter);
 
         $filter['requests.request_status_id'] = 'PROCCESS';
-        $counts['proccess'] = $this->_requestRepository->countByParams($filter); 
+        $counts['proccess'] = $this->_requestRepository->countByParams($filter);
 
         $filter['requests.request_status_id'] = 'APPROVED';
-        $counts['approved'] = $this->_requestRepository->countByParams($filter); 
+        $counts['approved'] = $this->_requestRepository->countByParams($filter);
 
         return view('dashboard::admin', compact('requests', 'user', 'counts'));
     }

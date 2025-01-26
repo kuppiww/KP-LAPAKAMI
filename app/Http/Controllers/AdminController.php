@@ -289,7 +289,7 @@ class AdminController extends Controller
         }
 
         if ($validator->fails()) {
-            //if user is activation false 
+            //if user is activation false
             $getUser = $this->_userRepository->getByNIK($request['user_nik']);
             $id_enc = Crypt::encryptString($getUser->user_id);
             $email = $request['user_email'];
@@ -470,7 +470,7 @@ class AdminController extends Controller
 
         $getUser = $this->_userRepository->getByNIK($nikDec);
 
-        // get User 
+        // get User
         // $getUser = $this->_userTemp->getByNIK($nikDec);
 
         // if (!$getUserByToken) {
@@ -566,17 +566,17 @@ class AdminController extends Controller
 
     /**
      * check user by NIK.
-     * 
+     *
      * Get checking access NIK.
-     * 
-     * 
+     *
+     *
      * @bodyParam  nik required NIK user masyarakat
-     * 
+     *
      * @response  {
      *  "code": 200,
      *  "status": "OK",
      *  "message": "Sukses",
-     *  "result": 
+     *  "result":
      *           {
      *               "status": true,
      *           }
@@ -603,8 +603,18 @@ class AdminController extends Controller
         return ResponseHelper::setResponse(200, 'Sukses', $result);
     }
 
-    public function showForm()
+    public function showForm($request_id)
     {
+        if (!$request_id) {
+            return redirect()->back()->withErrors(['error' => 'No Surat tidak terdaftar']);
+        }
+
+        try {
+            $no_surat = DB::table('requests')->where('request_id', $request_id)->first()->no_surat_pengantar;
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'No Surat tidak terdaftar']);
+        }
+
         $param['is_active'] = true;
         $data_layanan = $this->_servicesRepository->getAllByParams($param);
         $param['sys_users.group_id'] = 'pkelurahan';
@@ -616,9 +626,52 @@ class AdminController extends Controller
         $params['kd_district'] = '01';
         $data_nama_kelurahan = $this->_msubdistrictsRepository->getAllByParams($params);
 
+        return view('users.services.form-detail', compact('data_layanan', 'data_nama_kelurahan', 'data_nama_kecamatan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan', 'no_surat'));
+    }
 
+    public function storeform(Request $request)
+    {
+        $validated = $request->validate([
+            'Nama_Layanan' => 'required',
+            'Kelurahan' => 'required',
+            'Nama_verification_kelurahan' => 'required',
+            'Nama_Penandatangan_kelurahan' => 'required',
+            'Kecamatan' => 'required',
+            'Nama_Verification_kecamatan' => 'required',
+            'Nama_Penandatangan_kecamatan' => 'required',
+            'No_Surat' => 'required',
+        ]);
 
-        // dd('here');
-        return view('users.services.form-detail', compact('data_layanan', 'data_nama_kelurahan', 'data_nama_kecamatan', 'data_verifikator_kelurahan', 'data_verifikator_kecamatan'));
+        try {
+            DB::table('requests')->where('no_surat_pengantar', $validated['No_Surat'])->first();
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'No Surat tidak terdaftar']);
+        }
+
+        DB::table('requests')
+            ->where('no_surat_pengantar', $validated['No_Surat'])
+            ->update(['request_status_id' => 'APPROVED']);
+
+        try {
+            // Mendapatkan user_id dari pengguna yang sedang login
+            $user_id = Auth::id(); // Menggunakan Auth untuk mendapatkan ID pengguna yang sedang login
+
+            // Menambahkan user_id ke data yang akan disimpan
+            DB::table('Pengajuan_approved')->insertGetId([
+                'Nama_Layanan' => $validated['Nama_Layanan'],
+                'Kelurahan' => $validated['Kelurahan'],
+                'nama_verification_kelurahan' => json_encode($validated['Nama_verification_kelurahan']),
+                'Nama_Penandatangan_kelurahan' => $validated['Nama_Penandatangan_kelurahan'],
+                'Kecamatan' => $validated['Kecamatan'],
+                'Nama_verification_kecamatan' => json_encode($validated['Nama_Verification_kecamatan']),
+                'nama_penandatangan_kecamatan' => $validated['Nama_Penandatangan_kecamatan'],
+                'No_surat' => $validated['No_Surat'],
+                'user_id' => $user_id, // Menambahkan user_id di sini
+            ]);
+
+            return redirect()->back()->with('success', 'Data berhasil disimpan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
     }
 }

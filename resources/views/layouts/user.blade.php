@@ -134,8 +134,7 @@
 
 
                 <li class="nav-item">
-                    <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
-                        href="{{ url('services/verification') }}">
+                    <a href="{{ url('/user/verification-permohonan/') }}" class="nav-link @if (Request::segment(1) == 'verification') active @endif">
                         <i class="ri-file-line me-2 fs-5"></i> Status Verifikasi Layanan
                     </a>
                 </li>
@@ -208,8 +207,7 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link @if (Request::segment(1) == 'verification') active @endif"
-                                href="{{ url('user/verification-permohonan') }}">
+                            <a href="{{ url('/user/verification-permohonan/') }}" class="nav-link @if (Request::segment(1) == 'verification') active @endif">
                                 <i class="ri-file-line me-2 fs-5"></i> Status Verifikasi Layanan
                             </a>
                         </li>

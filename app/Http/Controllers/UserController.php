@@ -20,6 +20,7 @@ use App\Mail\UserVerificationMail;
 // Use App\User;
 use App\Helpers\LogHelper;
 use App\Helpers\CheckSiak;
+use App\Models\Pengajuan;
 use App\Models\SysUsers;
 use App\Models\User;
 use App\Models\UserTemp;
@@ -32,7 +33,7 @@ use Modules\User\Repositories\DistrictRepository;
 use Modules\User\Repositories\SubDistrictRepository;
 use Modules\Request\Repositories\ServiceRepository;
 use Modules\Users\Repositories\SysUsersRepository;
-
+use App\Http\Controllers\ModelNotFoundException;
 
 
 class UserController extends Controller
@@ -48,6 +49,7 @@ class UserController extends Controller
 
         $this->_userRepository      = new User;
         $this->_userTemp = new UserTemp;
+        $this->_pengajuan = new pengajuan;
         $this->_forgotRepository    = new UserForgotRepository;
         $this->_logHelper           = new LogHelper;
         $this->_fcmHelper           = new FCMHelper;
@@ -762,41 +764,10 @@ class UserController extends Controller
 
     public function showVerification()
     {
-        // Simulasi data untuk demonstrasi
-        // Ganti ini dengan data aktual dari database jika sudah terhubung
-        $data = [
-            'nomor_surat' => '123456789',
-            'layanan' => 'Layanan A',
-            'tanggal_surat' => '2024-08-21',
-            'verifications' => [
-                (object) ['id' => 1, 'pegawai' => 'Hadiyanto, S.T. Pranata Komputer Ahli Muda', 'instansi' => 'Yudi Permana', 'status' => 'pengajuan'],
-                (object) ['id' => 2, 'pegawai' => 'Agus Sutrisno', 'instansi' => 'Diana Corporation', 'status' => 'setuju'],
-                // Tambahkan data lainnya sesuai kebutuhan
-            ],
-            'tte' => [
-                (object) ['pegawai' => 'Budi Santoso', 'instansi' => 'PT. Contoh', 'status' => 'setuju'],
-                (object) ['pegawai' => 'Siti Aminah', 'instansi' => 'CV. Sample', 'status' => 'belum'],
-                // Tambahkan data lainnya sesuai kebutuhan
-            ],
-            'statusHistory' => [
-                (object) [
-                    'tanggal' => '2024-08-22',
-                    'details' => [
-                        (object) ['nama' => 'Hadiyanto, S.T.', 'nip' => '123456789', 'status' => 'Pengajuan', 'status_label' => 'Pengajuan'],
-                        (object) ['nama' => 'Agus Sutrisno', 'nip' => '987654321', 'status' => 'Setuju', 'status_label' => 'Setuju']
-                    ]
-                ],
-                (object) [
-                    'tanggal' => '2024-08-23',
-                    'details' => [
-                        (object) ['nama' => 'Budi Santoso', 'nip' => '1122334455', 'status' => 'Setuju', 'status_label' => 'Setuju'],
-                        (object) ['nama' => 'Siti Aminah', 'nip' => '5544332211', 'status' => 'Belum', 'status_label' => 'Belum']
-                    ]
-                ],
-                // Tambahkan data lainnya sesuai kebutuhan
-            ]
-        ];
+        $user = auth()->user();
 
-        return view('users.services.verification-permohonan', $data);
+        $verifications = $user->pengajuan()->get();
+
+        return view('users.services.verification-permohonan', compact('verifications'));
     }
 }

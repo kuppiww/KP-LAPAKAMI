@@ -29,7 +29,8 @@ use DB;
 
 class ReqBusinessController extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
 
         // Require Login
         $this->middleware('auth');
@@ -47,7 +48,6 @@ class ReqBusinessController extends Controller
 
         $this->module      = "ReqBusiness";
         $this->_logHelper  = new LogHelper;
-
     }
 
     /**
@@ -138,16 +138,16 @@ class ReqBusinessController extends Controller
         $this->_logRequest($req_id, $request['request_status_id'], 'Dibuat oleh ');
         $this->_logHelper->store($this->module, $request->service_id, 'create');
 
-        if($req_id != null){
+        if ($req_id != null) {
             $data_email   = array(
                 'name'          => $user->user_nama,
                 'email'         => $request['user_email'],
-                'url'           => env('APP_URL').'/user/layanan/memiliki-usaha/lihat/'.$req_id,
+                'url'           => env('APP_URL') . '/user/layanan/memiliki-usaha/lihat/' . $req_id,
                 'service_name'  => 'Surat Keterangan Memiliki Usaha',
                 'time'          => date('Y-m-d H:i:s'),
             );
-    
-            Mail::to($user->user_email)->send(new RequestChangeStatusMail($data_email));
+
+            // Mail::to($user->user_email)->send(new RequestChangeStatusMail($data_email));
         }
 
         DB::commit();
@@ -173,25 +173,25 @@ class ReqBusinessController extends Controller
             return redirect(url('404'));
         }
 
-        // Validation request data 
+        // Validation request data
         $params     = array(
-                        'request_id'            => $id, 
-                        'requests.created_by'   => $user->user_id, 
-                        'requests.service_id'   => $getService->service_id
-                    );        
+            'request_id'            => $id,
+            'requests.created_by'   => $user->user_id,
+            'requests.service_id'   => $getService->service_id
+        );
         $request    = $this->_requestRepository->getByParams($params);
 
         if (!$request) {
             return redirect(url('404'));
-        } 
+        }
 
         $filter['request_id'] = $id;
 
-        $logs            = $this->_requestLogRepository->getAllByParams($filter); 
-        $request_docs    = $this->_requestAttachmentRepository->getAllByParams($filter); 
-        $request_detail  = $this->_reqBusinessRepository->getByParams($filter); 
+        $logs            = $this->_requestLogRepository->getAllByParams($filter);
+        $request_docs    = $this->_requestAttachmentRepository->getAllByParams($filter);
+        $request_detail  = $this->_reqBusinessRepository->getByParams($filter);
 
-        return view('reqbusiness::detail', compact ('request', 'request_detail', 'logs', 'request_docs'));
+        return view('reqbusiness::detail', compact('request', 'request_detail', 'logs', 'request_docs'));
     }
 
     /**
@@ -211,31 +211,31 @@ class ReqBusinessController extends Controller
             return redirect(url('404'));
         }
 
-        // Validation request data 
+        // Validation request data
         $params     = array(
-                        'request_id'            => $id, 
-                        'requests.created_by'   => $user->user_id, 
-                        'requests.service_id'   => $getService->service_id
-                    );        
+            'request_id'            => $id,
+            'requests.created_by'   => $user->user_id,
+            'requests.service_id'   => $getService->service_id
+        );
         $request    = $this->_requestRepository->getByParams($params);
 
         if (!$request) {
             return redirect(url('404'));
-        } 
+        }
 
         $filter['request_id'] = $id;
 
-        $logs           = $this->_requestLogRepository->getAllByParams($filter); 
-        $request_docs   = $this->_requestAttachmentRepository->getAllByParams($filter); 
+        $logs           = $this->_requestLogRepository->getAllByParams($filter);
+        $request_docs   = $this->_requestAttachmentRepository->getAllByParams($filter);
         $districts      = $this->_districtRepository->getAll();
         $sub_districts  = $this->_subDistrictRepository->getAll();
         $religions      = $this->_religionRepository->getAll();
         $genders        = $this->_genderRepository->getAll();
         $merried_stats  = $this->_merriedStatusRepository->getAll();
-        $request_detail  = $this->_reqBusinessRepository->getByParams($filter); 
+        $request_detail  = $this->_reqBusinessRepository->getByParams($filter);
         $attach_samples = $this->_serviceRepository->getRequirementSample(['service_id' => $getService->service_id]);
 
-        return view('reqbusiness::edit', compact ('request', 'request_detail', 'logs', 'request_docs', 'sub_districts', 'districts', 'religions', 'genders', 'merried_stats', 'attach_samples'));
+        return view('reqbusiness::edit', compact('request', 'request_detail', 'logs', 'request_docs', 'sub_districts', 'districts', 'religions', 'genders', 'merried_stats', 'attach_samples'));
     }
 
     /**
@@ -258,7 +258,7 @@ class ReqBusinessController extends Controller
         $request['kd_kel']      = $user->kd_kel;
         $request['kewarganegaraan']    = $user->user_kewarganegaraan;
         $request['id_status_kawin']    = $user->id_merried_status;
-        
+
         //convertion date pengantar
         $tgl_surat_pengantar = str_replace('/', '-', $request->tgl_surat_pengantar);
         $request['tgl_surat_pengantar'] = date("Y-m-d", strtotime($tgl_surat_pengantar));
@@ -316,16 +316,16 @@ class ReqBusinessController extends Controller
      */
     public function destroy($id)
     {
-          // Check detail to db
-          $detail  = $this->_requestRepository->getById($id);
+        // Check detail to db
+        $detail  = $this->_requestRepository->getById($id);
 
-          if (!$detail) {
-              return redirect('/user/layanan');
-          }
-  
-          $this->_requestRepository->delete($id);
-          
-          return redirect('user/layanan')->with('message', 'Permohonan berhasil dibatalkan');
+        if (!$detail) {
+            return redirect('/user/layanan');
+        }
+
+        $this->_requestRepository->delete($id);
+
+        return redirect('user/layanan')->with('message', 'Permohonan berhasil dibatalkan');
     }
 
     private function _logRequest($req_id, $stat_id, $note_log)
@@ -333,9 +333,9 @@ class ReqBusinessController extends Controller
         $user_name = Auth::user()->user_id;
         $request['request_id']        = $req_id;
         $request['request_status_id'] = $stat_id;
-        $request['request_log_note']  = $note_log.$user_name;
-        
-        $this->_requestLogRepository->insert(DataHelper::_normalizeParams($request, true));        
+        $request['request_log_note']  = $note_log . $user_name;
+
+        $this->_requestLogRepository->insert(DataHelper::_normalizeParams($request, true));
     }
 
     private function _uploadFile($request)
@@ -345,64 +345,59 @@ class ReqBusinessController extends Controller
 
         if ($request->file('f_ktp') != '') {
 
-            $imageName = md5(time() . rand()) .'.'. $request->f_ktp->extension(); 
+            $imageName = md5(time() . rand()) . '.' . $request->f_ktp->extension();
 
             $request->file("f_ktp")->storeAs('files/request_business/ktp', $imageName, 'public');
 
-            array_push($data['file'], $imageName );
+            array_push($data['file'], $imageName);
 
-            array_push($data['note'], 'FILE_KTP' );
-
+            array_push($data['note'], 'FILE_KTP');
         }
 
         if ($request->file('f_p_rt_rw') != '') {
 
-            $imageName = md5(time() . rand()) .'.'. $request->f_p_rt_rw->extension(); 
+            $imageName = md5(time() . rand()) . '.' . $request->f_p_rt_rw->extension();
 
             $request->file("f_p_rt_rw")->storeAs('files/request_business/pengantar_rt_rw', $imageName, 'public');
 
-            array_push($data['file'], $imageName );
+            array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_RT_RW');
-
-        } 
+        }
 
         if ($request->file('f_kk') != '') {
 
-            $imageName = md5(time() . rand()) .'.'. $request->f_kk->extension(); 
+            $imageName = md5(time() . rand()) . '.' . $request->f_kk->extension();
 
             $request->file("f_kk")->storeAs('files/request_business/kk', $imageName, 'public');
 
-            array_push($data['file'], $imageName );
+            array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_KK');
-
-        } 
+        }
 
         if ($request->file('f_pernyataan') != '') {
 
-            $imageName = md5(time() . rand()) .'.'. $request->f_pernyataan->extension(); 
+            $imageName = md5(time() . rand()) . '.' . $request->f_pernyataan->extension();
 
             $request->file("f_pernyataan")->storeAs('files/request_business/surat_pernyataan', $imageName, 'public');
 
-            array_push($data['file'], $imageName );
+            array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_PERNYATAAN');
-
-        } 
+        }
 
         if ($request->file('f_usaha') != '') {
 
-            $imageName = md5(time() . rand()) .'.'. $request->f_usaha->extension(); 
+            $imageName = md5(time() . rand()) . '.' . $request->f_usaha->extension();
 
             $request->file("f_usaha")->storeAs('files/request_business/usaha', $imageName, 'public');
 
-            array_push($data['file'], $imageName );
+            array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_USAHA');
+        }
 
-        } 
-        
         return $data;
     }
 }

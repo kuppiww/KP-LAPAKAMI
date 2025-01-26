@@ -20,7 +20,8 @@ use DB;
 class RequestController extends Controller
 {
 
-    public function __construct(){
+    public function __construct()
+    {
 
         // Require Login
         $this->middleware('auth');
@@ -32,7 +33,6 @@ class RequestController extends Controller
 
         $this->module      = "Request";
         $this->_logHelper  = new LogHelper;
-
     }
     /**
      * Display a listing of the resource.
@@ -44,9 +44,9 @@ class RequestController extends Controller
 
         $filter['requests.created_by'] = $user->user_id;
 
-        $services= $this->_serviceRepository->getAllByParams(['is_select' => true]);
+        $services = $this->_serviceRepository->getAllByParams(['is_select' => true]);
 
-        $requests  = $this->_requestRepository->getAllByParams($filter); 
+        $requests  = $this->_requestRepository->getAllByParams($filter);
 
         return view('request::index', compact('requests', 'services'));
     }
@@ -59,13 +59,13 @@ class RequestController extends Controller
     {
 
         $user = Auth::user();
-        
+
         // Validation for user profile and email verification
-        if(!$user->user_is_comp_profile){
+        if (!$user->user_is_comp_profile) {
             return redirect('user/profil')->with('error', 'Profil pengguna belum dilengkapi');
         }
-        
-        if ($user->user_email_is_change){
+
+        if ($user->user_email_is_change) {
             return redirect('user/profil')->with('error', 'Email pengguna telah berubah, harap melalukan verifikasi email');
         }
 
@@ -74,7 +74,7 @@ class RequestController extends Controller
 
         $service_slug = $service->slug;
 
-        return redirect('/user/layanan/'.$service_slug.'/buat');
+        return redirect('/user/layanan/' . $service_slug . '/buat');
     }
 
     /**
@@ -100,9 +100,8 @@ class RequestController extends Controller
         $service_slug = $service->slug;
 
         // echo '/user/layanan/'.$service_slug.'/lihat/'.$id; exit;
- 
-        return redirect('/user/layanan/'.$service_slug.'/lihat/'.$id);
 
+        return redirect('/user/layanan/' . $service_slug . '/lihat/' . $id);
     }
 
     /**

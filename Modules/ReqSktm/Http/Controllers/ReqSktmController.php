@@ -91,7 +91,6 @@ class ReqSktmController extends Controller
 
         $this->module = "ReqBirth";
         $this->_logHelper = new LogHelper;
-
     }
 
     /**
@@ -219,7 +218,7 @@ class ReqSktmController extends Controller
                 'time' => date('Y-m-d H:i:s'),
             );
 
-            Mail::to($user->user_email)->send(new RequestChangeStatusMail($data_email));
+            // Mail::to($user->user_email)->send(new RequestChangeStatusMail($data_email));
         }
 
         DB::commit();
@@ -466,7 +465,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_KTP');
-
         }
 
         if ($request->file('f_p_rt_rw') != '') {
@@ -478,7 +476,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_RT_RW');
-
         }
 
         if ($request->file('f_kk') != '') {
@@ -490,7 +487,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_KK');
-
         }
 
         if ($request->file('f_pernyataan') != '') {
@@ -502,7 +498,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_PERNYATAAN');
-
         }
 
         if ($request->file('f_rekom_sekolah') != '') {
@@ -514,7 +509,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_REKOMENDASI_SEKOLAH');
-
         }
 
         if ($request->file('f_rujukan_rs') != '') {
@@ -526,7 +520,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_RUJUKAN_RS');
-
         }
 
         if ($request->file('f_jamkesmas') != '') {
@@ -538,7 +531,6 @@ class ReqSktmController extends Controller
             array_push($data['file'], $imageName);
 
             array_push($data['note'], 'FILE_JAMKESMAS');
-
         }
 
         return $data;
